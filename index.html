@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Essencial para Responsividade -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:400,700" rel="stylesheet">
+    <link href='style.css' rel='stylesheet' type='text/css'>
+    <title>Teste Político 8 Valores</title> <!-- Título da Aba Atualizado -->
+    <link rel="icon" type="x-icon" href="icon.png">
+    <link rel="shortcut icon" type="x-icon" href="icon.png">
+    <!-- Seus scripts de ads, etc. podem ir aqui -->
+</head>
+
+<body>
+    <h1><a href="index.html" class="header-link">Teste Político 8 Valores</a></h1>
+    <hr>
+    <div class="center">
+        <!-- Nomes dos eixos (Serão escondidos em telas < 768px pelo CSS) -->
+        <div class="axis_name quadcolumn">ECONÔMICO</div>
+        <div class="axis_name quadcolumn">DIPLOMÁTICO</div>
+        <div class="axis_name quadcolumn">CIVIL</div>
+        <div class="axis_name quadcolumn">SOCIAL</div>
+        <!-- Linha 1 de Ícones (Valores Principais) -->
+        <a href="#anchor" class="quadcolumn"><img src="imagens/igualdade.png" alt="Ícone Igualdade" class="quadcolumn"></a>
+        <a href="#anchor" class="quadcolumn"><img src="imagens/nacao.png" alt="Ícone Nação" class="quadcolumn"></a>
+        <a href="#anchor" class="quadcolumn"><img src="imagens/liberdade.png" alt="Ícone Liberdade" class="quadcolumn"></a>
+        <a href="#anchor" class="quadcolumn"><img src="imagens/tradicao.png" alt="Ícone Tradição" class="quadcolumn"></a>
+        <!-- Linha 2 de Ícones (Valores Opostos) -->
+        <a href="#anchor" class="quadcolumn"><img src="imagens/mercado.png" alt="Ícone Mercado" class="quadcolumn"></a>
+        <a href="#anchor" class="quadcolumn"><img src="imagens/global.png" alt="Ícone Global" class="quadcolumn"></a>
+        <a href="#anchor" class="quadcolumn"><img src="imagens/autoridade.png" alt="Ícone Autoridade" class="quadcolumn"></a>
+        <a href="#anchor" class="quadcolumn"><img src="imagens/progresso.png" alt="Ícone Progresso" class="quadcolumn"></a>
+    </div>
+    <br>
+    <button class="button" onclick="location.href='instructions.html';">Clique aqui para começar!</button>
+    <br>
+    <hr> <!-- HR entre botão e primeira seção -->
+    <div class="section">
+    <h2>Como funciona o teste?</h2>
+        <p>Este é um questionário político que tenta atribuir porcentagens para oito valores políticos diferentes. Você será apresentado a uma afirmação e, em seguida, responderá com sua opinião sobre ela, de <b>Concordo Totalmente</b> a <b>Discordo Totalmente</b>, com cada resposta afetando suas pontuações. No final do questionário, suas respostas serão comparadas ao máximo possível para cada valor, dando-lhe assim uma porcentagem.</p>
+        <p>Portanto, se você deseja ter um resultado confiável, responda honestamente!</p>
+        <p>Há <b><u><span id="numOfQuestions"></span></u></b> perguntas no teste.</p>
+    </div>
+    <hr> <!-- HR entre as seções -->
+    <div class="section">
+    <h2><a id="anchor">Quais são os oito valores?</a></h2>
+        <p>Existem quatro eixos independentes - Econômico, Diplomático, Civil e Social - e cada um tem dois valores opostos atribuídos a eles. São eles:</p>
+        <div class="explanation_bg">
+            <!-- Eixo Econômico -->
+            <div class="spacer">
+                <div class="explanation_blurb_left">
+                    <p class="value"><b style="color:#d32f2f;">IGUALDADE</b></p>
+                    <p class="blurb-text">
+                        Aqueles com pontuações mais altas em Igualdade acreditam que a economia deve distribuir valor de forma equitativa entre a população. Eles tendem a apoiar códigos tributários progressivos, programas sociais e, para aqueles que se destacam neste valor, o socialismo.
+                    </p>
+                </div>
+                <div class="explanation_axis"> <!-- Este div agora é flex column center -->
+                    <p class="axis_name">ECONÔMICO</p>
+                    <img class="arrow" src="double_arrow.svg" alt="Seta dupla horizontal"></img>
+                </div>
+                <div class="explanation_blurb_right">
+                    <p class="value"><b style="color:#00796b;">MERCADO</b></p>
+                    <p class="blurb-text">
+                        Aqueles com pontuações mais altas em Mercado acreditam que a economia deve focar em proporcionar um crescimento rápido. Eles tendem a apoiar impostos mais baixos, privatização, desregulamentação e, para aqueles que se destacam neste valor, o capitalismo laissez-faire e o liberalismo econômico.
+                    </p>
+                </div>
+            </div>
+            <!-- Eixo Diplomático -->
+            <div class="spacer">
+                <div class="explanation_blurb_left">
+                    <p class="value"><b style="color:#f57c00;">NAÇÃO</b></p>
+                    <p class="blurb-text">
+                        Aqueles com pontuações mais altas em Nação tendem a ser patriotas e nacionalistas. Frequentemente acreditam numa política externa mais agressiva, valorizando o exército, a força, a soberania e, para aqueles que se destacam neste valor, a expansão territorial.
+                    </p>
+                </div>
+                <div class="explanation_axis">
+                    <p class="axis_name">DIPLOMÁTICO</p>
+                    <img class="arrow" src="double_arrow.svg" alt="Seta dupla horizontal"></img>
+                </div>
+                <div class="explanation_blurb_right">
+                    <p class="value"><b style="color:#0288d1;">GLOBAL</b></p>
+                    <p class="blurb-text">
+                        Aqueles com pontuações mais altas em Global são cosmopolitas e possuem visão mais internacional. Frequentemente acreditam numa política externa pacífica, enfatizando a diplomacia, cooperação, integração e, para aqueles que se destacam neste valor, a governança global.
+                    </p>
+                </div>
+            </div>
+            <!-- Eixo Civil -->
+            <div class="spacer">
+                <div class="explanation_blurb_left">
+                    <p class="value"><b style="color:#fbc02d;">LIBERDADE</b></p>
+                    <p class="blurb-text">
+                        Aqueles com pontuações mais altas em Liberdade acreditam em fortes liberdades civis. Tendem a apoiar a democracia e opor-se à intervenção estatal na vida pessoal. Note que isso se refere a liberdades civis, não econômicas.
+                    </p>
+                </div>
+                <div class="explanation_axis">
+                    <p class="axis_name">CIVIL</p>
+                    <img class="arrow" src="double_arrow.svg" alt="Seta dupla horizontal"></img>
+                </div>
+                <div class="explanation_blurb_right">
+                    <p class="value"><b style="color:#303f9f;">AUTORIDADE</b></p>
+                    <p class="blurb-text">
+                        Aqueles com pontuações mais altas em Autoridade acreditam num forte poder estatal. Tendem a apoiar a intervenção estatal na vida pessoal, a vigilância governamental em setores que consideram críticos e, em valores altos, a censura ou até mesmo a autocracia.
+                    </p>
+                </div>
+            </div>
+            <!-- Eixo Social -->
+            <div class="spacer">
+                <div class="explanation_blurb_left">
+                    <p class="value"><b style="color:#689f38;">TRADIÇÃO</b></p>
+                    <p class="blurb-text">
+                        Aqueles com pontuações mais altas em Tradição acreditam em valores tradicionais e a aderência mais estrita a um código moral. Tendem a ser religiosos e a querer preservar a cultura e a história.
+                    </p>
+                </div>
+                <div class="explanation_axis">
+                    <p class="axis_name">SOCIAL</p>
+                    <img class="arrow" src="double_arrow.svg" alt="Seta dupla horizontal"></img>
+                </div>
+                <div class="explanation_blurb_right">
+                    <p class="value"><b style="color:#7b1fa2;">PROGRESSO</b></p>
+                    <p class="blurb-text">
+                        Aqueles com pontuações mais altas em Progresso acreditam na mudança social e na racionalidade. Embora nem sempre, geralmente são mais secularizados e apoiam ações ambientais e pesquisa científica ou tecnológica.
+                    </p>
+                </div>
+            </div>
+            <!-- Removido <br/> -->
+        </div>
+    </div>
+    <script type="application/javascript" src="questions.js"></script>
+    <script type="text/javascript">
+        // Garante que o script 'questions.js' carregou antes de tentar acessá-lo
+        if (typeof questions !== 'undefined') {
+            const numOfQuestionsSpan = document.getElementById("numOfQuestions");
+            if (numOfQuestionsSpan) {
+                numOfQuestionsSpan.innerHTML = questions.length;
+            } else {
+                 console.error("Elemento #numOfQuestions não encontrado.")
+            }
+        } else {
+            const numOfQuestionsSpan = document.getElementById("numOfQuestions");
+            if (numOfQuestionsSpan) numOfQuestionsSpan.innerHTML = "(?)";
+            console.error("Erro: questions.js não foi carregado ou a variável 'questions' não está definida.");
+        }
+    </script>
+    <!-- Seus scripts de estatísticas, etc. -->
+</body>
+</html>
