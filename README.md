@@ -23,9 +23,7 @@ O teste avalia seu posicionamento em quatro eixos independentes, cada um com doi
 
 ## 🚀 Como Acessar
 
-Você pode fazer o teste diretamente no seu navegador através do link:
-
-**[LINK PARA O SEU SITE AQUI]** _(Substitua este placeholder pelo URL real!)_
+Você pode fazer o teste diretamente no seu navegador através do link: (https://rilsonjoas.github.io/TestePolitico/)
 
 ## ⚙️ Como Funciona
 
