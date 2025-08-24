@@ -1,4 +1,6 @@
 import { useRef, useState, useEffect } from "react";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import * as domToImage from 'dom-to-image-more';
 import { Button } from "@/components/ui/button";
 import { useToast } from "./Toast";
@@ -13,7 +15,7 @@ interface ShareResultsProps {
     desc: string;
     politicians: { name: string }[];
     books: { title: string }[];
-  };
+  } | null;
 }
 
 export function ShareResults({ targetId, scores, matchedIdeology }: ShareResultsProps) {
@@ -311,7 +313,7 @@ export function ShareResults({ targetId, scores, matchedIdeology }: ShareResults
       const barWidth = canvas.width - 2 * padding - 80;
       const barX = padding + 40;
       
-      axes.forEach((axis, index) => {
+      axes.forEach((axis) => {
         // Card de fundo para cada eixo
         const cardHeight = axisSpacing - 15;
         ctx.fillStyle = '#ffffff';
@@ -523,7 +525,7 @@ export function ShareResults({ targetId, scores, matchedIdeology }: ShareResults
           style: {
             fontFamily: 'Arial, sans-serif'
           },
-          filter: (node: any) => {
+          filter: (node: Element) => {
             // Filtra elementos problemáticos
             if (node.className && typeof node.className === 'string') {
               return !node.className.includes('dark:');
@@ -652,6 +654,7 @@ export function ShareResults({ targetId, scores, matchedIdeology }: ShareResults
           <div className="flex flex-col items-center gap-4 mt-4 p-4 border rounded-lg shadow-md w-full">
             <p className="text-center font-semibold">Sua imagem está pronta!</p>
             <div className="max-w-full overflow-hidden rounded-lg border shadow-sm">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={imageUrl} alt="Resultados do Teste Político" className="max-w-full h-auto" />
             </div>
             <p className="text-sm text-center text-gray-600 dark:text-gray-400">

@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader} from '@/components/ui/card';
 import { questions } from '@/lib/data';
 import Image from 'next/image';
-import { ThemeToggleButton } from '@/components/ThemeToggleButton';
 import { Logo } from '@/components/Logo';
 
 export default function Home() {

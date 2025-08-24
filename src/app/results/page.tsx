@@ -1,17 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ideologies, Ideology } from '@/lib/data';
 import { ShareResults } from '@/components/ShareResults';
 import { Logo } from '@/components/Logo';
 import '../results-image.css';
 
-export default function Results() {
+function ResultsContent() {
   const searchParams = useSearchParams();
   const [scores, setScores] = useState({ e: 50, d: 50, g: 50, s: 50 });
   const [matchedIdeology, setMatchedIdeology] = useState<Ideology | null>(null);
@@ -124,5 +122,13 @@ export default function Results() {
         </footer>
       </>
     </div>
+  );
+}
+
+export default function Results() {
+  return (
+    <Suspense fallback={<div>Carregando resultados...</div>}>
+      <ResultsContent />
+    </Suspense>
   );
 }
