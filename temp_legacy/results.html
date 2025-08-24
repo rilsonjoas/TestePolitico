@@ -3,17 +3,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:400,700" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <link href='style.css' rel='stylesheet' type='text/css'>
     <title>Resultados - Teste Político 8 Valores</title>
     <link rel="icon" type="x-icon" href="icon.png">
     <link rel="shortcut icon" type="x-icon" href="icon.png">
     <script>
-        version = "" // Você pode definir uma versão aqui se quiser exibi-la no banner
+        version = "" 
     </script>
 </head>
 <body>
-    <!-- Carregar ideologies.js ANTES do script que o utiliza -->
     <script type="application/javascript" src="ideologies.js"></script>
 
     <h1><a href="index.html" class="header-link">Teste Político 8 Valores</a></h1>
@@ -21,18 +22,16 @@
 
     <h1>Resultados</h1>
 
-    <!-- Eixo Econômico -->
     <h2>Eixo Econômico: <span class="weight-300" id="economic-label"></span></h2>
     <div class="axis">
         <img id="img-equality" src="imagens/igualdade.png" alt="Ícone Igualdade" />
-        <div class="bar-container"> <!-- Removido style inline -->
+        <div class="bar-container"> 
              <div class="bar equality" id="bar-equality"><div class="text-wrapper" id="equality">?</div></div>
              <div class="bar wealth" id="bar-wealth"><div class="text-wrapper" id="wealth">?</div></div>
         </div>
         <img id="img-wealth" src="imagens/mercado.png" alt="Ícone Mercado" />
     </div>
 
-    <!-- Eixo Diplomático -->
     <h2>Eixo Diplomático: <span class="weight-300" id="diplomatic-label"></span></h2>
     <div class="axis">
         <img id="img-might" src="imagens/nacao.png" alt="Ícone Nação" />
@@ -43,7 +42,6 @@
         <img id="img-peace" src="imagens/global.png" alt="Ícone Global" />
     </div>
 
-    <!-- Eixo Civil -->
     <h2>Eixo Civil: <span class="weight-300" id="state-label"></span></h2>
     <div class="axis">
         <img id="img-liberty" src="imagens/liberdade.png" alt="Ícone Liberdade" />
@@ -54,7 +52,6 @@
         <img id="img-authority" src="imagens/autoridade.png" alt="Ícone Autoridade" />
     </div>
 
-    <!-- Eixo Social -->
     <h2>Eixo Social: <span class="weight-300" id="society-label"></span></h2>
     <div class="axis">
         <img id="img-tradition" src="imagens/tradicao.png" alt="Ícone Tradição" />
@@ -65,11 +62,9 @@
         <img id="img-progress" src="imagens/progresso.png" alt="Ícone Progresso" />
     </div>
 
-    <!-- Correspondência de Ideologia -->
     <h2>Correspondência Mais Próxima: <span class="weight-300" id="ideology-label">Calculando...</span></h2>
 
-    <!-- === INÍCIO DA SEÇÃO DE DETALHES DA IDEOLOGIA === -->
-    <div class="ideology-details" style="display: none;"> <!-- Começa escondido -->
+    <div class="ideology-details" style="display: none;">
         <div id="ideology-desc-container">
             <h3>Descrição</h3>
             <p id="ideology-desc">Carregando descrição...</p>
@@ -84,80 +79,65 @@
             <ul id="ideology-books-list"></ul>
         </div>
     </div>
-    <!-- === FIM DA SEÇÃO DE DETALHES DA IDEOLOGIA === -->
 
     <p class="instruction-text">Entender seu posicionamento político detalhado é o principal objetivo deste teste. Por isso, focamos nos 8 valores e seus eixos (Igualdade/Mercado, Nação/Global, Liberdade/Autoridade, Tradição/Progresso), como mostram os gráficos acima. Eles oferecem um panorama mais completo e com nuances das suas convicções. Encontrar um único rótulo ideológico que capture perfeitamente essa complexidade é difícil. Assim, a 'Correspondência Mais Próxima' é uma ferramenta ainda em desenvolvimento e deve ser vista como uma sugestão ou ponto de partida, sendo menos precisa que a análise dos seus eixos.</p>
 
     <hr/>
 
-    <!-- Banner gerado por JS -->
     <img src="" id="banner" alt="Banner com os resultados do teste" style="display: none;">
 
-    <!-- Container para os botões Voltar e Copiar -->
-     <div class="button-container"> <!-- Removido style inline -->
-        <!-- Botão Copiar Imagem -->
-        <button id="copy-banner-button" class="button copy-button" style="display: none;">Copiar Imagem</button> <!-- Começa escondido -->
-        <!-- Botão Voltar -->
+     <div class="button-container">
+        <button id="copy-banner-button" class="button copy-button" style="display: none;">Copiar Imagem</button>
         <button class="button back-button" onclick="location.href='index.html';">Voltar</button>
     </div>
 
-    <!-- Script Principal da Página de Resultados -->
     <script>
-         // Garante que 'ideologies' existe antes de rodar
          if (typeof ideologies !== 'undefined') {
-            // --- Funções Utilitárias ---
             function getQueryVariable(variable) {
                 const query = window.location.search.substring(1);
                 const vars = query.split("&");
                 for (let i = 0; i < vars.length; i++) {
                     const pair = vars[i].split("=");
                     if (decodeURIComponent(pair[0]) == variable) {
-                        return decodeURIComponent(pair[1].replace(/\+/g, ' ')); // Decodifica corretamente
+                        return decodeURIComponent(pair[1].replace(/\+/g, ' '));
                     }
                 }
-                return NaN; // Retorna NaN se não encontrar
+                return NaN;
             }
 
              function setBarValue(name, value) {
                 const innerel = document.getElementById(name);
                 const outerel = document.getElementById("bar-" + name);
                 if (!innerel || !outerel) {
-                     console.error("Elemento não encontrado para setBarValue:", name);
-                     return; // Sai se elementos não existem
+                     return;
                 }
 
                 const numValue = parseFloat(value);
                 if (isNaN(numValue)) {
-                     innerel.textContent = "?"; // Mostra '?' se inválido
+                     innerel.textContent = "?";
                      outerel.style.width = "0%";
-                     innerel.style.visibility = "visible"; // Garante que '?' seja visível
+                     innerel.style.visibility = "visible";
                      return;
                 }
 
-                // Garante que o valor esteja entre 0 e 100
                 const clampedValue = Math.max(0, Math.min(100, numValue));
 
                 outerel.style.width = clampedValue + "%";
-                innerel.textContent = clampedValue.toFixed(1) + "%"; // Usa valor ajustado
+                innerel.textContent = clampedValue.toFixed(1) + "%";
 
-                // Adia a checagem de visibilidade
                 setTimeout(() => {
-                    try { // Adiciona try-catch para erros de renderização
-                        // Mostra se a largura da barra for suficiente (ou se a barra for 0)
+                    try {
                         if (outerel.offsetWidth === 0 || innerel.offsetWidth + 15 < outerel.offsetWidth) {
                              innerel.style.visibility = "visible";
                         } else {
                             innerel.style.visibility = "hidden";
                         }
                     } catch (e) {
-                         console.warn("Erro ao verificar visibilidade do texto da barra:", name, e);
-                         innerel.style.visibility = "visible"; // Garante visibilidade em caso de erro
+                         innerel.style.visibility = "visible";
                     }
                 }, 50);
             }
 
-
-            // --- Labels dos Eixos ---
             const econArray = ["Comunista", "Socialista", "Social", "Centrista", "De Mercado", "Capitalista", "Laissez-Faire"];
             const diplArray = ["Cosmopolita", "Internacionalista", "Pacifista", "Equilibrado", "Patriótico", "Nacionalista", "Chauvinista"];
             const govtArray = ["Anarquista", "Libertário", "Liberal", "Moderado", "Estatista", "Autoritário", "Totalitário"];
@@ -166,7 +146,7 @@
             function setLabel(val, ary) {
                 const numVal = parseFloat(val);
                  if (isNaN(numVal)) { return "Indefinido"; }
-                if (numVal > 100) { return ""; } // Valores > 100 não devem ocorrer com clamp
+                if (numVal > 100) { return ""; }
                 if (numVal > 90) { return ary[0]; }
                 if (numVal > 75) { return ary[1]; }
                 if (numVal > 60) { return ary[2]; }
@@ -177,20 +157,16 @@
                 return "Indefinido";
             }
 
-            // --- Obter e Calcular Valores ---
-            // parseFloat diretamente aqui para garantir que são números
             const equality = parseFloat(getQueryVariable("e"));
             const peace = parseFloat(getQueryVariable("d"));
             const liberty = parseFloat(getQueryVariable("g"));
             const progress = parseFloat(getQueryVariable("s"));
 
-            // Calcula opostos apenas se o valor base for um número
             const wealth = !isNaN(equality) ? (100 - equality).toFixed(1) : NaN;
             const might = !isNaN(peace) ? (100 - peace).toFixed(1) : NaN;
             const authority = !isNaN(liberty) ? (100 - liberty).toFixed(1) : NaN;
             const tradition = !isNaN(progress) ? (100 - progress).toFixed(1) : NaN;
 
-            // --- Definir Valores das Barras e Labels ---
             setBarValue("equality", equality);
             setBarValue("wealth", wealth);
             setBarValue("peace", peace);
@@ -205,11 +181,9 @@
             document.getElementById("state-label").innerHTML = setLabel(liberty, govtArray);
             document.getElementById("society-label").innerHTML = setLabel(progress, sctyArray);
 
-            // --- Calcular e Exibir Ideologia e Detalhes ---
             let matchedIdeology = null;
             let ideologyName = "Indefinido";
 
-            // Calcula ideologia apenas se todos os valores base forem números válidos
             if (!isNaN(equality) && !isNaN(peace) && !isNaN(liberty) && !isNaN(progress)) {
                 let ideodist = Infinity;
                 for (let i = 0; i < ideologies.length; i++) {
@@ -227,7 +201,6 @@
             }
             document.getElementById("ideology-label").innerHTML = ideologyName;
 
-            // Preencher detalhes da ideologia
             const descContainer = document.getElementById('ideology-desc-container');
             const descEl = document.getElementById('ideology-desc');
             const politiciansContainer = document.getElementById('ideology-politicians-container');
@@ -237,12 +210,10 @@
             const ideologyDetailsContainer = document.querySelector('.ideology-details');
 
             if (matchedIdeology) {
-                 if(ideologyDetailsContainer) ideologyDetailsContainer.style.display = 'block'; // Mostra seção
+                 if(ideologyDetailsContainer) ideologyDetailsContainer.style.display = 'block';
 
-                // Descrição
                 if (descEl) descEl.innerHTML = matchedIdeology.desc || "Nenhuma descrição disponível.";
 
-                // Políticos
                 if (politiciansListEl && politiciansContainer && Array.isArray(matchedIdeology.politicians) && matchedIdeology.politicians.length > 0) {
                     politiciansListEl.innerHTML = '';
                     matchedIdeology.politicians.forEach(name => {
@@ -255,7 +226,6 @@
                     politiciansContainer.style.display = 'none';
                 }
 
-                // Livros
                 if (booksListEl && booksContainer && Array.isArray(matchedIdeology.books) && matchedIdeology.books.length > 0) {
                     booksListEl.innerHTML = '';
                     matchedIdeology.books.forEach(title => {
@@ -269,13 +239,9 @@
                 }
 
             } else {
-                // Caso nenhuma ideologia seja encontrada
                 if(ideologyDetailsContainer) ideologyDetailsContainer.style.display = 'none';
-                console.warn("Nenhuma ideologia correspondente encontrada ou dados inválidos.");
             }
 
-
-            // --- Geração do Banner (Canvas) ---
             function generateCanvasBanner() {
                  try {
                     const c = document.createElement("canvas");
@@ -293,94 +259,79 @@
                         { id: "img-tradition", x: 20, y: 530, w: 100, h: 100 }, { id: "img-progress", x: 680, y: 530, w: 100, h: 100 }
                     ];
 
-                    let imagesLoadedCount = 0;
-                    const totalImages = imagesToLoad.length;
-                    let allImagesLoaded = false;
-                    let loadPromises = []; // Array para promessas de carregamento
+                    let loadPromises = [];
 
                     const drawRestOfCanvas = () => {
-                        if (allImagesLoaded) return;
-                        allImagesLoaded = true;
-
-                        // Desenha barras de fundo
                         ctx.fillStyle = "#222222";
                         ctx.fillRect(120, 180, 560, 80); ctx.fillRect(120, 300, 560, 80);
                         ctx.fillRect(120, 420, 560, 80); ctx.fillRect(120, 540, 560, 80);
 
-                        // Desenha barras de valores
                         const barWidth = 5.6;
                         const drawBar = (valueStr, color, x, widthMultiplier, y, height) => {
                             const value = parseFloat(valueStr);
                             if (!isNaN(value)) {
-                                const clampedVal = Math.max(0, Math.min(100, value)); // Garante 0-100
+                                const clampedVal = Math.max(0, Math.min(100, value));
                                 ctx.fillStyle = color;
                                 const calculatedWidth = barWidth * clampedVal * widthMultiplier - 2;
-                                const finalX = (widthMultiplier === -1) ? x - (calculatedWidth > 0 ? calculatedWidth : 0) : x; // Ajusta X para barras da direita
+                                const finalX = (widthMultiplier === -1) ? x - (calculatedWidth > 0 ? calculatedWidth : 0) : x;
                                 ctx.fillRect(finalX, y, calculatedWidth > 0 ? calculatedWidth : 0, height);
                             }
                         };
-                        drawBar(equality, "#f44336", 120, 1, 184, 72);
-                        drawBar(wealth, "#00897b", 680, -1, 184, 72); // Multiplicador -1 para direita
-                        drawBar(might, "#ff9800", 120, 1, 304, 72);
-                        drawBar(peace, "#03a9f4", 680, -1, 304, 72);
-                        drawBar(liberty, "#ffeb3b", 120, 1, 424, 72);
-                        drawBar(authority, "#3f51b5", 680, -1, 424, 72);
-                        drawBar(tradition, "#8bc34a", 120, 1, 544, 72);
-                        drawBar(progress, "#9c27b0", 680, -1, 544, 72);
+                        drawBar(equality, "#e63946", 120, 1, 184, 72);
+                        drawBar(wealth, "#1d3557", 680, -1, 184, 72);
+                        drawBar(might, "#f77f00", 120, 1, 304, 72);
+                        drawBar(peace, "#a8dadc", 680, -1, 304, 72);
+                        drawBar(liberty, "#ffc300", 120, 1, 424, 72);
+                        drawBar(authority, "#457b9d", 680, -1, 424, 72);
+                        drawBar(tradition, "#8338ec", 120, 1, 544, 72);
+                        drawBar(progress, "#3a86ff", 680, -1, 544, 72);
 
-                        // Desenha textos principais
-                        ctx.fillStyle = "#222222"; ctx.font = "700 50px Montserrat";
+                        ctx.fillStyle = "#222222"; ctx.font = "700 50px Poppins";
                         ctx.textAlign = "left"; ctx.textBaseline = "top";
                         ctx.fillText("Teste Político 8 Valores", 20, 25);
-                        ctx.font = "400 40px Montserrat";
+                        ctx.font = "400 40px Poppins";
                         ctx.fillText(ideologyName, 20, 85);
 
-                        // Desenha porcentagens nas barras
-                        ctx.font = "900 30px Montserrat"; ctx.textBaseline = "middle";
+                        ctx.font = "900 30px Inter"; ctx.textBaseline = "middle";
                         const drawPercentageText = (valueStr, x, y, textAlign, barColor) => {
                              const value = parseFloat(valueStr);
                              if (!isNaN(value) && value > 30) {
                                 ctx.textAlign = textAlign;
-                                ctx.fillStyle = (barColor === '#ffeb3b' || barColor === '#8bc34a') ? '#222222' : '#ffffff';
-                                ctx.shadowColor = (barColor === '#ffeb3b' || barColor === '#8bc34a') ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.6)";
-                                ctx.shadowBlur = (barColor === '#ffeb3b' || barColor === '#8bc34a') ? 2 : 3;
+                                ctx.fillStyle = (barColor === '#ffc300' || barColor === '#a8dadc') ? '#222222' : '#ffffff';
+                                ctx.shadowColor = (barColor === '#ffc300' || barColor === '#a8dadc') ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.6)";
+                                ctx.shadowBlur = (barColor === '#ffc300' || barColor === '#a8dadc') ? 2 : 3;
                                 ctx.fillText(value.toFixed(1) + "%", x, y + 40);
                                 ctx.shadowColor = "transparent"; ctx.shadowBlur = 0;
                             }
                         };
-                        drawPercentageText(equality, 130, 180, "left", '#f44336');
-                        drawPercentageText(might, 130, 300, "left", '#ff9800');
-                        drawPercentageText(liberty, 130, 420, "left", '#ffeb3b');
-                        drawPercentageText(tradition, 130, 540, "left", '#8bc34a');
-                        drawPercentageText(wealth, 670, 180, "right", '#00897b');
-                        drawPercentageText(peace, 670, 300, "right", '#03a9f4');
-                        drawPercentageText(authority, 670, 420, "right", '#3f51b5');
-                        drawPercentageText(progress, 670, 540, "right", '#9c27b0');
+                        drawPercentageText(equality, 130, 180, "left", '#e63946');
+                        drawPercentageText(might, 130, 300, "left", '#f77f00');
+                        drawPercentageText(liberty, 130, 420, "left", '#ffc300');
+                        drawPercentageText(tradition, 130, 540, "left", '#8338ec');
+                        drawPercentageText(wealth, 670, 180, "right", '#1d3557');
+                        drawPercentageText(peace, 670, 300, "right", '#a8dadc');
+                        drawPercentageText(authority, 670, 420, "right", '#457b9d');
+                        drawPercentageText(progress, 670, 540, "right", '#3a86ff');
 
-                        // Desenha textos dos eixos e rodapé
-                        ctx.fillStyle = "#222222"; ctx.font = "300 20px Montserrat";
+                        ctx.fillStyle = "#222222"; ctx.font = "300 20px Poppins";
                         ctx.textAlign = "right"; ctx.textBaseline = "alphabetic";
-                        if(typeof version !== 'undefined' && version) ctx.fillText(version, 780, 40); // Só mostra se 'version' existir
+                        if(typeof version !== 'undefined' && version) ctx.fillText(version, 780, 40);
 
-                        ctx.font = "400 24px Montserrat"; ctx.textAlign = "center";
+                        ctx.font = "400 24px Poppins"; ctx.textAlign = "center";
                         ctx.fillText("Econômico: " + document.getElementById("economic-label").innerHTML, 400, 165);
                         ctx.fillText("Diplomático: " + document.getElementById("diplomatic-label").innerHTML, 400, 285);
                         ctx.fillText("Civil: " + document.getElementById("state-label").innerHTML, 400, 405);
                         ctx.fillText("Social: " + document.getElementById("society-label").innerHTML, 400, 525);
 
-                        // Define a imagem do banner e mostra o botão de cópia
                         const bannerElement = document.getElementById("banner");
                         const copyButton = document.getElementById("copy-banner-button");
                         if (bannerElement) {
-                            bannerElement.src = c.toDataURL('image/png'); // Especifica PNG
+                            bannerElement.src = c.toDataURL('image/png');
                             bannerElement.style.display = 'block';
-                            if (copyButton) copyButton.style.display = 'inline-block'; // Mostra botão de cópia
-                        } else {
-                            console.error("Elemento #banner não encontrado.")
+                            if (copyButton) copyButton.style.display = 'inline-block';
                         }
-                    }; // Fim de drawRestOfCanvas
+                    };
 
-                    // Carrega imagens usando Promises para garantir que todas terminaram
                     imagesToLoad.forEach(imgData => {
                         loadPromises.push(new Promise((resolve, reject) => {
                              const imgElement = document.getElementById(imgData.id);
@@ -388,10 +339,9 @@
                                 const loadImage = () => {
                                     try {
                                         ctx.drawImage(imgElement, imgData.x, imgData.y, imgData.w, imgData.h);
-                                        resolve(); // Resolve a promessa
+                                        resolve();
                                     } catch(e) {
-                                        console.error("Erro ao desenhar imagem:", imgData.id, e);
-                                        reject(e); // Rejeita em caso de erro de desenho
+                                        reject(e);
                                     }
                                 };
                                 if (imgElement.complete && imgElement.naturalHeight !== 0) {
@@ -399,23 +349,18 @@
                                 } else {
                                     imgElement.onload = loadImage;
                                     imgElement.onerror = () => {
-                                        console.error("Erro ao carregar imagem:", imgData.id);
-                                        reject(new Error("Falha ao carregar " + imgData.id)); // Rejeita se não carregar
+                                        reject(new Error("Falha ao carregar " + imgData.id));
                                     };
                                 }
                             } else {
-                                console.error("Elemento img não encontrado:", imgData.id);
-                                reject(new Error("Elemento não encontrado: " + imgData.id)); // Rejeita se não achar
+                                reject(new Error("Elemento não encontrado: " + imgData.id));
                             }
                         }));
                     });
 
-                    // Espera todas as imagens carregarem/desenharem
                     Promise.all(loadPromises)
-                        .then(drawRestOfCanvas) // Desenha o resto se tudo deu certo
+                        .then(drawRestOfCanvas)
                         .catch(error => {
-                            console.error("Falha ao carregar uma ou mais imagens para o canvas:", error);
-                            // Poderia exibir uma mensagem de erro alternativa no lugar do banner
                             const bannerElement = document.getElementById("banner");
                              if(bannerElement) {
                                 bannerElement.alt = "Erro ao gerar imagem dos resultados.";
@@ -424,19 +369,15 @@
                         });
 
                 } catch (e) {
-                    console.error("Erro fatal ao gerar o canvas:", e);
                     const bannerElement = document.getElementById("banner");
                     if(bannerElement) {
                         bannerElement.alt = "Erro ao gerar imagem dos resultados.";
                         bannerElement.style.display = 'none';
                     }
                 }
-             } // Fim de generateCanvasBanner
+             }
 
-
-            // --- Função para copiar imagem ---
             function dataURLtoBlob(dataurl) {
-                 // ... (código da função como antes) ...
                  try {
                     const arr = dataurl.split(','), mimeMatch = arr[0].match(/:(.*?);/);
                     if (!mimeMatch) throw new Error("Formato de Data URL inválido");
@@ -448,39 +389,31 @@
                     }
                     return new Blob([u8arr], {type:mime});
                 } catch (e) {
-                    console.error("Erro ao converter Data URL para Blob:", e);
                     return null;
                 }
             }
 
-            // --- Configuração do Botão Copiar ---
             function setupCopyButton() {
                 const copyButton = document.getElementById('copy-banner-button');
                 const bannerImage = document.getElementById('banner');
 
                 if (!copyButton || !bannerImage) {
-                    console.error("Botão de cópia ou imagem do banner não encontrado no DOM.");
                     return;
                 }
 
                 copyButton.addEventListener('click', async () => {
                     const originalButtonText = 'Copiar Imagem';
 
-                    // 1. Verificar Contexto Seguro (HTTPS ou localhost)
                     if (!window.isSecureContext) {
                         alert('Erro: A cópia de imagens só funciona em páginas seguras (HTTPS) ou localhost.');
-                        console.warn('Clipboard API bloqueada: Contexto não seguro.');
                         return;
                     }
 
-                    // 2. Verificar suporte da API Clipboard
                     if (!navigator.clipboard || !navigator.clipboard.write) {
                         alert('Seu navegador não suporta a função de copiar imagens diretamente.');
-                        console.warn('Clipboard API não suportada.');
                         return;
                     }
 
-                    // 3. Verificar se a imagem está pronta
                      if (!bannerImage.src || !bannerImage.src.startsWith('data:image/')) {
                         alert('Aguarde a imagem do banner ser completamente gerada antes de copiar.');
                         return;
@@ -493,7 +426,6 @@
                         const blob = dataURLtoBlob(bannerImage.src);
                         if (!blob) throw new Error("Falha ao criar Blob da imagem.");
 
-                        // Tenta escrever na área de transferência
                         await navigator.clipboard.write([
                             new ClipboardItem({
                                 [blob.type]: blob
@@ -501,17 +433,14 @@
                         ]);
 
                         copyButton.textContent = 'Copiado!';
-                        // Resetar botão após sucesso
                         setTimeout(() => {
                             copyButton.textContent = originalButtonText;
                             copyButton.disabled = false;
                         }, 2000);
 
                     } catch (err) {
-                        console.error('Erro ao copiar imagem para a área de transferência: ', err);
                         alert(`Falha ao copiar a imagem.\nCausa provável: Permissão negada ou erro interno.\nDetalhe: ${err.message}`);
                         copyButton.textContent = 'Erro ao Copiar';
-                        // Resetar botão após erro
                          setTimeout(() => {
                             copyButton.textContent = originalButtonText;
                             copyButton.disabled = false;
@@ -520,22 +449,13 @@
                 });
             }
 
-
-            // --- Inicialização Pós Carregamento ---
             window.addEventListener('load', () => {
-                // Gera o banner APÓS a página carregar completamente
-                // Usar um delay maior pode ajudar se houver fontes/imagens pesadas
                 setTimeout(generateCanvasBanner, 250);
-
-                // Configura o botão de cópia APÓS a página carregar
                 setupCopyButton();
             });
 
 
         } else {
-             // --- Código de Erro se ideologies.js não carregar ---
-             console.error("Erro Crítico: ideologies.js não foi carregado ou a variável 'ideologies' não está definida.");
-             // Opcional: Mostrar mensagem de erro clara ao usuário no corpo da página
              document.body.innerHTML = `<h1>Erro</h1><p>Não foi possível carregar os dados necessários (${'ideologies.js'}). Verifique sua conexão ou contate o administrador.</p>`;
         }
     </script>

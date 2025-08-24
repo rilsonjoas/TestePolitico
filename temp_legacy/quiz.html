@@ -3,7 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:400,700" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <link href='style.css' rel='stylesheet' type='text/css'>
     <title>Questionário - Teste Político 8 Valores</title>
     <link rel="icon" type="x-icon" href="icon.png">
@@ -13,55 +15,33 @@
     <script type="application/javascript" src="questions.js"></script>
 
           
-<h1><a href="index.html" class="header-link">Teste Político 8 Valores</a></h1>
+    <h1><a href="index.html" class="header-link">Teste Político 8 Valores</a></h1>
     <hr>
     <h2 style="text-align:center;" id="question-number">Carregando...</h2>
     <p class="question" id="question-text">Carregando pergunta...</p> 
 
-    <!-- Botões de resposta -->
     <button class="button stronglyAgree" onclick="next_question( 1.0)">Concordo Totalmente</button> <br>
     <button class="button agree" onclick="next_question( 0.5)">Concordo</button> <br>
     <button class="button neutral" onclick="next_question( 0.0)">Neutro/Não sei</button> <br>
     <button class="button disagree" onclick="next_question(-0.5)">Discordo</button> <br>
     <button class="button stronglyDisagree" onclick="next_question(-1.0)">Discordo Totalmente</button> <br>
 
-    <!-- Botão Anterior centralizado -->
     <div class="button-container" style="text-align: center; margin-top: 1.5rem;">
         <button class="small_button" onclick="prev_question()" id="back_button" style="display: none;">Anterior</button>
         <button class="small_button_off" id="back_button_off">Anterior</button>
     </div>
 
-    <!-- Scripts de estatísticas aqui -->
     <script type="text/javascript">
-    // Script de estatísticas (ex: statcounter)
-    var sc_project=11325211;
-    var sc_invisible=1;
-    var sc_security="fd9f0659";
-    var scJsHost = (("https:" == document.location.protocol) ?
-    "https://secure." : "http://www.");
-    document.write("<sc"+"ript type='text/javascript' src='" +
-    scJsHost+
-    "statcounter.com/counter/counter.js'></"+"script>");
-    </script>
-    <noscript><div class="statcounter"><a title="estatísticas web"
-    href="http://statcounter.com/" target="_blank"><img
-    class="statcounter"
-    src="//c.statcounter.com/11325211/0/fd9f0659/1/" alt="estatísticas web"></a></div></noscript>
-
-    <!-- JavaScript para o teste em si -->
-    <script>
-        // Garante que 'questions' existe antes de rodar o script
         if (typeof questions !== 'undefined') {
-            var max_econ, max_dipl, max_govt, max_scty; // Pontuações máximas possíveis
+            var max_econ, max_dipl, max_govt, max_scty;
             max_econ = max_dipl = max_govt = max_scty = 0;
             let econ_array = new Array(questions.length);
             let dipl_array = new Array(questions.length);
             let govt_array = new Array(questions.length);
             let scty_array = new Array(questions.length);
-            var qn = 0; // Número da pergunta
-            var saved_answers = {}; // Objeto para guardar respostas temporárias
+            var qn = 0;
+            var saved_answers = {};
 
-            // Calcula máximos
             for (var i = 0; i < questions.length; i++) {
                 max_econ += Math.abs(questions[i].effect.econ);
                 max_dipl += Math.abs(questions[i].effect.dipl);
@@ -74,18 +54,15 @@
                 document.getElementById("question-number").innerHTML = "Pergunta " + (qn + 1) + " de " + (questions.length);
                 if (qn === 0) {
                     document.getElementById("back_button").style.display = 'none';
-                    document.getElementById("back_button_off").style.display = 'inline-block'; // Usa inline-block para centralizar
+                    document.getElementById("back_button_off").style.display = 'inline-block';
                 } else {
                     document.getElementById("back_button").style.display = 'inline-block';
                     document.getElementById("back_button_off").style.display = 'none';
                 }
-                // Restaurar foco ou indicar resposta anterior visualmente (opcional)
             }
 
             function next_question(mult) {
-                // Salva a resposta atual antes de avançar
-                 saved_answers[qn] = mult;
-
+                saved_answers[qn] = mult;
                 econ_array[qn] = mult * questions[qn].effect.econ;
                 dipl_array[qn] = mult * questions[qn].effect.dipl;
                 govt_array[qn] = mult * questions[qn].effect.govt;
@@ -104,9 +81,7 @@
                     return;
                 }
                 qn--;
-                // Remove a resposta salva da pergunta atual ao voltar
                 delete saved_answers[qn];
-                // Zera os efeitos da pergunta que estamos voltando
                 econ_array[qn] = 0;
                 dipl_array[qn] = 0;
                 govt_array[qn] = 0;
@@ -116,7 +91,7 @@
             }
 
             function calc_score(score, max) {
-                 if (max === 0) return "50.0"; // Evita divisão por zero se não houver perguntas para um eixo
+                 if (max === 0) return "50.0";
                 return (100 * (max + score) / (2 * max)).toFixed(1);
             }
 
@@ -133,13 +108,10 @@
                     `&s=${calc_score(final_scty, max_scty)}`;
             }
 
-            // Inicia a primeira pergunta
             init_question();
-
         } else {
              document.getElementById("question-number").innerHTML = "Erro";
              document.getElementById("question-text").innerHTML = "Não foi possível carregar as perguntas. Verifique se o arquivo 'questions.js' está acessível e correto.";
-             // Esconder botões de resposta e navegação
              document.querySelectorAll('.button, .small_button, .small_button_off').forEach(btn => btn.style.display = 'none');
         }
     </script>
