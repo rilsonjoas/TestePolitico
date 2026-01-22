@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Teste Político 8 Valores
 
-## Getting Started
+Um quiz político interativo que avalia seu posicionamento em 8 valores políticos através de 70 questões, identificando sua ideologia política com base em suas respostas.
 
-First, run the development server:
+**[Acesse o quiz aqui](https://teste-politico.vercel.app/)**
+
+## Sobre o Projeto
+
+O Teste Político 8 Valores é uma aplicação web que analisa o posicionamento político do usuário em 4 eixos (8 valores):
+
+| Eixo | Valores |
+|------|---------|
+| **Econômico** | Igualdade vs Mercado |
+| **Diplomático** | Nação vs Mundo |
+| **Governo** | Liberdade vs Autoridade |
+| **Social** | Tradição vs Progresso |
+
+Ao final do quiz, você recebe:
+- Seu posicionamento percentual em cada eixo
+- A ideologia política mais próxima do seu perfil
+- Políticos e livros de referência relacionados à sua ideologia
+
+## Tecnologias
+
+- **[Next.js 15](https://nextjs.org/)** - Framework React com App Router
+- **[TypeScript](https://www.typescriptlang.org/)** - Tipagem estática
+- **[Tailwind CSS](https://tailwindcss.com/)** - Estilização
+- **[shadcn/ui](https://ui.shadcn.com/)** - Componentes de UI
+- **[html2canvas](https://html2canvas.hertzen.com/)** - Geração de imagem dos resultados
+
+## Funcionalidades
+
+- Quiz com 70 questões sobre temas políticos, econômicos e sociais
+- Escala de 5 pontos (Discordo Totalmente → Concordo Totalmente)
+- Tema claro/escuro
+- Geração de imagem do resultado para compartilhamento
+- Design responsivo (mobile e desktop)
+- Interface em Português
+
+## Executando Localmente
 
 ```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/teste-politico.git
+cd teste-politico
+
+# Instale as dependências
+npm install
+
+# Inicie o servidor de desenvolvimento
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse [http://localhost:3000](http://localhost:3000) no seu navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts Disponíveis
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Comando | Descrição |
+|---------|-----------|
+| `npm run dev` | Inicia o servidor de desenvolvimento |
+| `npm run build` | Gera o build de produção |
+| `npm start` | Inicia o servidor de produção |
+| `npm run lint` | Executa o linter |
 
-## Learn More
+## Estrutura do Projeto
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/                 # Páginas (App Router)
+│   ├── page.tsx         # Home - apresentação dos 8 valores
+│   ├── instructions/    # Instruções do quiz
+│   ├── quiz/            # Página do quiz
+│   └── results/         # Página de resultados
+├── components/          # Componentes React
+│   └── ui/              # Componentes shadcn/ui
+├── lib/
+│   ├── data.ts          # Questões e ideologias
+│   └── utils.ts         # Funções utilitárias
+└── hooks/               # Custom hooks
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+O projeto está hospedado na [Vercel](https://vercel.com). Para fazer seu próprio deploy:
 
-## Deploy on Vercel
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/rilsonjoas/TestePolitico)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contribuindo
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull requests.
+
+## Licença
+
+Este projeto é open source e está disponível sob a licença MIT.

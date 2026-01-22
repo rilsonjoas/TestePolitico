@@ -116,10 +116,6 @@ function ResultsContent() {
             </Link>
           </div>
         </main>
-
-        <footer className="text-center mt-12 py-4 border-t">
-          <p>&copy; 2025 - Desenvolvido por <a href="https://github.com/rilsonjoas" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Rilson Joás</a></p>
-        </footer>
       </>
     </div>
   );

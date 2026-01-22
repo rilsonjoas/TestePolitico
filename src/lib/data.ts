@@ -385,442 +385,661 @@ export const ideologies: Ideology[] = [
   {
     name: "Anarco-Comunismo",
     stats: { econ: 100, dipl: 50, govt: 100, scty: 90 },
-    desc: "O Anarco-Comunismo é uma vertente do anarquismo que defende a abolição do Estado, do capitalismo, do trabalho assalariado e da propriedade privada, substituindo-os pela propriedade comum dos meios de produção. A visão é de uma sociedade horizontal composta por comunas autogeridas e associações voluntárias, onde os indivíduos são livres para satisfazer suas necessidades com base no princípio 'de cada um segundo sua capacidade, a cada um segundo suas necessidades'. É uma filosofia que combina um forte compromisso com a igualdade econômica (comunismo) com um igualmente forte compromisso com a liberdade individual (anarquismo).",
+    desc: "Acreditamos que a verdadeira liberdade só é possível com igualdade material. Lutamos pela abolição do Estado, do capitalismo e de toda hierarquia opressora, construindo em seu lugar uma sociedade de comunas livres e autogeridas. Cada pessoa contribui voluntariamente segundo suas capacidades e recebe segundo suas necessidades, sem patrões, sem polícia, sem fronteiras. A cooperação livre entre iguais substitui a coerção. A propriedade comum dos meios de produção garante que ninguém explore o trabalho alheio. Rejeitamos tanto a tirania do capital quanto a do Estado autoritário.",
     politicians: [
       {
-        name: "Piotr Kropotkin (Teórico)",
+        name: "Piotr Kropotkin",
         link: "https://pt.wikipedia.org/wiki/Piotr_Kropotkin",
       },
       {
-        name: "Errico Malatesta (Teórico)",
+        name: "Errico Malatesta",
         link: "https://pt.wikipedia.org/wiki/Errico_Malatesta",
       },
       {
-        name: "Nestor Makhno (Líder Revolucionário)",
+        name: "Nestor Makhno",
         link: "https://pt.wikipedia.org/wiki/Nestor_Makhno",
+      },
+      {
+        name: "Emma Goldman",
+        link: "https://pt.wikipedia.org/wiki/Emma_Goldman",
       },
     ],
     books: [
-      { title: "A Conquista do Pão", link: "" },
-      { title: "Mutualismo: Um Fator de Evolução", link: "" },
-      { title: "Anarquismo e Outros Ensaios", link: "" },
-      { title: "Campos, Fábricas e Oficinas", link: "" },
+      {
+        title: "A Conquista do Pão - Kropotkin",
+        link: "https://amzn.to/4r7aY6Q",
+      },
+      {
+        title:
+          "O indivíduo, a sociedade e o Estado e outros ensaios - Emma Goldman",
+        link: "https://amzn.to/4sQW9qy",
+      },
+      {
+        title: "No Café - Diálogos Sobre O Anarquismo - Malatesta",
+        link: "https://amzn.to/4jQ7djI",
+      },
     ],
   },
   {
     name: "Comunismo Libertário",
     stats: { econ: 100, dipl: 70, govt: 80, scty: 80 },
-    desc: "O Comunismo Libertário compartilha muitas semelhanças com o Anarco-Comunismo, defendendo uma sociedade sem Estado e sem classes. No entanto, pode haver uma maior ênfase em estruturas federais e democráticas para coordenar as comunas. A ideologia se opõe a todas as formas de autoridade coercitiva e hierarquia, seja ela estatal, capitalista ou social. O objetivo é criar uma sociedade onde a liberdade individual e a igualdade social sejam mutuamente reforçadas e interdependentes, frequentemente incorporando pautas ecológicas e municipalistas.",
+    desc: "Defendemos uma sociedade sem classes e sem Estado, organizada através de federações de comunas democráticas e assembleias populares. Não basta derrubar o capitalismo se for para erguer uma nova burocracia em seu lugar. O poder deve fluir de baixo para cima, das bases para as coordenações, nunca o contrário. Combinamos a luta por justiça econômica com a defesa intransigente das liberdades individuais. Incorporamos também a luta ecológica, pois não há libertação humana sem harmonia com a natureza. Municipalismo, democracia direta e ecologia social são nossos pilares.",
     politicians: [
       {
-        name: "Murray Bookchin (Teórico)",
+        name: "Murray Bookchin",
         link: "https://pt.wikipedia.org/wiki/Murray_Bookchin",
       },
       {
-        name: "Daniel Guérin (Teórico)",
+        name: "Daniel Guérin",
         link: "https://pt.wikipedia.org/wiki/Daniel_Gu%C3%A9rin",
+      },
+      {
+        name: "Abdullah Öcalan",
+        link: "https://pt.wikipedia.org/wiki/Abdullah_%C3%96calan",
+      },
+      {
+        name: "Federica Montseny",
+        link: "https://pt.wikipedia.org/wiki/Federica_Montseny",
       },
     ],
     books: [
-      { title: "A Ecologia da Liberdade", link: "" },
-      { title: "Anarquismo: Da Teoria à Prática", link: "" },
-      { title: "Post-Scarcity Anarchism", link: "" },
+      { title: "A Ecologia da Liberdade - Murray Bookchin", link: "" },
+      { title: "Anarquismo: Da Teoria à Prática - Daniel Guérin", link: "" },
+      { title: "Post-Scarcity Anarchism - Murray Bookchin", link: "" },
+      { title: "Confederalismo Democrático - Abdullah Öcalan", link: "" },
+      { title: "O Municipalismo Libertário - Murray Bookchin", link: "" },
     ],
   },
   {
     name: "Trotskismo",
     stats: { econ: 100, dipl: 100, govt: 60, scty: 80 },
-    desc: "O Trotskismo é uma corrente do marxismo desenvolvida por Leon Trotsky. Sua principal característica é a teoria da 'revolução permanente', que argumenta que a revolução socialista deve ser um processo contínuo e mundial, não confinado a um único país. Trotskistas são críticos ferrenhos do stalinismo, que acusam de ter traído a revolução ao criar uma burocracia totalitária e contrarrevolucionária. Defendem a democracia operária, com controle dos trabalhadores sobre o Estado e a economia, e são internacionalistas convictos, promovendo a solidariedade e a união da classe trabalhadora global.",
+    desc: "A revolução não pode parar nas fronteiras nacionais nem se contentar com reformas parciais. Defendemos a revolução permanente: ela deve se expandir internacionalmente e aprofundar-se constantemente até a completa emancipação da classe trabalhadora mundial. Condenamos a degeneração burocrática do stalinismo, que traiu os ideais de Outubro ao criar uma casta privilegiada e totalitária. Lutamos por uma democracia operária genuína, com sovietes livres, controle dos trabalhadores sobre a produção e uma Internacional revolucionária que una o proletariado de todos os países.",
     politicians: [
       {
-        name: "Leon Trotsky (Revolucionário)",
+        name: "Leon Trotsky",
         link: "https://pt.wikipedia.org/wiki/Leon_Trotsky",
       },
       {
-        name: "Ernest Mandel (Teórico)",
+        name: "Ernest Mandel",
         link: "https://pt.wikipedia.org/wiki/Ernest_Mandel",
+      },
+      {
+        name: "James P. Cannon",
+        link: "https://pt.wikipedia.org/wiki/James_P._Cannon",
+      },
+      {
+        name: "Nahuel Moreno",
+        link: "https://pt.wikipedia.org/wiki/Nahuel_Moreno",
       },
     ],
     books: [
-      { title: "A Revolução Permanente", link: "" },
-      { title: "História da Revolução Russa", link: "" },
-      { title: "A Revolução Traída", link: "" },
-      { title: "Terrorismo e Comunismo", link: "" },
+      { title: "A Revolução Permanente - Trotsky", link: "" },
+      { title: "História da Revolução Russa - Trotsky", link: "" },
+      { title: "A Revolução Traída - Trotsky", link: "" },
+      { title: "O Programa de Transição - Trotsky", link: "" },
+      { title: "Capitalismo Tardio - Ernest Mandel", link: "" },
     ],
   },
   {
     name: "Marxismo",
     stats: { econ: 100, dipl: 70, govt: 40, scty: 80 },
-    desc: "O Marxismo é um método de análise socioeconômica baseado nas obras de Karl Marx e Friedrich Engels. Ele postula que a história humana é uma sucessão de lutas de classes e que o capitalismo é um sistema inerentemente explorador. Busca a superação do capitalismo através da revolução proletária, visando uma sociedade comunista final: sem classes, sem Estado e com propriedade comum dos meios de produção. No período de transição, propõe a 'ditadura do proletariado' para consolidar o poder dos trabalhadores. É uma ideologia fundamentalmente internacionalista e progressista.",
+    desc: "A história de toda sociedade até hoje é a história da luta de classes. O capitalismo, apesar de seu dinamismo, é um sistema baseado na exploração do trabalho assalariado, onde os trabalhadores produzem mais valor do que recebem. Através da análise materialista da história e da economia política, compreendemos as contradições internas do capital que inevitavelmente levarão à sua superação. Defendemos a organização da classe trabalhadora para tomar o poder e construir uma sociedade sem classes, sem exploração e, finalmente, sem Estado. Proletários de todos os países, uni-vos!",
     politicians: [
       {
-        name: "Karl Marx (Filósofo)",
+        name: "Karl Marx",
         link: "https://pt.wikipedia.org/wiki/Karl_Marx",
       },
       {
-        name: "Friedrich Engels (Filósofo)",
+        name: "Friedrich Engels",
         link: "https://pt.wikipedia.org/wiki/Friedrich_Engels",
       },
       {
-        name: "Rosa Luxemburgo (Revolucionária)",
+        name: "Rosa Luxemburgo",
         link: "https://pt.wikipedia.org/wiki/Rosa_Luxemburgo",
+      },
+      {
+        name: "Antonio Gramsci",
+        link: "https://pt.wikipedia.org/wiki/Antonio_Gramsci",
       },
     ],
     books: [
-      { title: "O Manifesto Comunista", link: "" },
-      { title: "O Capital", link: "" },
-      { title: "Reforma ou Revolução?", link: "" },
+      { title: "O Manifesto Comunista - Marx e Engels", link: "" },
+      { title: "O Capital - Karl Marx", link: "" },
+      { title: "Reforma ou Revolução? - Rosa Luxemburgo", link: "" },
+      { title: "Cadernos do Cárcere - Antonio Gramsci", link: "" },
+      { title: "A Ideologia Alemã - Marx e Engels", link: "" },
     ],
   },
   {
     name: "De Leonismo",
     stats: { econ: 100, dipl: 30, govt: 30, scty: 80 },
-    desc: "O De Leonismo é uma forma de marxismo sindicalista desenvolvida por Daniel De Leon. Ele defende o estabelecimento de uma república socialista industrial, onde o governo seria formado por sindicatos organizados por setor. A estratégia combina a luta política, através de um partido socialista, com a luta econômica, por meio de sindicatos industriais revolucionários. O objetivo é alcançar o socialismo (propriedade comum) através de uma transformação radical da sociedade, com uma estrutura de poder centralizada na transição, mas focada na nação e socialmente progressista.",
+    desc: "O caminho para o socialismo passa pela organização simultânea no campo político e no econômico. Defendemos sindicatos industriais revolucionários que, organizados por setor produtivo, formarão a base de uma república socialista industrial. O voto socialista nas urnas dará legitimidade à transformação; os sindicatos industriais darão a ela substância econômica. O Estado burguês será substituído por um congresso de representantes dos trabalhadores de cada indústria. Rejeitamos tanto o reformismo impotente quanto o anarquismo desorganizado. A classe trabalhadora, organizada e consciente, será sua própria libertadora.",
     politicians: [
       {
-        name: "Daniel De Leon (Teórico/Ativista)",
+        name: "Daniel De Leon",
         link: "https://pt.wikipedia.org/wiki/Daniel_De_Leon",
+      },
+      {
+        name: "James Connolly",
+        link: "https://pt.wikipedia.org/wiki/James_Connolly",
+      },
+      {
+        name: "Arnold Petersen",
+        link: "https://en.wikipedia.org/wiki/Arnold_Petersen",
       },
     ],
     books: [
-      { title: "Reform or Revolution?", link: "" },
-      { title: "Socialist Reconstruction of Society", link: "" },
+      { title: "Reforma ou Revolução - Daniel De Leon", link: "" },
+      { title: "Reconstrução Socialista da Sociedade - De Leon", link: "" },
+      { title: "Sindicalismo Industrial - De Leon", link: "" },
+      { title: "O Que Significa De Leonismo - Arnold Petersen", link: "" },
     ],
   },
   {
     name: "Leninismo",
     stats: { econ: 100, dipl: 40, govt: 20, scty: 70 },
-    desc: "O Leninismo é um desenvolvimento da teoria marxista por Vladimir Lênin, que adapta o marxismo às condições da Rússia no início do século XX. Sua principal contribuição é a ênfase na necessidade de um 'partido de vanguarda', composto por revolucionários profissionais, para liderar a classe trabalhadora na tomada do poder e estabelecer uma ditadura do proletariado. O Leninismo é pragmático e focado na estratégia revolucionária, defendendo o centralismo democrático dentro do partido e um Estado forte na fase de transição para o comunismo.",
+    desc: "A classe trabalhadora, por si só, não desenvolve espontaneamente consciência revolucionária. É necessário um partido de vanguarda, disciplinado e organizado pelo centralismo democrático, para trazer essa consciência de fora e liderar as massas na tomada do poder. O imperialismo é a fase superior do capitalismo, e sua derrota exige uma estratégia revolucionária coordenada. A ditadura do proletariado, através de sovietes e conselhos populares, esmaga a resistência da burguesia e inicia a construção socialista. O Estado eventualmente definha quando as classes desaparecem.",
     politicians: [
       {
-        name: "Vladimir Lênin (Revolucionário)",
+        name: "Vladimir Lênin",
         link: "https://pt.wikipedia.org/wiki/Vladimir_Lenin",
+      },
+      {
+        name: "Alexandra Kollontai",
+        link: "https://pt.wikipedia.org/wiki/Alexandra_Kollontai",
+      },
+      {
+        name: "Nikolai Bukharin",
+        link: "https://pt.wikipedia.org/wiki/Nikolai_Bukharin",
+      },
+      {
+        name: "Fidel Castro",
+        link: "https://pt.wikipedia.org/wiki/Fidel_Castro",
       },
     ],
     books: [
-      { title: "O Estado e a Revolução", link: "" },
-      { title: "Que Fazer?", link: "" },
-      { title: "Imperialismo, Fase Superior do Capitalismo", link: "" },
+      { title: "O Estado e a Revolução - Lênin", link: "" },
+      { title: "Que Fazer? - Lênin", link: "" },
+      { title: "Imperialismo, Fase Superior do Capitalismo - Lênin", link: "" },
+      { title: "As Teses de Abril - Lênin", link: "" },
+      { title: "Esquerdismo: Doença Infantil do Comunismo - Lênin", link: "" },
     ],
   },
   {
     name: "Stalinismo/Maoismo",
     stats: { econ: 100, dipl: 20, govt: 0, scty: 60 },
-    desc: "Stalinismo e Maoismo são ideologias totalitárias baseadas no Marxismo-Leninismo. O Stalinismo, sob Josef Stalin, se caracteriza pelo controle estatal absoluto sobre a economia (planos quinquenais), industrialização forçada, coletivização da agricultura, culto extremo à personalidade, e repressão em massa através de expurgos e gulags. O Maoismo, de Mao Tsé-Tung, adapta o leninismo à China, enfatizando o campesinato como força revolucionária, a guerra popular prolongada e a 'revolução cultural'. Ambas as ideologias são marcadas por um autoritarismo extremo, nacionalismo ('socialismo em um só país') e supressão total da dissidência.",
+    desc: "É possível e necessário construir o socialismo em um só país, cercado por potências hostis. Isso exige industrialização acelerada, coletivização da agricultura e um partido forte que elimine implacavelmente inimigos de classe e sabotadores. O Maoismo adapta esses princípios às condições do Terceiro Mundo, reconhecendo o campesinato como força revolucionária principal e desenvolvendo a estratégia de guerra popular prolongada. A luta de classes continua sob o socialismo, exigindo vigilância constante e revolução cultural para combater a restauração capitalista. A linha de massas garante que o partido nunca se afaste do povo.",
     politicians: [
       {
-        name: "Josef Stalin (URSS)",
+        name: "Josef Stalin",
         link: "https://pt.wikipedia.org/wiki/Josef_Stalin",
       },
       {
-        name: "Mao Tsé-Tung (China)",
+        name: "Mao Tsé-Tung",
         link: "https://pt.wikipedia.org/wiki/Mao_Ts%C3%A9-Tung",
+      },
+      {
+        name: "Kim Il-sung",
+        link: "https://pt.wikipedia.org/wiki/Kim_Il-sung",
+      },
+      {
+        name: "Enver Hoxha",
+        link: "https://pt.wikipedia.org/wiki/Enver_Hoxha",
       },
     ],
     books: [
-      { title: "Fundamentos do Leninismo", link: "" },
-      { title: "O Livro Vermelho", link: "" },
+      { title: "Fundamentos do Leninismo - Stalin", link: "" },
+      { title: "O Livro Vermelho - Mao Tsé-Tung", link: "" },
+      { title: "Sobre a Prática e a Contradição - Mao", link: "" },
       {
-        title: "(Textos críticos como 'Arquipélago Gulag' de Soljenítsin)",
+        title: "Problemas Econômicos do Socialismo na URSS - Stalin",
         link: "",
       },
+      { title: "Sobre a Guerra Prolongada - Mao", link: "" },
     ],
   },
   {
     name: "Comunismo Religioso",
     stats: { econ: 100, dipl: 50, govt: 30, scty: 30 },
-    desc: "O Comunismo Religioso é uma forma de comunismo que encontra suas bases em preceitos religiosos, em vez do materialismo histórico marxista. Defende que os princípios de partilha, vida comunitária e igualdade radical estão presentes em textos sagrados (como nos Atos dos Apóstolos do Cristianismo). Propõe uma sociedade com propriedade comum e ausência de classes, motivada por ideais espirituais e morais. Tende a ser socialmente tradicionalista e pode variar em sua visão sobre a estrutura de poder, mas geralmente se opõe ao Estado secular.",
+    desc: "A comunhão de bens não é uma invenção moderna, está nas Escrituras: 'Nenhum deles considerava exclusivamente sua coisa alguma que possuísse, mas tudo entre eles era comum.' A verdadeira fé exige que vivamos como irmãos, partilhando o pão e o trabalho, sem propriedade privada que corrompe a alma com a ganância. A igualdade radical foi o plano divino desde o início; a propriedade é o pecado original da sociedade. Comunidades de fé que vivem em comum realizam na terra o Reino dos Céus, onde não há meu nem teu, mas apenas nosso sob os olhos de Deus.",
     politicians: [
       {
-        name: "Thomas Müntzer (Teólogo/Rebelde)",
+        name: "Thomas Müntzer",
         link: "https://pt.wikipedia.org/wiki/Thomas_M%C3%BCntzer",
       },
       {
-        name: "Gerrard Winstanley (Digger)",
+        name: "Gerrard Winstanley",
         link: "https://pt.wikipedia.org/wiki/Gerrard_Winstanley",
+      },
+      {
+        name: "Camilo Torres",
+        link: "https://pt.wikipedia.org/wiki/Camilo_Torres_Restrepo",
       },
     ],
     books: [
-      { title: "A Lei da Liberdade", link: "" },
+      { title: "A Lei da Liberdade - Gerrard Winstanley", link: "" },
+      { title: "A Nova Lei da Retidão - Winstanley", link: "" },
+      { title: "Sermões Revolucionários - Thomas Müntzer", link: "" },
+      { title: "Atos dos Apóstolos (Bíblia)", link: "" },
     ],
   },
   {
     name: "Socialismo de Estado",
     stats: { econ: 80, dipl: 30, govt: 30, scty: 70 },
-    desc: "O Socialismo de Estado é uma ideologia que defende a propriedade e o controle estatal sobre os meios de produção e a economia. Diferente de vertentes mais libertárias, vê o aparato estatal como o principal agente para implementar o socialismo. Mantém uma estrutura de governo centralizada e burocrática para administrar a economia planificada e os serviços públicos. Geralmente é nacionalista, focando no desenvolvimento do próprio país, e pode ser socialmente progressista, embora com controle estatal sobre a vida civil.",
+    desc: "O Estado é o instrumento mais eficaz para transformar a sociedade e garantir justiça econômica. Através da propriedade pública dos setores estratégicos, planejamento centralizado e administração técnica, podemos superar a anarquia do mercado e suas crises cíclicas. A industrialização dirigida pelo Estado desenvolve a nação e eleva o padrão de vida do povo trabalhador. A burocracia estatal, quando bem organizada, distribui recursos de forma mais racional que a mão invisível do mercado. O desenvolvimento nacional vem antes das utopias internacionalistas.",
     politicians: [
       {
-        name: "(Líderes de regimes de partido único não-totalitários)",
-        link: "",
+        name: "Getúlio Vargas",
+        link: "https://pt.wikipedia.org/wiki/Get%C3%BAlio_Vargas",
+      },
+      {
+        name: "Juan Perón",
+        link: "https://pt.wikipedia.org/wiki/Juan_Per%C3%B3n",
+      },
+      {
+        name: "Gamal Abdel Nasser",
+        link: "https://pt.wikipedia.org/wiki/Gamal_Abdel_Nasser",
+      },
+      {
+        name: "Jawaharlal Nehru",
+        link: "https://pt.wikipedia.org/wiki/Jawaharlal_Nehru",
       },
     ],
     books: [
+      { title: "A Descoberta da Índia - Nehru", link: "" },
+      { title: "Filosofia do Peronismo - Juan Perón", link: "" },
+      { title: "A Economia do Desenvolvimento - diversos autores", link: "" },
+      { title: "Planejamento Econômico - Oscar Lange", link: "" },
     ],
   },
   {
     name: "Socialismo Teocrático",
     stats: { econ: 80, dipl: 50, govt: 30, scty: 20 },
-    desc: "O Socialismo Teocrático combina princípios econômicos socialistas, como a propriedade estatal ou coletiva e a forte regulação, com um sistema de governo teocrático, onde as leis e a autoridade política derivam de preceitos religiosos e são exercidas por uma liderança clerical. Busca criar uma sociedade economicamente igualitária que adere estritamente a códigos morais e sociais tradicionais ditados pela religião dominante. É uma fusão de autoritarismo religioso com planejamento econômico centralizado.",
+    desc: "A justiça social e a justiça divina são uma só. A lei de Deus condena tanto a exploração do homem pelo homem quanto a imoralidade da sociedade secular. Defendemos um Estado que implemente a economia socialista sob orientação dos princípios sagrados e da liderança religiosa. A riqueza deve ser distribuída conforme os mandamentos divinos, e a sociedade deve viver segundo a moralidade prescrita pela fé verdadeira. Rejeitamos tanto o capitalismo materialista quanto o comunismo ateu. A revolução espiritual e a revolução social caminham juntas.",
     politicians: [
       {
-        name: "Ali Shariati (Influência no Irã)",
+        name: "Ali Shariati",
         link: "https://pt.wikipedia.org/wiki/Ali_Shariati",
+      },
+      {
+        name: "Muammar Gaddafi",
+        link: "https://pt.wikipedia.org/wiki/Muammar_Gaddafi",
+      },
+      {
+        name: "Ruhollah Khomeini (aspectos econômicos)",
+        link: "https://pt.wikipedia.org/wiki/Ruhollah_Khomeini",
       },
     ],
     books: [
-      {
-        title:
-      "",
-        link: "",
-      },
+      { title: "Religião contra Religião - Ali Shariati", link: "" },
+      { title: "O Livro Verde - Muammar Gaddafi", link: "" },
+      { title: "Marxismo e Outras Falácias Ocidentais - Shariati", link: "" },
+      { title: "Economia Islâmica - diversos autores", link: "" },
     ],
   },
   {
     name: "Socialismo Religioso",
     stats: { econ: 80, dipl: 50, govt: 70, scty: 20 },
-    desc: "O Socialismo Religioso busca conciliar os princípios socialistas de justiça social, igualdade e cooperação com os valores e ensinamentos de uma determinada fé. Diferente do socialismo teocrático, geralmente opera dentro de sistemas democráticos e não busca um Estado clerical. Movimentos como a Teologia da Libertação no Catolicismo são exemplos, interpretando a fé como uma 'opção preferencial pelos pobres' e defendendo reformas estruturais para combater a desigualdade. Tende a ser economicamente de esquerda, mas socialmente mais tradicionalista que o socialismo secular.",
+    desc: "A fé verdadeira exige compromisso com os pobres e oprimidos. Os profetas sempre denunciaram a injustiça e a acumulação de riquezas. A Teologia da Libertação nos ensina que pecar não é apenas transgressão individual, mas também estruturas sociais que perpetuam a miséria. Cristo estava entre os pobres, e nós devemos estar também. Defendemos reformas econômicas radicais, redistribuição de terras e riquezas, educação e saúde para todos, dentro de um quadro democrático. A libertação é espiritual e material, pessoal e coletiva.",
     politicians: [
       {
-        name: "Frei Betto (Teólogo da Libertação)",
+        name: "Frei Betto",
         link: "https://pt.wikipedia.org/wiki/Frei_Betto",
       },
       {
-        name: "Leonardo Boff (Teólogo da Libertação)",
+        name: "Leonardo Boff",
         link: "https://pt.wikipedia.org/wiki/Leonardo_Boff",
       },
       {
-        name: "Martin Luther King Jr. (Associado a alguns aspectos)",
+        name: "Oscar Romero",
+        link: "https://pt.wikipedia.org/wiki/%C3%93scar_Romero",
+      },
+      {
+        name: "Martin Luther King Jr.",
         link: "https://pt.wikipedia.org/wiki/Martin_Luther_King_Jr.",
       },
     ],
     books: [
-      { title: "Cristianismo e a Luta de Classes", link: "" },
-      { title: "Um Testamento de Esperança", link: "" },
+      { title: "Teologia da Libertação - Gustavo Gutiérrez", link: "" },
+      { title: "Jesus Cristo Libertador - Leonardo Boff", link: "" },
+      { title: "Batismo de Sangue - Frei Betto", link: "" },
+      { title: "Força para Amar - Martin Luther King Jr.", link: "" },
+      { title: "Igreja: Carisma e Poder - Leonardo Boff", link: "" },
     ],
   },
   {
     name: "Socialismo Democrático",
     stats: { econ: 80, dipl: 50, govt: 50, scty: 80 },
-    desc: "O Socialismo Democrático é uma ideologia que visa alcançar uma sociedade socialista através de meios democráticos e graduais, em vez de uma revolução violenta. Seus defensores participam do processo eleitoral para implementar reformas que aumentem o controle público e dos trabalhadores sobre a economia. Defendem a propriedade social ou estatal de setores estratégicos, um robusto estado de bem-estar social, e a expansão da democracia para a esfera econômica. Rejeitam os modelos autoritários associados ao comunismo do século XX.",
+    desc: "O socialismo deve ser conquistado através da democracia, e a democracia só é plena quando se estende à esfera econômica. Lutamos nas urnas, nos sindicatos e nos movimentos sociais por uma transformação gradual mas profunda da sociedade. Os setores estratégicos da economia devem ser controlados democraticamente pelo povo, não por acionistas ou burocratas. Um Estado de bem-estar robusto garante saúde, educação e moradia como direitos, não mercadorias. Rejeitamos tanto o capitalismo selvagem quanto o autoritarismo que se disfarçou de socialismo no século XX.",
     politicians: [
       {
-        name: "Bernie Sanders (EUA)",
-        link: "https://pt.wikipedia.org/wiki/Bernie_Sanders",
-      },
-      {
-        name: "Salvador Allende (Chile)",
+        name: "Salvador Allende",
         link: "https://pt.wikipedia.org/wiki/Salvador_Allende",
       },
       {
-        name: "Evo Morales (Bolívia)",
-        link: "https://pt.wikipedia.org/wiki/Evo_Morales",
+        name: "Bernie Sanders",
+        link: "https://pt.wikipedia.org/wiki/Bernie_Sanders",
+      },
+      {
+        name: "Jeremy Corbyn",
+        link: "https://pt.wikipedia.org/wiki/Jeremy_Corbyn",
+      },
+      {
+        name: "Alexandria Ocasio-Cortez",
+        link: "https://pt.wikipedia.org/wiki/Alexandria_Ocasio-Cortez",
       },
     ],
     books: [
-      { title: "O Caminho para o Poder (Karl Kautsky)", link: "" },
-      { title: "Socialismo: Passado e Futuro (Michael Harrington)", link: "" },
+      { title: "O Caminho para o Poder - Karl Kautsky", link: "" },
+      { title: "Socialismo: Passado e Futuro - Michael Harrington", link: "" },
+      { title: "Por Que Não o Socialismo? - G.A. Cohen", link: "" },
+      { title: "A Alma do Homem sob o Socialismo - Oscar Wilde", link: "" },
+      { title: "O ABC do Socialismo - Leo Huberman", link: "" },
     ],
   },
   {
     name: "Socialismo Revolucionário",
     stats: { econ: 80, dipl: 20, govt: 50, scty: 70 },
-    desc: "O Socialismo Revolucionário abrange correntes que acreditam que o socialismo só pode ser alcançado através da derrubada fundamental do sistema capitalista e do Estado burguês. Rejeita o reformismo e a via parlamentar como insuficientes para superar as estruturas de poder existentes. Acredita que a classe dominante nunca cederá seu poder pacificamente, tornando a revolução uma necessidade. A visão do Estado pós-revolucionário pode variar, mas a ênfase está na ruptura, não na transição gradual.",
+    desc: "O reformismo é uma ilusão! A burguesia nunca entregará seu poder pacificamente. A história mostra que toda conquista dos trabalhadores foi arrancada pela luta, e que toda concessão pode ser retirada. A via parlamentar está bloqueada pelos interesses do capital. Somente a ação revolucionária das massas organizadas pode destruir o Estado burguês e construir uma nova sociedade. Não queremos reformar o capitalismo, queremos superá-lo. A revolução não é um momento, é um processo que exige organização, consciência de classe e disposição para a luta.",
     politicians: [
       {
-        name: "Che Guevara (Revolucionário)",
+        name: "Che Guevara",
         link: "https://pt.wikipedia.org/wiki/Che_Guevara",
       },
       {
-        name: "Subcomandante Marcos (Zapatista)",
+        name: "Subcomandante Marcos",
         link: "https://pt.wikipedia.org/wiki/Subcomandante_Marcos",
+      },
+      {
+        name: "Thomas Sankara",
+        link: "https://pt.wikipedia.org/wiki/Thomas_Sankara",
+      },
+      {
+        name: "Hugo Blanco",
+        link: "https://pt.wikipedia.org/wiki/Hugo_Blanco",
       },
     ],
     books: [
-      { title: "O Estado e a Revolução (Lênin)", link: "" },
-      { title: "Guerra de Guerrilhas (Che Guevara)", link: "" },
+      { title: "O Estado e a Revolução - Lênin", link: "" },
+      { title: "Guerra de Guerrilhas - Che Guevara", link: "" },
+      { title: "O Homem e o Socialismo em Cuba - Che Guevara", link: "" },
+      { title: "Os Condenados da Terra - Frantz Fanon", link: "" },
+      { title: "Nosotros Decimos No - Eduardo Galeano", link: "" },
     ],
   },
   {
     name: "Socialismo Libertário",
     stats: { econ: 80, dipl: 80, govt: 80, scty: 80 },
-    desc: "O Socialismo Libertário é uma ampla categoria de filosofias políticas que promovem uma sociedade socialista sem um Estado centralizado e autoritário. Prioriza tanto a igualdade econômica quanto a liberdade individual, opondo-se a todas as formas de hierarquia coercitiva, sejam elas do Estado ou do capital. Defende a autogestão dos trabalhadores, a democracia direta e a descentralização do poder político. Inclui correntes como o anarquismo social, o municipalismo libertário e o sindicalismo.",
+    desc: "Socialismo sem liberdade é tirania; liberdade sem socialismo é privilégio. Defendemos uma sociedade onde os trabalhadores controlem democraticamente seus locais de trabalho e comunidades, sem patrões nem burocratas ditando suas vidas. Toda hierarquia deve justificar-se, e as que não podem ser justificadas devem ser desmanteladas. Opomos-nos igualmente ao capitalismo e ao 'socialismo realmente existente' que concentrou poder em novas elites. Democracia direta, autogestão, federalismo e solidariedade internacional são nossos princípios. O poder deve estar disperso, não concentrado.",
     politicians: [
       {
-        name: "Noam Chomsky (Intelectual)",
+        name: "Noam Chomsky",
         link: "https://pt.wikipedia.org/wiki/Noam_Chomsky",
       },
       {
-        name: "Howard Zinn (Historiador/Ativista)",
+        name: "Howard Zinn",
         link: "https://pt.wikipedia.org/wiki/Howard_Zinn",
+      },
+      {
+        name: "David Graeber",
+        link: "https://pt.wikipedia.org/wiki/David_Graeber",
+      },
+      {
+        name: "Angela Davis",
+        link: "https://pt.wikipedia.org/wiki/Angela_Davis",
       },
     ],
     books: [
-      { title: "A People's History of the United States", link: "" },
-      { title: "Sobre Anarquismo", link: "" },
+      {
+        title: "Uma História Popular dos Estados Unidos - Howard Zinn",
+        link: "",
+      },
+      { title: "Sobre Anarquismo - Noam Chomsky", link: "" },
+      { title: "Dívida: Os Primeiros 5000 Anos - David Graeber", link: "" },
+      { title: "Mulheres, Raça e Classe - Angela Davis", link: "" },
+      { title: "Razões para Agir - Noam Chomsky", link: "" },
     ],
   },
   {
     name: "Anarco-Sindicalismo",
     stats: { econ: 80, dipl: 50, govt: 100, scty: 80 },
-    desc: "O Anarco-Sindicalismo é uma vertente do anarquismo que vê os sindicatos revolucionários como o meio para derrubar o capitalismo e o Estado, e como a base para a organização da futura sociedade. Os trabalhadores, organizados por indústria, tomariam controle dos meios de produção através de uma 'greve geral expropriadora'. A sociedade pós-revolucionária seria uma federação de coletivos de trabalhadores autogeridos, eliminando a necessidade de um governo central. É uma estratégia pragmática para alcançar uma sociedade anarquista.",
+    desc: "Os trabalhadores não precisam de políticos ou burocratas para se libertar. Através de sindicatos revolucionários organizados por indústria, construímos o poder para derrubar o capitalismo e a estrutura para a nova sociedade simultaneamente. A greve geral é nossa arma mais poderosa. Quando os trabalhadores cruzam os braços unidos, o sistema para. E quando tomam as fábricas em suas próprias mãos, o capitalismo acaba. A sociedade futura será uma federação de coletivos autogeridos, onde quem trabalha decide. Ação direta, não eleições; autogestão, não delegação!",
     politicians: [
       {
-        name: "Rudolf Rocker (Teórico)",
+        name: "Rudolf Rocker",
         link: "https://pt.wikipedia.org/wiki/Rudolf_Rocker",
       },
       {
-        name: "Buenaventura Durruti (Sindicalista)",
+        name: "Buenaventura Durruti",
         link: "https://pt.wikipedia.org/wiki/Buenaventura_Durruti",
+      },
+      {
+        name: "Émile Pouget",
+        link: "https://pt.wikipedia.org/wiki/%C3%89mile_Pouget",
+      },
+      {
+        name: "Fernand Pelloutier",
+        link: "https://pt.wikipedia.org/wiki/Fernand_Pelloutier",
       },
     ],
     books: [
-      { title: "Anarco-Sindicalismo: Teoria e Prática", link: "" },
-      { title: "Homage to Catalonia (George Orwell)", link: "" },
+      {
+        title: "Anarco-Sindicalismo: Teoria e Prática - Rudolf Rocker",
+        link: "",
+      },
+      { title: "Homenagem à Catalunha - George Orwell", link: "" },
+      { title: "Ação Direta - Émile Pouget", link: "" },
+      { title: "A CNT na Revolução Espanhola - José Peirats", link: "" },
+      { title: "O Que É a Propriedade? - Proudhon", link: "" },
     ],
   },
   {
     name: "Populismo de Esquerda",
     stats: { econ: 60, dipl: 40, govt: 30, scty: 70 },
-    desc: "O Populismo de Esquerda é uma estratégia política que constrói um antagonismo entre 'o povo' (a maioria trabalhadora) e 'a elite' (uma oligarquia corrupta e poderosa). Defende políticas de redistribuição de renda, fortalecimento do Estado de bem-estar, nacionalização de setores estratégicos e maior soberania nacional. Frequentemente é liderado por figuras carismáticas que buscam mobilizar as massas e pode ter tendências centralizadoras de poder para implementar sua agenda contra a oposição estabelecida.",
+    desc: "O povo contra a oligarquia! Por décadas, uma elite corrupta governou em benefício próprio, privatizando o público, entregando nossas riquezas ao capital estrangeiro e empobrecendo a maioria. Chegou a hora do povo retomar o que é seu. Nacionalização dos recursos estratégicos, redistribuição de renda, serviços públicos de qualidade e soberania nacional. Não somos nem esquerda nem direita tradicionais; representamos os de baixo contra os de cima. A democracia deve servir ao povo, não aos banqueiros. Pátria, povo e dignidade!",
     politicians: [
       {
-        name: "Hugo Chávez (Venezuela)",
+        name: "Hugo Chávez",
         link: "https://pt.wikipedia.org/wiki/Hugo_Ch%C3%A1vez",
       },
       {
-        name: "Jean-Luc Mélenchon (França)",
+        name: "Jean-Luc Mélenchon",
         link: "https://pt.wikipedia.org/wiki/Jean-Luc_M%C3%A9lenchon",
+      },
+      {
+        name: "Rafael Correa",
+        link: "https://pt.wikipedia.org/wiki/Rafael_Correa",
+      },
+      {
+        name: "Pablo Iglesias",
+        link: "https://pt.wikipedia.org/wiki/Pablo_Iglesias_Turri%C3%B3n",
       },
     ],
     books: [
-      { title: "A Razão Populista (Ernesto Laclau)", link: "" },
-      { title: "(Manifestos e discursos de cada movimento)", link: "" },
+      { title: "A Razão Populista - Ernesto Laclau", link: "" },
+      {
+        title: "Hegemonia e Estratégia Socialista - Laclau e Mouffe",
+        link: "",
+      },
+      { title: "Por Um Populismo de Esquerda - Chantal Mouffe", link: "" },
+      { title: "O Que é Populismo? - Jan-Werner Müller", link: "" },
     ],
   },
   {
     name: "Distributismo Teocrático",
     stats: { econ: 60, dipl: 40, govt: 30, scty: 20 },
-    desc: "O Distributismo Teocrático combina a filosofia econômica do distributismo com um governo teocrático. Economicamente, busca uma ampla distribuição da propriedade produtiva, favorecendo pequenas empresas e cooperativas, baseada em doutrinas sociais religiosas (como as encíclicas papais). Politicamente, defende que as leis e a governança da sociedade devem ser diretamente guiadas por princípios e autoridades religiosas, criando um Estado onde a fé e a política são inseparáveis e a moralidade tradicional é imposta por lei.",
+    desc: "A doutrina social da Igreja nos ensina que tanto o capitalismo de poucos quanto o coletivismo do Estado violam a dignidade humana. A propriedade deve estar amplamente distribuída entre as famílias, permitindo que cada um viva do próprio trabalho com dignidade. As guildas, cooperativas e pequenas empresas familiares são o modelo, não as grandes corporações nem a burocracia estatal. Mas essa ordem econômica só é estável quando a sociedade é guiada pelos princípios da fé verdadeira e da lei moral, sob a orientação da autoridade espiritual.",
     politicians: [
       {
-        name: "(Principalmente teóricos de movimentos católicos sociais)",
-        link: "",
+        name: "Papa Leão XIII",
+        link: "https://pt.wikipedia.org/wiki/Papa_Le%C3%A3o_XIII",
+      },
+      {
+        name: "Papa Pio XI",
+        link: "https://pt.wikipedia.org/wiki/Papa_Pio_XI",
+      },
+      {
+        name: "Engelbert Dollfuss",
+        link: "https://pt.wikipedia.org/wiki/Engelbert_Dollfuss",
       },
     ],
     books: [
-      { title: "Rerum Novarum (Encíclica Papal)", link: "" },
-      { title: "Quadragesimo Anno (Encíclica Papal)", link: "" },
+      { title: "Rerum Novarum - Papa Leão XIII", link: "" },
+      { title: "Quadragesimo Anno - Papa Pio XI", link: "" },
+      { title: "Centesimus Annus - Papa João Paulo II", link: "" },
+      { title: "O Estado Servil - Hilaire Belloc", link: "" },
     ],
   },
   {
     name: "Distributismo",
     stats: { econ: 60, dipl: 50, govt: 50, scty: 20 },
-    desc: "O Distributismo é uma 'terceira via' econômica, distinta tanto do capitalismo quanto do socialismo. Sua tese central é que a propriedade dos meios de produção deve ser distribuída o mais amplamente possível entre a população, em vez de ser concentrada nas mãos do Estado ou de poucos capitalistas. Favorece a pequena propriedade, a agricultura familiar, as cooperativas e as guildas de artesãos. Geralmente é baseado em valores comunitários e tradicionais, com forte influência da doutrina social católica.",
+    desc: "Três acres e uma vaca! Nem capitalismo de monopólios nem socialismo de burocratas. A propriedade é boa, tão boa que todos deveriam tê-la. Defendemos uma sociedade de pequenos proprietários: agricultores em suas terras, artesãos em suas oficinas, comerciantes em suas lojas, todos donos dos meios de seu próprio sustento. As cooperativas e guildas organizam a produção sem criar nem plutocratas nem comissários. A família é a unidade básica da sociedade, e a comunidade local é onde a democracia realmente funciona. Grande demais é ruim, seja empresa ou Estado.",
     politicians: [
       {
-        name: "G. K. Chesterton (Escritor/Teórico)",
+        name: "G. K. Chesterton",
         link: "https://pt.wikipedia.org/wiki/G._K._Chesterton",
       },
       {
-        name: "Hilaire Belloc (Escritor/Teórico)",
+        name: "Hilaire Belloc",
         link: "https://pt.wikipedia.org/wiki/Hilaire_Belloc",
+      },
+      {
+        name: "E. F. Schumacher",
+        link: "https://pt.wikipedia.org/wiki/E._F._Schumacher",
+      },
+      {
+        name: "Dorothy Day",
+        link: "https://pt.wikipedia.org/wiki/Dorothy_Day",
       },
     ],
     books: [
-      { title: "O Que Há de Errado com o Mundo", link: "" },
-      { title: "O Estado Servil", link: "" },
+      { title: "O Que Há de Errado com o Mundo - Chesterton", link: "" },
+      { title: "O Estado Servil - Hilaire Belloc", link: "" },
+      { title: "O Negócio é Ser Pequeno - E. F. Schumacher", link: "" },
+      { title: "O Esboço da Sanidade - G. K. Chesterton", link: "" },
+      { title: "A Restauração da Propriedade - Belloc", link: "" },
     ],
   },
   {
     name: "Liberalismo Social",
     stats: { econ: 60, dipl: 60, govt: 60, scty: 80 },
-    desc: "O Liberalismo Social, também conhecido como liberalismo de esquerda, é uma ideologia que acredita que a liberdade individual só pode ser plenamente alcançada sob condições sociais e econômicas justas. Combina o apoio a uma economia de mercado com a necessidade de intervenção governamental para corrigir falhas de mercado, reduzir a desigualdade e garantir a igualdade de oportunidades através de um forte estado de bem-estar. Defende firmemente os direitos civis e liberdades individuais, sendo socialmente progressista.",
+    desc: "A verdadeira liberdade não é apenas a ausência de coerção do Estado, mas a capacidade real de viver uma vida plena. De que adianta a liberdade formal para quem não tem educação, saúde ou oportunidades? Defendemos uma economia de mercado regulada, onde o Estado corrige as falhas do mercado, garante igualdade de oportunidades e protege os mais vulneráveis com uma rede de segurança social robusta. Direitos civis, tolerância, pluralismo e justiça social caminham juntos. A liberdade de cada um depende das condições materiais que permitem exercê-la.",
     politicians: [
       {
-        name: "John Rawls (Filósofo)",
+        name: "John Rawls",
         link: "https://pt.wikipedia.org/wiki/John_Rawls",
       },
       {
-        name: "William Beveridge (Economista)",
+        name: "Franklin D. Roosevelt",
+        link: "https://pt.wikipedia.org/wiki/Franklin_D._Roosevelt",
+      },
+      {
+        name: "William Beveridge",
         link: "https://pt.wikipedia.org/wiki/William_Beveridge",
       },
       {
-        name: "Franklin D. Roosevelt (EUA)",
-        link: "https://pt.wikipedia.org/wiki/Franklin_D._Roosevelt",
+        name: "Amartya Sen",
+        link: "https://pt.wikipedia.org/wiki/Amartya_Sen",
       },
     ],
     books: [
-      { title: "Uma Teoria da Justiça", link: "" },
-      { title: "Relatório Beveridge", link: "" },
-      { title: "Liberalism (L.T. Hobhouse)", link: "" },
+      { title: "Uma Teoria da Justiça - John Rawls", link: "" },
+      { title: "Desenvolvimento como Liberdade - Amartya Sen", link: "" },
+      { title: "O Relatório Beveridge", link: "" },
+      { title: "Liberalismo - L. T. Hobhouse", link: "" },
+      { title: "Justiça como Equidade - John Rawls", link: "" },
     ],
   },
   {
     name: "Democracia Cristã",
     stats: { econ: 60, dipl: 60, govt: 50, scty: 30 },
-    desc: "A Democracia Cristã é uma ideologia política que busca aplicar princípios cristãos à esfera pública. Opera dentro de um quadro democrático e apoia uma 'economia social de mercado', que combina a livre iniciativa com a responsabilidade social e um estado de bem-estar para proteger os vulneráveis. Socialmente, tende a ser conservadora, enfatizando valores como a família tradicional e a comunidade. Em política externa, é geralmente favorável à cooperação internacional e à integração, como a União Europeia.",
+    desc: "A política deve ser guiada por princípios morais enraizados na tradição cristã: dignidade da pessoa humana, solidariedade, subsidiariedade e bem comum. Defendemos uma economia social de mercado, onde a livre iniciativa é equilibrada pela responsabilidade social e pela proteção dos mais fracos. A família é a célula fundamental da sociedade e merece proteção especial. Somos favoráveis à cooperação internacional e à integração europeia, pois a paz e a prosperidade dependem da colaboração entre nações. Moderação, não extremismo; reforma, não revolução.",
     politicians: [
       {
-        name: "Konrad Adenauer (Alemanha)",
+        name: "Konrad Adenauer",
         link: "https://pt.wikipedia.org/wiki/Konrad_Adenauer",
       },
       {
-        name: "Alcide De Gasperi (Itália)",
+        name: "Alcide De Gasperi",
         link: "https://pt.wikipedia.org/wiki/Alcide_De_Gasperi",
       },
       {
-        name: "Angela Merkel (Alemanha)",
+        name: "Angela Merkel",
         link: "https://pt.wikipedia.org/wiki/Angela_Merkel",
+      },
+      {
+        name: "Robert Schuman",
+        link: "https://pt.wikipedia.org/wiki/Robert_Schuman",
       },
     ],
     books: [
-      { title: "(Encíclicas sociais católicas como Rerum Novarum)", link: "" },
+      { title: "Rerum Novarum - Papa Leão XIII", link: "" },
+      { title: "Economia Social de Mercado - Alfred Müller-Armack", link: "" },
+      { title: "Populorum Progressio - Papa Paulo VI", link: "" },
+      { title: "Doutrina Social da Igreja - Compêndio", link: "" },
     ],
   },
   {
     name: "Social Democracia",
     stats: { econ: 60, dipl: 70, govt: 60, scty: 80 },
-    desc: "A Social Democracia é uma ideologia que apoia intervenções econômicas e sociais para promover a justiça social dentro do quadro de uma economia capitalista. É caracterizada por um compromisso com a democracia representativa, um robusto estado de bem-estar social universal (saúde, educação), regulação do mercado de trabalho e um sistema de negociação coletiva entre sindicatos e empregadores. Busca 'humanizar' o capitalismo, garantindo que seus benefícios sejam amplamente compartilhados pela sociedade.",
+    desc: "O capitalismo pode ser civilizado. Através de sindicatos fortes, negociação coletiva, regulação do mercado e um Estado de bem-estar universal e generoso, podemos garantir que a prosperidade seja compartilhada por todos. Saúde universal, educação pública de qualidade, aposentadoria digna, seguro-desemprego e licenças parentais são direitos, não privilégios. A democracia não termina na urna; ela deve se estender ao local de trabalho e à economia. Buscamos uma sociedade onde todos tenham segurança material para viver com dignidade e liberdade real.",
     politicians: [
       {
-        name: "Olof Palme (Suécia)",
+        name: "Olof Palme",
         link: "https://pt.wikipedia.org/wiki/Olof_Palme",
       },
       {
-        name: "Willy Brandt (Alemanha Ocidental)",
+        name: "Willy Brandt",
         link: "https://pt.wikipedia.org/wiki/Willy_Brandt",
       },
       {
-        name: "Clement Attlee (Reino Unido)",
+        name: "Clement Attlee",
         link: "https://pt.wikipedia.org/wiki/Clement_Attlee",
+      },
+      {
+        name: "Gro Harlem Brundtland",
+        link: "https://pt.wikipedia.org/wiki/Gro_Harlem_Brundtland",
       },
     ],
     books: [
-      { title: "O Futuro do Socialismo (Anthony Crosland)", link: "" },
-      { title: "Capitalismo, Socialismo e Democracia (Schumpeter)", link: "" },
+      { title: "O Futuro do Socialismo - Anthony Crosland", link: "" },
+      { title: "A Terceira Via - Anthony Giddens", link: "" },
+      { title: "O Modelo Nórdico - diversos autores", link: "" },
+      {
+        title: "Ideias Socialistas em Transformação - Norberto Bobbio",
+        link: "",
+      },
+      { title: "Capital no Século XXI - Thomas Piketty", link: "" },
     ],
   },
   {
     name: "Progressismo",
     stats: { econ: 60, dipl: 80, govt: 60, scty: 100 },
-    desc: "O Progressismo é uma filosofia política que acredita no progresso social e na melhoria da condição humana através da reforma social, da ciência e da ação governamental. Opõe-se ao status quo e busca combater problemas como a desigualdade econômica, a discriminação e a degradação ambiental. Defende a expansão dos direitos civis, a regulação da economia para o bem comum e o investimento em serviços públicos. É uma ideologia fundamentalmente otimista sobre a capacidade da humanidade de resolver seus problemas coletivamente.",
+    desc: "O arco da história é longo, mas se curva em direção à justiça. Acreditamos no progresso: na ciência que cura doenças e resolve problemas, na educação que liberta mentes, nos direitos civis que expandem a dignidade a todos. Cada geração pode e deve melhorar a anterior. Lutamos contra todas as formas de discriminação, pela igualdade de gênero, pelos direitos LGBTQ+, pela justiça racial e pela proteção do meio ambiente. O governo é uma ferramenta para o bem comum quando usado corretamente. Não aceitamos que 'sempre foi assim' como desculpa para a injustiça.",
     politicians: [
       {
-        name: "Theodore Roosevelt (EUA)",
+        name: "Theodore Roosevelt",
         link: "https://pt.wikipedia.org/wiki/Theodore_Roosevelt",
       },
       {
-        name: "Woodrow Wilson (EUA)",
-        link: "https://pt.wikipedia.org/wiki/Woodrow_Wilson",
+        name: "Elizabeth Warren",
+        link: "https://pt.wikipedia.org/wiki/Elizabeth_Warren",
       },
       {
-        name: "John Dewey (Filósofo)",
-        link: "https://pt.wikipedia.org/wiki/John_Dewey",
+        name: "Justin Trudeau",
+        link: "https://pt.wikipedia.org/wiki/Justin_Trudeau",
+      },
+      {
+        name: "Jacinda Ardern",
+        link: "https://pt.wikipedia.org/wiki/Jacinda_Ardern",
       },
     ],
     books: [
-      { title: "A Promessa da Vida Americana (Herbert Croly)", link: "" },
-      { title: "Democracia e Educação (John Dewey)", link: "" },
+      { title: "A Promessa da Vida Americana - Herbert Croly", link: "" },
+      { title: "Democracia e Educação - John Dewey", link: "" },
+      { title: "Os Anjos Bons da Nossa Natureza - Steven Pinker", link: "" },
+      { title: "O Capital no Século XXI - Thomas Piketty", link: "" },
+      { title: "Primavera Silenciosa - Rachel Carson", link: "" },
     ],
   },
   {
@@ -912,7 +1131,7 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "Liberalism and its Discontents (Francis Fukuyama)", link: "" }
+      { title: "Liberalism and its Discontents (Francis Fukuyama)", link: "" },
     ],
   },
   {
@@ -971,9 +1190,7 @@ export const ideologies: Ideology[] = [
         link: "https://pt.wikipedia.org/wiki/Mitt_Romney",
       },
     ],
-    books: [
-      { title: "O Conservadorismo (Michael Oakeshott)", link: "" },
-    ],
+    books: [{ title: "O Conservadorismo (Michael Oakeshott)", link: "" }],
   },
   {
     name: "Reacionário",
@@ -1000,9 +1217,7 @@ export const ideologies: Ideology[] = [
         link: "https://pt.wikipedia.org/wiki/Henry_George",
       },
     ],
-    books: [
-      { title: "Progresso e Pobreza", link: "" },
-    ],
+    books: [{ title: "Progresso e Pobreza", link: "" }],
   },
   {
     name: "Libertarianismo",
@@ -1324,8 +1539,7 @@ export const ideologies: Ideology[] = [
     politicians: [
       { name: "(Figuras associadas a desregulamentação extrema)", link: "" },
     ],
-    books: [
-    ],
+    books: [],
   },
   {
     name: "Anarco-Capitalismo",

@@ -96,10 +96,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-
-      <footer className="text-center mt-16 py-4 border-t border-gray-300 dark:border-gray-700 dark:bg-gray-900">
-        <p className="dark:text-gray-400">&copy; 2025 - Desenvolvido por <a href="https://github.com/rilsonjoas" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Rilson Joás</a></p>
-      </footer>
       </div>
     </div>
   );

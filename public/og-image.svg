@@ -1,0 +1,61 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#1f2937"/>
+
+  <!-- Gradient overlay -->
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:0.3" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grad1)"/>
+
+  <!-- Title -->
+  <text x="600" y="200" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="white" text-anchor="middle">
+    Teste Político
+  </text>
+  <text x="600" y="290" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="#3b82f6" text-anchor="middle">
+    8 Valores
+  </text>
+
+  <!-- Subtitle -->
+  <text x="600" y="380" font-family="Arial, sans-serif" font-size="28" fill="#9ca3af" text-anchor="middle">
+    Descubra sua ideologia política em 70 questões
+  </text>
+
+  <!-- Values row -->
+  <g transform="translate(150, 450)">
+    <!-- Igualdade -->
+    <rect x="0" y="0" width="100" height="100" rx="8" fill="#e63946"/>
+    <text x="50" y="120" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af" text-anchor="middle">Igualdade</text>
+
+    <!-- Nação -->
+    <rect x="130" y="0" width="100" height="100" rx="8" fill="#f77f00"/>
+    <text x="180" y="120" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af" text-anchor="middle">Nação</text>
+
+    <!-- Liberdade -->
+    <rect x="260" y="0" width="100" height="100" rx="8" fill="#ffc300"/>
+    <text x="310" y="120" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af" text-anchor="middle">Liberdade</text>
+
+    <!-- Tradição -->
+    <rect x="390" y="0" width="100" height="100" rx="8" fill="#8338ec"/>
+    <text x="440" y="120" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af" text-anchor="middle">Tradição</text>
+
+    <!-- Mercado -->
+    <rect x="520" y="0" width="100" height="100" rx="8" fill="#1d3557"/>
+    <text x="570" y="120" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af" text-anchor="middle">Mercado</text>
+
+    <!-- Global -->
+    <rect x="650" y="0" width="100" height="100" rx="8" fill="#a8dadc"/>
+    <text x="700" y="120" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af" text-anchor="middle">Global</text>
+
+    <!-- Autoridade -->
+    <rect x="780" y="0" width="100" height="100" rx="8" fill="#457b9d"/>
+    <text x="830" y="120" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af" text-anchor="middle">Autoridade</text>
+
+    <!-- Progresso -->
+    <rect x="910" y="0" width="100" height="100" rx="8" fill="#3a86ff"/>
+    <text x="960" y="120" font-family="Arial, sans-serif" font-size="14" fill="#9ca3af" text-anchor="middle">Progresso</text>
+  </g>
+</svg>
