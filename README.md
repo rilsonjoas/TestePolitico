@@ -2,7 +2,7 @@
 
 Um quiz político interativo que avalia seu posicionamento em 8 valores políticos através de 70 questões, identificando sua ideologia política com base em suas respostas.
 
-**[Acesse o quiz aqui](https://teste-politico.vercel.app/)**
+**[Acesse o quiz aqui](https://testepolitico.com.br/)**
 
 ## Sobre o Projeto
 

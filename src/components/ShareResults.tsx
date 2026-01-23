@@ -27,6 +27,9 @@ export function ShareResults({ targetId, scores, matchedIdeology }: ShareResults
   const loadingTimeout = useRef<NodeJS.Timeout | null>(null);
   const { showToast, ToastComponent } = useToast();
 
+  const [canShare, setCanShare] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
+
   useEffect(() => {
     setSupportsClipboard(
       'navigator' in window &&
@@ -34,7 +37,59 @@ export function ShareResults({ targetId, scores, matchedIdeology }: ShareResults
       'write' in navigator.clipboard &&
       window.isSecureContext
     );
+    
+    // Check for Web Share API support
+    if (typeof navigator !== 'undefined' && 'share' in navigator) {
+      setCanShare(true);
+    }
   }, []);
+
+  // --- COMPARTILHAMENTO E LINKS (Definidos antes do uso) ---
+  const shareUrl = `https://testepolitico.com.br/results?e=${scores?.e || 50}&d=${scores?.d || 50}&g=${scores?.g || 50}&s=${scores?.s || 50}`;
+
+  const shareText = matchedIdeology
+    ? `Fiz o Teste Político 8 Valores e minha ideologia mais próxima é: ${matchedIdeology.name}!`
+    : `Fiz o Teste Político 8 Valores! Descubra sua ideologia:`;
+
+  const handleNativeShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Teste Político 8 Valores',
+          text: shareText,
+          url: shareUrl,
+        });
+        showToast("Compartilhado com sucesso!", "success");
+      } catch (err) {
+        if ((err as Error).name !== 'AbortError') {
+           console.error('Error sharing:', err);
+        }
+      }
+    }
+  };
+
+  const handleShareTwitter = () => {
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+    window.open(twitterUrl, '_blank', 'width=600,height=400');
+  };
+
+  const handleShareWhatsApp = () => {
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopiedLink(true);
+      showToast("Link copiado!", "success");
+      setTimeout(() => setCopiedLink(false), 2000);
+    } catch {
+      showToast("Erro ao copiar link", "error");
+    }
+  };
+
+  // --- GERAÇÃO DE IMAGEM ---
 
   const getFormatDimensions = (format: SocialFormat) => {
     switch (format) {
@@ -53,322 +108,186 @@ export function ShareResults({ targetId, scores, matchedIdeology }: ShareResults
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d')!;
     
+    // Configurações de dimensão
     const { width, height } = getFormatDimensions(format);
     canvas.width = width;
     canvas.height = height;
     
-    // Fundo com gradiente
+    // --- ESTILO E PALETA ---
+    const isDark = true; // Forçar modo escuro para estética "Premium"
+    const textPrimary = '#ffffff';
+    const textSecondary = '#94a3b8';
+    
+    // Fundo Gradiente "Deep Space"
     const bgGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    bgGradient.addColorStop(0, '#f8fafc');
-    bgGradient.addColorStop(1, '#e2e8f0');
+    bgGradient.addColorStop(0, '#0f172a'); // Slate 900
+    bgGradient.addColorStop(1, '#1e293b'); // Slate 800
     ctx.fillStyle = bgGradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Padding base
+    const padding = Math.max(50, canvas.width * 0.05);
+
+    // --- CABEÇALHO ---
+    // Logo centralizado e minimalista
+    const logoY = padding + 40;
     
-    // Configurações baseadas no formato
-    const padding = Math.max(40, canvas.width * 0.05);
-    const headerHeight = format === 'instagram' ? 140 : (format === 'twitter' ? 80 : 120);
-    
-    // Header com gradiente
-    const gradient = ctx.createLinearGradient(0, 0, 0, headerHeight);
-    gradient.addColorStop(0, '#2563eb');
-    gradient.addColorStop(1, '#1d4ed8');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(padding, padding, canvas.width - 2 * padding, headerHeight);
-    
-    // Borda do header
-    ctx.strokeStyle = '#1e40af';
-    ctx.lineWidth = 3;
-    ctx.strokeRect(padding, padding, canvas.width - 2 * padding, headerHeight);
-    
-    // Logo simples no header (círculo com 8 segmentos)
-    const logoSize = format === 'instagram' ? 50 : (format === 'twitter' ? 35 : 45);
-    const logoX = padding + logoSize + 30;
-    const logoY = padding + headerHeight / 2;
-    const logoRadius = logoSize;
-    
-    // Desenha logo circular
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.arc(logoX, logoY, logoRadius, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.strokeStyle = '#1e40af';
-    ctx.lineWidth = 3;
-    ctx.stroke();
-    
-    // 8 segmentos coloridos no logo
-    const logoColors = ['#e63946', '#1d3557', '#f77f00', '#a8dadc', '#8338ec', '#3a86ff', '#ffc300', '#457b9d'];
-    for (let i = 0; i < 8; i++) {
-      const angle = (i * Math.PI) / 4;
-      const nextAngle = ((i + 1) * Math.PI) / 4;
-      
-      ctx.fillStyle = logoColors[i];
-      ctx.beginPath();
-      ctx.moveTo(logoX, logoY);
-      ctx.arc(logoX, logoY, logoRadius - 8, angle, nextAngle);
-      ctx.closePath();
-      ctx.fill();
-    }
-    
-    // Centro do logo
-    ctx.fillStyle = '#2563eb';
-    ctx.beginPath();
-    ctx.arc(logoX, logoY, 12, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 16px Arial';
+    // Título do Site
     ctx.textAlign = 'center';
-    ctx.fillText('8', logoX, logoY + 6);
+    ctx.fillStyle = textPrimary;
+    const titleSize = format === 'twitter' ? 28 : 36;
+    ctx.font = `bold ${titleSize}px Arial`;
+    ctx.fillText('TESTE POLÍTICO', canvas.width / 2, logoY);
     
-    // Título do site
-    const titleFontSize = format === 'instagram' ? 42 : (format === 'twitter' ? 28 : 36);
-    const subtitleFontSize = format === 'instagram' ? 22 : (format === 'twitter' ? 16 : 20);
+    ctx.fillStyle = '#3b82f6'; // Azul destaque
+    ctx.font = `bold ${titleSize}px Arial`;
+    // Pequeno ajuste para desenhar o "8 VALORES" logo abaixo ou ao lado se for twitter
+    if (format === 'twitter') {
+       ctx.fillText('8 VALORES', canvas.width / 2, logoY + 35);
+    } else {
+       ctx.fillText('8 VALORES', canvas.width / 2, logoY + 45);
+    }
+
+    // --- CONTEÚDO PRINCIPAL (IDEOLOGIA) ---
+    const centerY = canvas.height * (format === 'twitter' ? 0.35 : 0.28);
     
-    ctx.fillStyle = '#ffffff';
-    ctx.textAlign = 'left';
-    ctx.font = `bold ${titleFontSize}px Arial`;
-    ctx.fillText('Teste Político 8 Valores', logoX + logoRadius + 25, logoY - 10);
-    
-    ctx.font = `${subtitleFontSize}px Arial`;
-    ctx.fillText('Descubra suas ideologias políticas', logoX + logoRadius + 25, logoY + 20);
-    
+    if (matchedIdeology) {
+      // Label "Minha ideologia é"
+      ctx.fillStyle = textSecondary;
+      ctx.font = '24px Arial';
+      ctx.fillText('Minha ideologia é', canvas.width / 2, centerY - 20);
+
+      // Nome da Ideologia (Hero Text)
+      ctx.fillStyle = textPrimary;
+      // Ajuste dinâmico de tamanho de fonte baseado no tamanho do nome
+      const nameLength = matchedIdeology.name.length;
+      let ideologyFontSize = format === 'twitter' ? 48 : 72;
+      if (nameLength > 20) ideologyFontSize *= 0.8;
+      
+      ctx.font = `800 ${ideologyFontSize}px Arial`;
+      
+      // Efeito de brilho no texto (Shadow)
+      ctx.shadowColor = 'rgba(59, 130, 246, 0.5)';
+      ctx.shadowBlur = 20;
+      ctx.fillText(matchedIdeology.name, canvas.width / 2, centerY + (format === 'twitter' ? 40 : 60));
+      ctx.shadowBlur = 0; // Reset shadow
+    }
+
+    // --- BARRAS DE EIXOS ---
     if (!scores) return canvas;
-    
+
     const axes = [
-      { name: 'Econômico', value1: scores.e, value2: 100 - scores.e, label1: 'Igualdade', label2: 'Mercado', color1: '#e63946', color2: '#1d3557' },
-      { name: 'Diplomático', value1: scores.d, value2: 100 - scores.d, label1: 'Nação', label2: 'Global', color1: '#f77f00', color2: '#a8dadc' },
-      { name: 'Civil', value1: scores.g, value2: 100 - scores.g, label1: 'Liberdade', label2: 'Autoridade', color1: '#ffc300', color2: '#457b9d' },
-      { name: 'Social', value1: scores.s, value2: 100 - scores.s, label1: 'Tradição', label2: 'Progresso', color1: '#8338ec', color2: '#3a86ff' },
+      { name: 'Econômico', value1: scores.e, value2: 100 - scores.e, label1: 'Igualdade', label2: 'Mercado', color1: '#ef4444', color2: '#22c55e' }, // Cores mais vibrantes
+      { name: 'Diplomático', value1: scores.d, value2: 100 - scores.d, label1: 'Nação', label2: 'Global', color1: '#f97316', color2: '#06b6d4' },
+      { name: 'Civil', value1: scores.g, value2: 100 - scores.g, label1: 'Liberdade', label2: 'Autoridade', color1: '#eab308', color2: '#3b82f6' },
+      { name: 'Social', value1: scores.s, value2: 100 - scores.s, label1: 'Tradição', label2: 'Progresso', color1: '#a855f7', color2: '#ec4899' },
     ];
+
+    // Layout das barras muda drasticamente baseado no formato
+    const isTwitter = format === 'twitter';
+    const startBarsY = isTwitter 
+      ? canvas.height * 0.55 
+      : canvas.height * 0.45;
     
-    // Função auxiliar para desenhar card de eixo (conteúdo centralizado verticalmente)
-    const drawAxisCard = (
-      axis: typeof axes[0],
-      x: number,
-      y: number,
-      cardW: number,
-      cardH: number,
-      fontSize: { name: number; label: number; percent: number },
-      barH: number
-    ) => {
-      const innerPadding = 15;
-      const barX = x + innerPadding;
-      const barWidth = cardW - innerPadding * 2;
+    const barSpacing = isTwitter ? 45 : 70;
+    const barHeight = isTwitter ? 25 : 40;
+    const maxBarWidth = Math.min(800, canvas.width - (padding * 2));
+    const barStartX = (canvas.width - maxBarWidth) / 2;
 
-      // Card branco
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(x, y, cardW, cardH);
-      ctx.strokeStyle = '#e2e8f0';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(x, y, cardW, cardH);
+    const fontSize = {
+      label: isTwitter ? 14 : 20,
+      percent: isTwitter ? 14 : 20
+    };
 
-      // Calcular altura total do conteúdo para centralizar
-      const contentHeight = fontSize.name + 15 + fontSize.label + 12 + barH + 8 + fontSize.percent;
-      const startY = y + (cardH - contentHeight) / 2;
-
-      // Nome do eixo
-      ctx.font = `bold ${fontSize.name}px Arial`;
-      ctx.fillStyle = '#1f2937';
-      ctx.textAlign = 'center';
-      ctx.fillText(axis.name, x + cardW / 2, startY + fontSize.name);
-
-      // Labels
-      const labelY = startY + fontSize.name + 15 + fontSize.label;
+    axes.forEach((axis, i) => {
+      const y = startBarsY + (i * barSpacing);
+      
+      // Fundo da barra (track)
+      const trackY = y - (barHeight / 2);
+      
+      // Labels acima da barra
+      ctx.fillStyle = textSecondary;
       ctx.font = `600 ${fontSize.label}px Arial`;
       ctx.textAlign = 'left';
       ctx.fillStyle = axis.color1;
-      ctx.fillText(axis.label1, barX, labelY);
+      ctx.fillText(axis.label1, barStartX, trackY - 10);
+      
       ctx.textAlign = 'right';
       ctx.fillStyle = axis.color2;
-      ctx.fillText(axis.label2, barX + barWidth, labelY);
+      ctx.fillText(axis.label2, barStartX + maxBarWidth, trackY - 10);
 
-      // Barra de progresso
-      const barY = labelY + 12;
-      ctx.fillStyle = '#e5e7eb';
-      ctx.fillRect(barX, barY, barWidth, barH);
+      // Barra Container (arredondada)
+      ctx.beginPath();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      ctx.roundRect(barStartX, trackY, maxBarWidth, barHeight, barHeight/2);
+      ctx.fillStyle = '#334155'; // Slate 700
+      ctx.fill();
 
-      // Partes coloridas da barra
-      ctx.fillStyle = axis.color1;
-      ctx.fillRect(barX, barY, (barWidth * axis.value1) / 100, barH);
-      ctx.fillStyle = axis.color2;
-      ctx.fillRect(barX + (barWidth * axis.value1) / 100, barY, (barWidth * axis.value2) / 100, barH);
+      // Parte Esquerda (Color 1)
+      const width1 = (maxBarWidth * axis.value1) / 100;
+      if (width1 > 0) {
+        ctx.beginPath();
+        // Arredondar canto esquerdo sempre, direito apenas se for 100%
+        // [top-left, top-right, bottom-right, bottom-left]
+        const radii = width1 === maxBarWidth 
+          ? [barHeight/2] 
+          : [barHeight/2, 0, 0, barHeight/2];
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        ctx.roundRect(barStartX, trackY, width1, barHeight, radii);
+        ctx.fillStyle = axis.color1;
+        ctx.fill();
+      }
 
-      // Percentuais
-      const percentY = barY + barH + fontSize.percent + 8;
+      // Parte Direita (Color 2)
+      const width2 = maxBarWidth - width1;
+      if (width2 > 0) {
+        ctx.beginPath();
+        // Arredondar canto direito sempre, esquerdo apenas se for 100%
+        const radii = width2 === maxBarWidth 
+          ? [barHeight/2] 
+          : [0, barHeight/2, barHeight/2, 0];
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        ctx.roundRect(barStartX + width1, trackY, width2, barHeight, radii);
+        ctx.fillStyle = axis.color2;
+        ctx.fill();
+      }
+
+      // Porcentagens dentro da barra (se houver espaço) ou ao lado
       ctx.font = `bold ${fontSize.percent}px Arial`;
-
-      ctx.fillStyle = axis.color1;
-      ctx.textAlign = 'left';
-      ctx.fillText(`${axis.value1.toFixed(1)}%`, barX, percentY);
-
-      ctx.fillStyle = axis.color2;
-      ctx.textAlign = 'right';
-      ctx.fillText(`${axis.value2.toFixed(1)}%`, barX + barWidth, percentY);
-    };
-
-    // Função para desenhar card de ideologia
-    const drawIdeologyCard = (
-      x: number,
-      y: number,
-      cardW: number,
-      cardH: number,
-      fontSize: { title: number; name: number; desc: number },
-      maxDescLines?: number
-    ) => {
-      if (!matchedIdeology) return;
-
-      // Gradiente azul
-      const gradient = ctx.createLinearGradient(x, y, x, y + cardH);
-      gradient.addColorStop(0, '#2563eb');
-      gradient.addColorStop(1, '#1d4ed8');
-      ctx.fillStyle = gradient;
-      ctx.fillRect(x, y, cardW, cardH);
-
-      let textY = y + 25;
-
-      // Subtítulo
-      ctx.font = `${fontSize.title}px Arial`;
-      ctx.fillStyle = '#93c5fd';
-      ctx.textAlign = 'center';
-      ctx.fillText('Correspondência Mais Próxima:', x + cardW / 2, textY + fontSize.title);
-
-      textY += fontSize.title + 15;
-
-      // Nome da ideologia
-      ctx.font = `bold ${fontSize.name}px Arial`;
       ctx.fillStyle = '#ffffff';
-      ctx.fillText(matchedIdeology.name, x + cardW / 2, textY + fontSize.name * 0.8);
-
-      textY += fontSize.name + 20;
-
-      // Descrição - sem truncamento prematuro
-      ctx.font = `${fontSize.desc}px Arial`;
-      ctx.fillStyle = '#dbeafe';
-
-      const maxWidth = cardW - 50;
-      const lineH = fontSize.desc + 8;
-      const availableHeight = cardH - (textY - y) - 25;
-      const maxLines = maxDescLines || Math.floor(availableHeight / lineH);
-
-      // Quebrar em linhas usando toda a descrição
-  const words = matchedIdeology.desc.split(' ');
-  let line = '';
-  const allLines: string[] = [];
-
-      for (const word of words) {
-        const test = line + word + ' ';
-        if (ctx.measureText(test).width > maxWidth && line) {
-          allLines.push(line.trim());
-          line = word + ' ';
-        } else {
-          line = test;
-        }
+      
+      // Texto da esquerda
+      if (width1 > 50) {
+        ctx.textAlign = 'left';
+        ctx.fillText(`${axis.value1.toFixed(1)}%`, barStartX + 12, trackY + barHeight/2 + fontSize.percent/3);
       }
-      if (line.trim()) {
-        allLines.push(line.trim());
+      
+      // Texto da direita
+      if (width2 > 50) {
+        ctx.textAlign = 'right';
+        ctx.fillText(`${axis.value2.toFixed(1)}%`, barStartX + maxBarWidth - 12, trackY + barHeight/2 + fontSize.percent/3);
       }
+    });
 
-      // Desenhar as linhas (até o máximo permitido)
-      for (let i = 0; i < Math.min(allLines.length, maxLines); i++) {
-        let lineText = allLines[i];
-        // Se for a última linha e houver mais texto, adicionar ...
-        if (i === maxLines - 1 && allLines.length > maxLines) {
-          lineText = lineText.substring(0, lineText.length - 3) + '...';
-        }
-  ctx.fillText(lineText, x + cardW / 2, textY);
-  textY += lineH;
-      }
-    };
-
-    if (format === 'twitter') {
-      // LAYOUT TWITTER - 2x2 grid mais compacto com ideologia à direita
-      const footerSpace = 70; // Espaço reservado para footer
-      const contentStartY = padding + headerHeight + 20;
-      const contentEndY = canvas.height - footerSpace;
-      const contentH = contentEndY - contentStartY;
-
-      // Layout: 2 colunas - eixos à esquerda, ideologia à direita
-      const leftWidth = (canvas.width - 3 * padding) * 0.6;
-      const rightWidth = (canvas.width - 3 * padding) * 0.4;
-
-      // Calcular altura dos cards de eixo para o grid 2x2
-      const gridSpacing = 12;
-      const cardH = (contentH - gridSpacing) / 2;
-
-      const fontSize = { name: 18, label: 14, percent: 13 };
-
-      // Calcular altura total do grid 2x2 e centralizar verticalmente
-      const totalGridH = 2 * cardH + gridSpacing;
-      const gridStartY = contentStartY + (contentH - totalGridH) / 2;
-
-      // Cards dos eixos (2x2) - centralizados verticalmente
-      axes.forEach((axis, i) => {
-        const col = i % 2;
-        const row = Math.floor(i / 2);
-        const cardW = (leftWidth - 10) / 2;
-        const x = padding + col * (cardW + 10);
-        const y = gridStartY + row * (cardH + gridSpacing);
-        drawAxisCard(axis, x, y, cardW, cardH, fontSize, 22);
-      });
-
-      // Card de ideologia à direita - usa todo o espaço disponível
-      const ideologyX = padding + leftWidth + padding;
-      drawIdeologyCard(ideologyX, contentStartY, rightWidth, contentH, { title: 14, name: 22, desc: 13 }, 10);
-
-    } else {
-      // LAYOUT INSTAGRAM E SQUARE (uma coluna)
-      const isInstagram = format === 'instagram';
-
-      const footerH = isInstagram ? 70 : 60;
-      const ideologyH = isInstagram ? 300 : 200; // Aumentado para mais linhas de descrição
-      const contentStartY = padding + headerHeight + (isInstagram ? 40 : 25);
-      const contentEndY = canvas.height - footerH;
-      const totalAvailableH = contentEndY - contentStartY;
-
-      const cardSpacing = isInstagram ? 18 : 12;
-      const ideologySpacing = isInstagram ? 25 : 15;
-
-      // Calcular altura disponível para os 4 cards de eixo
-      const axisAreaH = totalAvailableH - ideologyH - ideologySpacing;
-      const cardH = Math.floor((axisAreaH - 3 * cardSpacing) / 4);
-      const cardW = canvas.width - 2 * padding;
-
-      const fontSize = {
-        name: isInstagram ? 38 : 24,
-        label: isInstagram ? 28 : 18,
-        percent: isInstagram ? 24 : 16
-      };
-
-      // Calcular altura real dos 4 cards + espaçamentos
-      const totalAxisH = 4 * cardH + 3 * cardSpacing;
-
-      // Centralizar os cards de eixo verticalmente na área disponível
-      const axisStartY = contentStartY + (axisAreaH - totalAxisH) / 2;
-
-      let yPos = axisStartY;
-      axes.forEach((axis) => {
-        drawAxisCard(axis, padding, yPos, cardW, cardH, fontSize, isInstagram ? 45 : 28);
-        yPos += cardH + cardSpacing;
-      });
-
-      // Card de ideologia - logo após os eixos
-      const ideologyY = contentStartY + axisAreaH + ideologySpacing;
-      drawIdeologyCard(
-        padding,
-        ideologyY,
-        cardW,
-        ideologyH,
-        { title: isInstagram ? 26 : 18, name: isInstagram ? 42 : 28, desc: isInstagram ? 22 : 16 },
-        isInstagram ? 5 : 4
-      );
-    }
+    // --- RODAPÉ ---
+    const footerY = canvas.height - (padding);
     
-    // Rodapé com call-to-action - posicionado mais abaixo para não sobrepor o conteúdo
-    const footerY = canvas.height - (format === 'instagram' ? 50 : format === 'twitter' ? 25 : 30);
-    ctx.fillStyle = '#64748b';
-    ctx.font = `${format === 'instagram' ? '28' : format === 'twitter' ? '18' : '24'}px Arial`;
+    // Linha divisória sutil
+    ctx.strokeStyle = '#334155';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(canvas.width/2 - 100, footerY - 50);
+    ctx.lineTo(canvas.width/2 + 100, footerY - 50);
+    ctx.stroke();
+
+    ctx.fillStyle = textSecondary;
+    ctx.font = `bold ${isTwitter ? 18 : 24}px Arial`;
     ctx.textAlign = 'center';
-    ctx.fillText('Faça seu teste em testepolitico8valores.com', canvas.width / 2, footerY);
-    
+    ctx.fillText('testepolitico.com.br', canvas.width / 2, footerY);
+
     return canvas;
   };
 
@@ -478,31 +397,6 @@ export function ShareResults({ targetId, scores, matchedIdeology }: ShareResults
     showToast(`Imagem ${formatNames[selectedFormat]} baixada!`, "success");
   };
 
-  const shareUrl = `https://teste-politico.vercel.app/results?e=${scores?.e || 50}&d=${scores?.d || 50}&g=${scores?.g || 50}&s=${scores?.s || 50}`;
-
-  const shareText = matchedIdeology
-    ? `Fiz o Teste Político 8 Valores e minha ideologia mais próxima é: ${matchedIdeology.name}!`
-    : `Fiz o Teste Político 8 Valores! Descubra sua ideologia:`;
-
-  const handleShareTwitter = () => {
-    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
-    window.open(twitterUrl, '_blank', 'width=600,height=400');
-  };
-
-  const handleShareWhatsApp = () => {
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`;
-    window.open(whatsappUrl, '_blank');
-  };
-
-  const handleCopyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(shareUrl);
-      showToast("Link copiado!", "success");
-    } catch {
-      showToast("Erro ao copiar link", "error");
-    }
-  };
-
   return (
     <>
       {ToastComponent}
@@ -514,40 +408,74 @@ export function ShareResults({ targetId, scores, matchedIdeology }: ShareResults
             Compartilhar Resultado
           </h3>
 
-          <div className="grid grid-cols-3 gap-3">
-            <button
-              onClick={handleShareTwitter}
-              className="flex flex-col items-center gap-2 p-4 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-            >
-              <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
-                <span className="text-white font-bold">𝕏</span>
-              </div>
-              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Twitter</span>
-            </button>
+          <div className="flex flex-col gap-3">
+             {/* Botão de Compartilhamento Nativo (Mobile/Supported) */}
+             {canShare && (
+               <button
+                 onClick={handleNativeShare}
+                 className="w-full flex items-center justify-center gap-3 p-4 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white transition-all shadow-md transform hover:scale-[1.02]"
+               >
+                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                 </svg>
+                 <span className="font-bold text-lg">Compartilhar</span>
+               </button>
+             )}
 
-            <button
-              onClick={handleShareWhatsApp}
-              className="flex flex-col items-center gap-2 p-4 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-            >
-              <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                </svg>
-              </div>
-              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">WhatsApp</span>
-            </button>
+            <div className="grid grid-cols-3 gap-3">
+              <button
+                onClick={handleShareWhatsApp}
+                className="flex flex-col items-center gap-2 p-4 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                title="Compartilhar no WhatsApp"
+              >
+                <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
+                </div>
+                <span className="text-xs font-medium text-gray-700 dark:text-gray-300">WhatsApp</span>
+              </button>
 
-            <button
-              onClick={handleCopyLink}
-              className="flex flex-col items-center gap-2 p-4 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-            >
-              <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Copiar Link</span>
-            </button>
+              <button
+                onClick={handleShareTwitter}
+                className="flex flex-col items-center gap-2 p-4 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                title="Compartilhar no Twitter/X"
+              >
+                <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
+                  <span className="text-white font-bold">𝕏</span>
+                </div>
+                <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Twitter</span>
+              </button>
+
+              <button
+                onClick={handleCopyLink}
+                className={`flex flex-col items-center gap-2 p-4 rounded-lg transition-colors ${
+                  copiedLink 
+                    ? 'bg-green-100 dark:bg-green-900/30 border border-green-500' 
+                    : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
+                }`}
+                title="Copiar Link para Área de Transferência"
+              >
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+                  copiedLink ? 'bg-green-500' : 'bg-blue-500'
+                }`}>
+                  {copiedLink ? (
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                  )}
+                </div>
+                <span className={`text-xs font-medium ${
+                  copiedLink ? 'text-green-700 dark:text-green-400' : 'text-gray-700 dark:text-gray-300'
+                }`}>
+                  {copiedLink ? 'Copiado!' : 'Copiar'}
+                </span>
+              </button>
+            </div>
           </div>
         </div>
 

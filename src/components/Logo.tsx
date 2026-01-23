@@ -24,7 +24,7 @@ export function Logo({ size = 32, showText = false, className = "" }: LogoProps)
             Teste Político 8 Valores
           </span>
           <span className="text-sm text-gray-600 dark:text-gray-400 leading-tight">
-            testepolitico8valores.com
+            testepolitico.com.br
           </span>
         </div>
       )}

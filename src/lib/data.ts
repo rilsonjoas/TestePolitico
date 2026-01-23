@@ -1566,3 +1566,25 @@ export const ideologies: Ideology[] = [
     ],
   },
 ];
+
+export function getMatchedIdeology(e: number, d: number, g: number, s: number): Ideology | null {
+  let closestIdeology: Ideology | null = null;
+  let minDistance = Infinity;
+
+  for (const ideology of ideologies) {
+    const distance = Math.sqrt(
+      Math.pow(ideology.stats.econ - e, 2) +
+      Math.pow(ideology.stats.dipl - d, 2) +
+      Math.pow(ideology.stats.govt - g, 2) +
+      Math.pow(ideology.stats.scty - s, 2)
+    );
+
+    if (distance < minDistance) {
+      minDistance = distance;
+      closestIdeology = ideology;
+    }
+  }
+
+  return closestIdeology;
+}
+

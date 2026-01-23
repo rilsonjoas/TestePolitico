@@ -4,7 +4,7 @@ import { ThemeToggleButton } from "@/components/ThemeToggleButton";
 import { CookieConsent } from "@/components/CookieConsent";
 import { Footer } from "@/components/Footer";
 
-const siteUrl = "https://teste-politico.vercel.app";
+const siteUrl = "https://testepolitico.com.br";
 const siteName = "Teste Político 8 Valores";
 const siteDescription = "Descubra sua ideologia política! Responda 70 questões e veja seu posicionamento em 8 valores: Igualdade vs Mercado, Nação vs Global, Liberdade vs Autoridade, Tradição vs Progresso.";
 
@@ -50,6 +50,17 @@ export default function RootLayout({
   return (
         <html lang="pt-br" suppressHydrationWarning>
           <body className="min-h-screen w-full bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify({
+                  "@context": "https://schema.org",
+                  "@type": "WebSite",
+                  "name": "Teste Político 8 Valores",
+                  "url": "https://testepolitico.com.br",
+                }),
+              }}
+            />
             <div className="fixed top-4 right-4 z-50">
               <ThemeToggleButton />
             </div>

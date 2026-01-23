@@ -5,7 +5,22 @@ import { questions } from '@/lib/data';
 import Image from 'next/image';
 import { Logo } from '@/components/Logo';
 
+
 export default function Home() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Quiz",
+    "name": "Teste Político 8 Valores",
+    "description": "Descubra sua ideologia política com base em 8 valores fundamentais. Responda a 70 perguntas para ver seu posicionamento no espectro político.",
+    "educationalUse": "self-assessment",
+    "about": {
+      "@type": "Thing",
+      "name": "Ideologia Política"
+    },
+    "assesses": ["Economic Policy", "Civil Liberty", "Diplomatic views", "Societal views"],
+    "learningResourceType": "Assessment"
+  };
+
   const values = [
     { name: 'Igualdade', icon: '/imagens/igualdade.png', anchor: '#anchor' },
     { name: 'Nação', icon: '/imagens/nacao.png', anchor: '#anchor' },
@@ -26,6 +41,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen w-full bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="container mx-auto p-4 md:p-8 dark:bg-gray-900">
       <header className="relative mb-10 mt-8 dark:bg-gray-900">
         <div className="flex flex-col items-center gap-4">
