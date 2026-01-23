@@ -4,8 +4,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-
-
+import { AmazonLink } from '@/components/AmazonLink';
 
 // Gera os parâmetros estáticos para todas as ideologias no build time
 export async function generateStaticParams() {
@@ -133,20 +132,24 @@ export default async function IdeologyPage({ params }: { params: Promise<{ slug:
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
               <span className="text-2xl">📚</span> Leituras Recomendadas
             </h2>
-            <ul className="space-y-3">
+            <div className="grid gap-4">
               {ideology.books.map((b, i) => (
-                <li key={i} className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg border border-gray-100 dark:border-gray-700">
-                  {b.link ? (
-                    <a href={b.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
-                      {b.title}
-                    </a>
-                  ) : (
-                    <span className="font-medium">{b.title}</span>
-                  )}
-                </li>
+                b.link ? (
+                  <AmazonLink
+                    key={i}
+                    title={b.title}
+                    description={`Leitura essencial para entender o ${ideology.name}.`}
+                    url={b.link}
+                    trackingId="rilson-20"
+                  />
+                ) : (
+                  <div key={i} className="p-3 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-100 dark:border-gray-700 text-sm italic font-medium">
+                    {b.title}
+                  </div>
+                )
               ))}
-               {ideology.books.length === 0 && <li className="text-gray-500 italic">Nenhuma leitura listada.</li>}
-            </ul>
+              {ideology.books.length === 0 && <p className="text-gray-500 italic">Nenhuma leitura listada.</p>}
+            </div>
           </section>
         </div>
 
