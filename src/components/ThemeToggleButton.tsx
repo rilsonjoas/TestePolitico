@@ -33,7 +33,7 @@ export function ThemeToggleButton() {
 
   // Inicializa o tema ao montar o componente
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "system";
+    const savedTheme = localStorage.getItem("theme") || "dark";
     setTheme(savedTheme);
     applyTheme(savedTheme);
     setMounted(true);

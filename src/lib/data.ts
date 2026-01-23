@@ -1164,7 +1164,7 @@ export const ideologies: Ideology[] = [
     ],
   },
   {
-    name: "Liberalismo",
+    name: "Liberalismo de Esquerda",
     stats: { econ: 50, dipl: 60, govt: 60, scty: 60 },
     desc: "No contexto contemporâneo, especialmente nos Estados Unidos, o Liberalismo refere-se a uma posição de centro-esquerda. Apoia uma economia de mercado regulada para proteger os consumidores e o meio ambiente, juntamente com uma rede de segurança social financiada por impostos progressivos. Defende fortemente as liberdades civis, os direitos das minorias, a separação entre Igreja e Estado e uma política externa baseada na diplomacia e em alianças internacionais.",
     politicians: [
@@ -1686,26 +1686,57 @@ export const ideologies: Ideology[] = [
       { title: "No Ritmo do Reino - James K. A. Smith", link: "" },
     ],
   },
+  {
+    name: "Liberalismo de Direita",
+    stats: { econ: 20, dipl: 40, govt: 70, scty: 70 },
+    desc: "O Liberalismo de Direita (ou Liberalismo Econômico Moderno) foca na redução drástica do Estado, privatizações, desregulamentação e responsabilidade fiscal. No contexto brasileiro, é associado à defesa das reformas estruturantes e da liberdade individual como motor do progresso. Acredita que o livre mercado é o mecanismo mais eficiente para gerar riqueza e que o papel do governo deve se limitar a garantir a segurança, a justiça e o cumprimento de contratos, evitando intervenções na economia.",
+    roast: "Você cita o Roberto Campos em jantares de família e acha que o 'imposto é roubo' é a única frase que precisa para explicar toda a sociologia moderna. Provavelmente tem um adesivo do MBL no carro e acredita que a mão invisível do mercado vai consertar até o seu Wi-Fi ruim.",
+    politicians: [
+      {
+        name: "Roberto Campos",
+        link: "https://pt.wikipedia.org/wiki/Roberto_Campos",
+      },
+      {
+        name: "Paulo Guedes",
+        link: "https://pt.wikipedia.org/wiki/Paulo_Guedes",
+      },
+      {
+        name: "Kim Kataguiri (MBL)",
+        link: "https://pt.wikipedia.org/wiki/Kim_Kataguiri",
+      },
+      {
+        name: "Friedrich Hayek",
+        link: "https://pt.wikipedia.org/wiki/Friedrich_Hayek",
+      },
+    ],
+    books: [
+      { title: "A Lanterna na Popa - Roberto Campos", link: "" },
+      { title: "O Caminho da Servidão - Friedrich Hayek", link: "" },
+      { title: "As Seis Lições - Ludwig von Mises", link: "" },
+      { title: "Livre para Escolher - Milton Friedman", link: "" },
+    ],
+  },
 ];
 
 export function getMatchedIdeology(e: number, d: number, g: number, s: number): Ideology | null {
-  let closestIdeology: Ideology | null = null;
-  let minDistance = Infinity;
+  const top = getTopMatchedIdeologies(e, d, g, s, 1);
+  return top.length > 0 ? top[0] : null;
+}
 
-  for (const ideology of ideologies) {
+export function getTopMatchedIdeologies(e: number, d: number, g: number, s: number, count: number = 3): Ideology[] {
+  const results = ideologies.map(ideology => {
     const distance = Math.sqrt(
       Math.pow(ideology.stats.econ - e, 2) +
       Math.pow(ideology.stats.dipl - d, 2) +
       Math.pow(ideology.stats.govt - g, 2) +
       Math.pow(ideology.stats.scty - s, 2)
     );
+    return { ideology, distance };
+  });
 
-    if (distance < minDistance) {
-      minDistance = distance;
-      closestIdeology = ideology;
-    }
-  }
-
-  return closestIdeology;
+  results.sort((a, b) => a.distance - b.distance);
+  
+  return results.slice(0, count).map(r => r.ideology);
 }
+
 

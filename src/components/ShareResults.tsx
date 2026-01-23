@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useToast } from "./Toast";
+import { Swords } from "lucide-react";
 
 type SocialFormat = 'instagram' | 'twitter' | 'square';
 
@@ -143,27 +144,53 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
     ctx.fillStyle = bgGradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    // --- CARREGAR LOGO ---
+    const loadImage = (src: string): Promise<HTMLImageElement> => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+      });
+    };
+
+    try {
+      const logoImg = await loadImage("/logo.svg");
+      const logoSize = format === 'twitter' ? 50 : 80;
+      const logoX = (canvas.width - logoSize) / 2;
+      const logoY = format === 'twitter' ? 30 : 50;
+
+      // Sombra suave no logo
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+      ctx.shadowBlur = 15;
+      ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
+      ctx.shadowBlur = 0;
+    } catch (e) {
+      console.warn("Logo failed to load for canvas:", e);
+    }
+
     // Padding base
     const padding = Math.max(50, canvas.width * 0.05);
 
     // --- CABEÇALHO ---
     // Logo centralizado e minimalista
-    const logoY = padding + 40;
+    const titleY = format === 'twitter' ? 120 : 180;
     
     // Título do Site
     ctx.textAlign = 'center';
-    ctx.fillStyle = textPrimary;
-    const titleSize = format === 'twitter' ? 28 : 36;
-    ctx.font = `bold ${titleSize}px Arial`;
-    ctx.fillText('TESTE POLÍTICO', canvas.width / 2, logoY);
+    const titleSize = format === 'twitter' ? 32 : 40;
+    ctx.font = `900 ${titleSize}px Arial`;
     
-    ctx.fillStyle = '#3b82f6'; // Azul destaque
-    ctx.font = `bold ${titleSize}px Arial`;
-    // Pequeno ajuste para desenhar o "8 VALORES" logo abaixo ou ao lado se for twitter
-    if (format === 'twitter') {
-       ctx.fillText('8 VALORES', canvas.width / 2, logoY + 35);
+    // Título unificado para Twitter e Square se houver espaço
+    if (format === 'twitter' || format === 'square') {
+       ctx.fillStyle = textPrimary;
+       ctx.fillText('TESTE POLÍTICO 8 VALORES', canvas.width / 2, titleY);
     } else {
-       ctx.fillText('8 VALORES', canvas.width / 2, logoY + 45);
+       ctx.fillStyle = textPrimary;
+       ctx.fillText('TESTE POLÍTICO', canvas.width / 2, titleY);
+       ctx.fillStyle = '#3b82f6'; // Azul destaque
+       ctx.fillText('8 VALORES', canvas.width / 2, titleY + 50);
     }
 
     // --- CONTEÚDO PRINCIPAL (IDEOLOGIA) ---
@@ -512,8 +539,8 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
                       : 'border-purple-500 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20'
                   }`}
                 >
-                  <span className="font-bold">
-                    {copiedCompareLink ? 'Link Copiado!' : '⚔️ Desafiar um Amigo'}
+                  <span className="font-bold flex items-center gap-2">
+                    {copiedCompareLink ? 'Link Copiado!' : <><Swords size={18} /> Desafiar um Amigo</>}
                   </span>
                 </button>
                 <p className="text-xs text-center text-gray-500 dark:text-gray-400 mt-2">

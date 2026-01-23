@@ -51,6 +51,21 @@ export default function RootLayout({
   return (
         <html lang="pt-br" suppressHydrationWarning>
           <head>
+            {/* Blocking script to prevent theme flicker */}
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  (function() {
+                    const savedTheme = localStorage.getItem('theme') || 'dark';
+                    if (savedTheme === 'dark' || (savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                      document.documentElement.classList.add('dark');
+                    } else {
+                      document.documentElement.classList.remove('dark');
+                    }
+                  })()
+                `,
+              }}
+            />
             {/* AdSense Publisher ID configurado */}
             <AdSense pId="ca-pub-5482566824255473" />
           </head>
