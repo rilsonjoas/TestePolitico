@@ -27,8 +27,22 @@ export interface Ideology {
     scty: number;
   };
   desc: string;
+  roast?: string;
   politicians: Politician[];
   books: Book[];
+}
+
+export function slugify(text: string) {
+  return text
+    .toString()
+    .toLowerCase()
+    .normalize('NFD') // Remove acentos
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '-') // Substitui espaços por hifens
+    .replace(/[^\w\-]+/g, '') // Remove caracteres não-alfanuméricos
+    .replace(/\-\-+/g, '-') // Substitui múltiplos hifens por um único
+    .replace(/^-+/, '') // Remove hifens do início
+    .replace(/-+$/, ''); // Remove hifens do fim
 }
 
 export const questions: Question[] = [
@@ -385,7 +399,8 @@ export const ideologies: Ideology[] = [
   {
     name: "Anarco-Comunismo",
     stats: { econ: 100, dipl: 50, govt: 100, scty: 90 },
-    desc: "Acreditamos que a verdadeira liberdade só é possível com igualdade material. Lutamos pela abolição do Estado, do capitalismo e de toda hierarquia opressora, construindo em seu lugar uma sociedade de comunas livres e autogeridas. Cada pessoa contribui voluntariamente segundo suas capacidades e recebe segundo suas necessidades, sem patrões, sem polícia, sem fronteiras. A cooperação livre entre iguais substitui a coerção. A propriedade comum dos meios de produção garante que ninguém explore o trabalho alheio. Rejeitamos tanto a tirania do capital quanto a do Estado autoritário.",
+    desc: "Acreditamos que a verdadeira liberdade só é possível com igualdade material. Lutamos pela abolição do Estado, do capitalismo e de toda hierarquia opressora, construindo em seu lugar uma sociedade de comunas livres e autogeridas. Cada pessoa contribui voluntariamente segundo suas capacidades e recebe segundo suas necessidades, sem patrões, sem polícia, sem fronteiras. A cooperação livre entre iguais substitui a coerção. Rejeitamos tanto a tirania do capital quanto a do Estado autoritário.",
+    roast: "Para você, qualquer hierarquia é fascismo, menos a do grupo do WhatsApp da comuna que ninguém modera. Você acredita que a humanidade viveria em paz e harmonia se não fosse o Estado, ignorando 5.000 anos de história humana.",
     politicians: [
       {
         name: "Piotr Kropotkin",
@@ -424,22 +439,23 @@ export const ideologies: Ideology[] = [
     name: "Comunismo Libertário",
     stats: { econ: 100, dipl: 70, govt: 80, scty: 80 },
     desc: "Defendemos uma sociedade sem classes e sem Estado, organizada através de federações de comunas democráticas e assembleias populares. Não basta derrubar o capitalismo se for para erguer uma nova burocracia em seu lugar. O poder deve fluir de baixo para cima, das bases para as coordenações, nunca o contrário. Combinamos a luta por justiça econômica com a defesa intransigente das liberdades individuais. Incorporamos também a luta ecológica, pois não há libertação humana sem harmonia com a natureza. Municipalismo, democracia direta e ecologia social são nossos pilares.",
+    roast: "Você é o anarquista que insiste em ter um plano de 5 anos para a revolução, mas não consegue organizar a vaquinha do churrasco. Sua utopia é um conselho de bairro que debate por 12 horas se a lixeira deve ser de plástico ou metal.",
     politicians: [
       {
         name: "Murray Bookchin",
         link: "https://pt.wikipedia.org/wiki/Murray_Bookchin",
       },
       {
-        name: "Daniel Guérin",
-        link: "https://pt.wikipedia.org/wiki/Daniel_Gu%C3%A9rin",
+        name: "Maria Lacerda de Moura (BR)",
+        link: "https://pt.wikipedia.org/wiki/Maria_Lacerda_de_Moura",
+      },
+      {
+        name: "José Oiticica (BR)",
+        link: "https://pt.wikipedia.org/wiki/Jos%C3%A9_Oiticica",
       },
       {
         name: "Abdullah Öcalan",
         link: "https://pt.wikipedia.org/wiki/Abdullah_%C3%96calan",
-      },
-      {
-        name: "Federica Montseny",
-        link: "https://pt.wikipedia.org/wiki/Federica_Montseny",
       },
     ],
     books: [
@@ -453,7 +469,8 @@ export const ideologies: Ideology[] = [
   {
     name: "Trotskismo",
     stats: { econ: 100, dipl: 100, govt: 60, scty: 80 },
-    desc: "A revolução não pode parar nas fronteiras nacionais nem se contentar com reformas parciais. Defendemos a revolução permanente: ela deve se expandir internacionalmente e aprofundar-se constantemente até a completa emancipação da classe trabalhadora mundial. Condenamos a degeneração burocrática do stalinismo, que traiu os ideais de Outubro ao criar uma casta privilegiada e totalitária. Lutamos por uma democracia operária genuína, com sovietes livres, controle dos trabalhadores sobre a produção e uma Internacional revolucionária que una o proletariado de todos os países.",
+    desc: "Seguimos a tradição de Trotski, defendendo a revolução permanente e internacional. O socialismo não pode ser construído em um só país; deve ser uma luta global da classe trabalhadora. Opomos-nos à burocracia estalinista que traiu a revolução, defendendo a verdadeira democracia operária e os conselhos de trabalhadores (sovietes). A vanguarda revolucionária é necessária, mas deve permanecer ligada às massas.",
+    roast: "Sua habilidade principal é fundar partidos que se dividem em três facções na primeira reunião. Você vende jornal na porta da faculdade e espera a Revolução Mundial há 80 anos.",
     politicians: [
       {
         name: "Leon Trotsky",
@@ -483,37 +500,44 @@ export const ideologies: Ideology[] = [
   {
     name: "Marxismo",
     stats: { econ: 100, dipl: 70, govt: 40, scty: 80 },
-    desc: "A história de toda sociedade até hoje é a história da luta de classes. O capitalismo, apesar de seu dinamismo, é um sistema baseado na exploração do trabalho assalariado, onde os trabalhadores produzem mais valor do que recebem. Através da análise materialista da história e da economia política, compreendemos as contradições internas do capital que inevitavelmente levarão à sua superação. Defendemos a organização da classe trabalhadora para tomar o poder e construir uma sociedade sem classes, sem exploração e, finalmente, sem Estado. Proletários de todos os países, uni-vos!",
+    desc: "O Marxismo é a análise científica do capitalismo e a luta pela emancipação do proletariado. Acreditamos que a história é movida pela luta de classes e que o capitalismo, com suas contradições internas, será inevitavelmente superado pelo comunismo. Defendemos a socialização dos meios de produção e a organização da classe trabalhadora para tomar o poder político e construir uma sociedade sem classes.",
+    roast: "Você chama tudo de 'dialético' quando não sabe explicar. Provavelmente acha que ler livros difíceis te torna moralmente superior a quem trabalha num emprego real.",
     politicians: [
       {
         name: "Karl Marx",
         link: "https://pt.wikipedia.org/wiki/Karl_Marx",
       },
       {
-        name: "Friedrich Engels",
-        link: "https://pt.wikipedia.org/wiki/Friedrich_Engels",
-      },
-      {
-        name: "Rosa Luxemburgo",
-        link: "https://pt.wikipedia.org/wiki/Rosa_Luxemburgo",
-      },
-      {
         name: "Antonio Gramsci",
         link: "https://pt.wikipedia.org/wiki/Antonio_Gramsci",
+      },
+      {
+        name: "Theodor Adorno (Escola de Frankfurt)",
+        link: "https://pt.wikipedia.org/wiki/Theodor_W._Adorno",
+      },
+      {
+        name: "Luís Carlos Prestes (BR)",
+        link: "https://pt.wikipedia.org/wiki/Lu%C3%ADs_Carlos_Prestes",
+      },
+      {
+        name: "Álvaro Cunhal (PT)",
+        link: "https://pt.wikipedia.org/wiki/%C3%81lvaro_Cunhal",
       },
     ],
     books: [
       { title: "O Manifesto Comunista - Marx e Engels", link: "" },
+      { title: "Formação do Brasil Contemporâneo - Caio Prado Jr.", link: "" },
+      { title: "O Cavaleiro da Esperança - Jorge Amado", link: "" },
+      { title: "Cadernos do Cárcere - Gramsci", link: "" },
+      { title: "Dialética do Esclarecimento - Adorno e Horkheimer", link: "" },
       { title: "O Capital - Karl Marx", link: "" },
-      { title: "Reforma ou Revolução? - Rosa Luxemburgo", link: "" },
-      { title: "Cadernos do Cárcere - Antonio Gramsci", link: "" },
-      { title: "A Ideologia Alemã - Marx e Engels", link: "" },
     ],
   },
   {
     name: "De Leonismo",
     stats: { econ: 100, dipl: 30, govt: 30, scty: 80 },
     desc: "O caminho para o socialismo passa pela organização simultânea no campo político e no econômico. Defendemos sindicatos industriais revolucionários que, organizados por setor produtivo, formarão a base de uma república socialista industrial. O voto socialista nas urnas dará legitimidade à transformação; os sindicatos industriais darão a ela substância econômica. O Estado burguês será substituído por um congresso de representantes dos trabalhadores de cada indústria. Rejeitamos tanto o reformismo impotente quanto o anarquismo desorganizado. A classe trabalhadora, organizada e consciente, será sua própria libertadora.",
+    roast: "Você é o único que ainda acredita que a revolução virá através de sindicatos industriais e um partido político que ninguém conhece. Seu plano é tão detalhado que ninguém consegue entender, e você passa mais tempo discutindo a pureza ideológica do que agindo.",
     politicians: [
       {
         name: "Daniel De Leon",
@@ -707,22 +731,22 @@ export const ideologies: Ideology[] = [
       { title: "Igreja: Carisma e Poder - Leonardo Boff", link: "" },
     ],
   },
-  {
+  {   
     name: "Socialismo Democrático",
     stats: { econ: 80, dipl: 50, govt: 50, scty: 80 },
     desc: "O socialismo deve ser conquistado através da democracia, e a democracia só é plena quando se estende à esfera econômica. Lutamos nas urnas, nos sindicatos e nos movimentos sociais por uma transformação gradual mas profunda da sociedade. Os setores estratégicos da economia devem ser controlados democraticamente pelo povo, não por acionistas ou burocratas. Um Estado de bem-estar robusto garante saúde, educação e moradia como direitos, não mercadorias. Rejeitamos tanto o capitalismo selvagem quanto o autoritarismo que se disfarçou de socialismo no século XX.",
     politicians: [
       {
+        name: "Leonel Brizola (BR)",
+        link: "https://pt.wikipedia.org/wiki/Leonel_Brizola",
+      },
+      {
+        name: "Pepe Mujica (Uruguai)",
+        link: "https://pt.wikipedia.org/wiki/Jos%C3%A9_Mujica",
+      },
+      {
         name: "Salvador Allende",
         link: "https://pt.wikipedia.org/wiki/Salvador_Allende",
-      },
-      {
-        name: "Bernie Sanders",
-        link: "https://pt.wikipedia.org/wiki/Bernie_Sanders",
-      },
-      {
-        name: "Jeremy Corbyn",
-        link: "https://pt.wikipedia.org/wiki/Jeremy_Corbyn",
       },
       {
         name: "Alexandria Ocasio-Cortez",
@@ -731,7 +755,7 @@ export const ideologies: Ideology[] = [
     ],
     books: [
       { title: "O Caminho para o Poder - Karl Kautsky", link: "" },
-      { title: "Socialismo: Passado e Futuro - Michael Harrington", link: "" },
+      { title: "Fios da História - Uma Biografia de Brizola", link: "" },
       { title: "Por Que Não o Socialismo? - G.A. Cohen", link: "" },
       { title: "A Alma do Homem sob o Socialismo - Oscar Wilde", link: "" },
       { title: "O ABC do Socialismo - Leo Huberman", link: "" },
@@ -770,7 +794,8 @@ export const ideologies: Ideology[] = [
   {
     name: "Socialismo Libertário",
     stats: { econ: 80, dipl: 80, govt: 80, scty: 80 },
-    desc: "Socialismo sem liberdade é tirania; liberdade sem socialismo é privilégio. Defendemos uma sociedade onde os trabalhadores controlem democraticamente seus locais de trabalho e comunidades, sem patrões nem burocratas ditando suas vidas. Toda hierarquia deve justificar-se, e as que não podem ser justificadas devem ser desmanteladas. Opomos-nos igualmente ao capitalismo e ao 'socialismo realmente existente' que concentrou poder em novas elites. Democracia direta, autogestão, federalismo e solidariedade internacional são nossos princípios. O poder deve estar disperso, não concentrado.",
+    desc: "O Socialismo Libertário busca uma sociedade igualitária e livre, rejeitando tanto o controle estatal centralizado quanto a exploração capitalista. Acreditamos na autogestão dos trabalhadores, na democracia direta e na propriedade coletiva ou comum dos meios de produção, mas sem a brutalidade de uma vanguarda autoritária. A liberdade individual é inseparável da igualdade social; não pode haver uma sem a outra.",
+    roast: "Você passa 90% do tempo explicando que a URSS não era socialismo de verdade e os outros 10% brigando com outros esquerdistas sobre quem é mais revolucionário.",
     politicians: [
       {
         name: "Noam Chomsky",
@@ -804,22 +829,23 @@ export const ideologies: Ideology[] = [
     name: "Anarco-Sindicalismo",
     stats: { econ: 80, dipl: 50, govt: 100, scty: 80 },
     desc: "Os trabalhadores não precisam de políticos ou burocratas para se libertar. Através de sindicatos revolucionários organizados por indústria, construímos o poder para derrubar o capitalismo e a estrutura para a nova sociedade simultaneamente. A greve geral é nossa arma mais poderosa. Quando os trabalhadores cruzam os braços unidos, o sistema para. E quando tomam as fábricas em suas próprias mãos, o capitalismo acaba. A sociedade futura será uma federação de coletivos autogeridos, onde quem trabalha decide. Ação direta, não eleições; autogestão, não delegação!",
+    roast: "Sua solução para tudo é uma greve geral. Se o pneu furar? Greve geral. Se chover no domingo? Greve geral. Você acha que organizar um sindicato é mais fácil do que organizar um churrasco.",
     politicians: [
       {
-        name: "Rudolf Rocker",
-        link: "https://pt.wikipedia.org/wiki/Rudolf_Rocker",
+        name: "Edgard Leuenroth (BR)",
+        link: "https://pt.wikipedia.org/wiki/Edgard_Leuenroth",
       },
       {
         name: "Buenaventura Durruti",
         link: "https://pt.wikipedia.org/wiki/Buenaventura_Durruti",
       },
       {
-        name: "Émile Pouget",
-        link: "https://pt.wikipedia.org/wiki/%C3%89mile_Pouget",
+        name: "Neno Vasco (PT)",
+        link: "https://pt.wikipedia.org/wiki/Neno_Vasco",
       },
       {
-        name: "Fernand Pelloutier",
-        link: "https://pt.wikipedia.org/wiki/Fernand_Pelloutier",
+        name: "Rudolf Rocker",
+        link: "https://pt.wikipedia.org/wiki/Rudolf_Rocker",
       },
     ],
     books: [
@@ -837,36 +863,35 @@ export const ideologies: Ideology[] = [
     name: "Populismo de Esquerda",
     stats: { econ: 60, dipl: 40, govt: 30, scty: 70 },
     desc: "O povo contra a oligarquia! Por décadas, uma elite corrupta governou em benefício próprio, privatizando o público, entregando nossas riquezas ao capital estrangeiro e empobrecendo a maioria. Chegou a hora do povo retomar o que é seu. Nacionalização dos recursos estratégicos, redistribuição de renda, serviços públicos de qualidade e soberania nacional. Não somos nem esquerda nem direita tradicionais; representamos os de baixo contra os de cima. A democracia deve servir ao povo, não aos banqueiros. Pátria, povo e dignidade!",
+    roast: "Você acha que a inflação é uma conspiração das elites e que imprimir dinheiro é política social. Seu passatempo favorito é culpar o imperialismo ianque porque seu time perdeu.",
     politicians: [
+      {
+        name: "Lula (Luiz Inácio Lula da Silva)",
+        link: "https://pt.wikipedia.org/wiki/Luiz_In%C3%A1cio_Lula_da_Silva",
+      },
+      {
+        name: "Dilma Rousseff",
+        link: "https://pt.wikipedia.org/wiki/Dilma_Rousseff",
+      },
+      {
+        name: "Guilherme Boulos",
+        link: "https://pt.wikipedia.org/wiki/Guilherme_Boulos",
+      },
       {
         name: "Hugo Chávez",
         link: "https://pt.wikipedia.org/wiki/Hugo_Ch%C3%A1vez",
       },
-      {
-        name: "Jean-Luc Mélenchon",
-        link: "https://pt.wikipedia.org/wiki/Jean-Luc_M%C3%A9lenchon",
-      },
-      {
-        name: "Rafael Correa",
-        link: "https://pt.wikipedia.org/wiki/Rafael_Correa",
-      },
-      {
-        name: "Pablo Iglesias",
-        link: "https://pt.wikipedia.org/wiki/Pablo_Iglesias_Turri%C3%B3n",
-      },
     ],
     books: [
+      { title: "A Verdade Vencerá - Lula", link: "" },
+      { title: "O Povo Brasileiro - Darcy Ribeiro", link: "" },
+      { title: "As Veias Abertas da América Latina - Galeano", link: "" },
       { title: "A Razão Populista - Ernesto Laclau", link: "" },
-      {
-        title: "Hegemonia e Estratégia Socialista - Laclau e Mouffe",
-        link: "",
-      },
-      { title: "Por Um Populismo de Esquerda - Chantal Mouffe", link: "" },
       { title: "O Que é Populismo? - Jan-Werner Müller", link: "" },
     ],
   },
   {
-    name: "Distributismo Teocrático",
+    name: "Distributismo Católico",
     stats: { econ: 60, dipl: 40, govt: 30, scty: 20 },
     desc: "A doutrina social da Igreja nos ensina que tanto o capitalismo de poucos quanto o coletivismo do Estado violam a dignidade humana. A propriedade deve estar amplamente distribuída entre as famílias, permitindo que cada um viva do próprio trabalho com dignidade. As guildas, cooperativas e pequenas empresas familiares são o modelo, não as grandes corporações nem a burocracia estatal. Mas essa ordem econômica só é estável quando a sociedade é guiada pelos princípios da fé verdadeira e da lei moral, sob a orientação da autoridade espiritual.",
     politicians: [
@@ -894,6 +919,7 @@ export const ideologies: Ideology[] = [
     name: "Distributismo",
     stats: { econ: 60, dipl: 50, govt: 50, scty: 20 },
     desc: "Três acres e uma vaca! Nem capitalismo de monopólios nem socialismo de burocratas. A propriedade é boa, tão boa que todos deveriam tê-la. Defendemos uma sociedade de pequenos proprietários: agricultores em suas terras, artesãos em suas oficinas, comerciantes em suas lojas, todos donos dos meios de seu próprio sustento. As cooperativas e guildas organizam a produção sem criar nem plutocratas nem comissários. A família é a unidade básica da sociedade, e a comunidade local é onde a democracia realmente funciona. Grande demais é ruim, seja empresa ou Estado.",
+    roast: "Você quer viver no Condado dos Hobbits. Acha que o problema do mundo é que não temos vacas suficientes e que o feudalismo foi injustiçado pela história.",
     politicians: [
       {
         name: "G. K. Chesterton",
@@ -924,22 +950,23 @@ export const ideologies: Ideology[] = [
     name: "Liberalismo Social",
     stats: { econ: 60, dipl: 60, govt: 60, scty: 80 },
     desc: "A verdadeira liberdade não é apenas a ausência de coerção do Estado, mas a capacidade real de viver uma vida plena. De que adianta a liberdade formal para quem não tem educação, saúde ou oportunidades? Defendemos uma economia de mercado regulada, onde o Estado corrige as falhas do mercado, garante igualdade de oportunidades e protege os mais vulneráveis com uma rede de segurança social robusta. Direitos civis, tolerância, pluralismo e justiça social caminham juntos. A liberdade de cada um depende das condições materiais que permitem exercê-la.",
+    roast: "Sua ideologia é 'por que não podemos todos nos dar bem e tributar os ricos um pouquinho?'. Você provavelmente tem uma foto do Obama na estante e acha que twittar é ativismo.",
     politicians: [
       {
-        name: "John Rawls",
-        link: "https://pt.wikipedia.org/wiki/John_Rawls",
+        name: "Geraldo Alckmin",
+        link: "https://pt.wikipedia.org/wiki/Geraldo_Alckmin",
       },
       {
-        name: "Franklin D. Roosevelt",
-        link: "https://pt.wikipedia.org/wiki/Franklin_D._Roosevelt",
+        name: "Fernando Henrique Cardoso (BR)",
+        link: "https://pt.wikipedia.org/wiki/Fernando_Henrique_Cardoso",
       },
       {
-        name: "William Beveridge",
-        link: "https://pt.wikipedia.org/wiki/William_Beveridge",
+        name: "Joe Biden (EUA)",
+        link: "https://pt.wikipedia.org/wiki/Joe_Biden",
       },
       {
-        name: "Amartya Sen",
-        link: "https://pt.wikipedia.org/wiki/Amartya_Sen",
+        name: "Barack Obama",
+        link: "https://pt.wikipedia.org/wiki/Barack_Obama",
       },
     ],
     books: [
@@ -983,7 +1010,12 @@ export const ideologies: Ideology[] = [
     name: "Social Democracia",
     stats: { econ: 60, dipl: 70, govt: 60, scty: 80 },
     desc: "O capitalismo pode ser civilizado. Através de sindicatos fortes, negociação coletiva, regulação do mercado e um Estado de bem-estar universal e generoso, podemos garantir que a prosperidade seja compartilhada por todos. Saúde universal, educação pública de qualidade, aposentadoria digna, seguro-desemprego e licenças parentais são direitos, não privilégios. A democracia não termina na urna; ela deve se estender ao local de trabalho e à economia. Buscamos uma sociedade onde todos tenham segurança material para viver com dignidade e liberdade real.",
+    roast: "Você quer a revolução, desde que ela não atrase seu brunch. Acha que votar em partidos de esquerda moderada é um ato radical de rebeldia.",
     politicians: [
+      {
+        name: "Mário Soares (PT)",
+        link: "https://pt.wikipedia.org/wiki/M%C3%A1rio_Soares",
+      },
       {
         name: "Olof Palme",
         link: "https://pt.wikipedia.org/wiki/Olof_Palme",
@@ -993,12 +1025,8 @@ export const ideologies: Ideology[] = [
         link: "https://pt.wikipedia.org/wiki/Willy_Brandt",
       },
       {
-        name: "Clement Attlee",
-        link: "https://pt.wikipedia.org/wiki/Clement_Attlee",
-      },
-      {
-        name: "Gro Harlem Brundtland",
-        link: "https://pt.wikipedia.org/wiki/Gro_Harlem_Brundtland",
+        name: "Ulysses Guimarães (BR)",
+        link: "https://pt.wikipedia.org/wiki/Ulysses_Guimar%C3%A3es",
       },
     ],
     books: [
@@ -1016,6 +1044,7 @@ export const ideologies: Ideology[] = [
     name: "Progressismo",
     stats: { econ: 60, dipl: 80, govt: 60, scty: 100 },
     desc: "O arco da história é longo, mas se curva em direção à justiça. Acreditamos no progresso: na ciência que cura doenças e resolve problemas, na educação que liberta mentes, nos direitos civis que expandem a dignidade a todos. Cada geração pode e deve melhorar a anterior. Lutamos contra todas as formas de discriminação, pela igualdade de gênero, pelos direitos LGBTQ+, pela justiça racial e pela proteção do meio ambiente. O governo é uma ferramenta para o bem comum quando usado corretamente. Não aceitamos que 'sempre foi assim' como desculpa para a injustiça.",
+    roast: "Você cancela pessoas no Twitter por esporte e acha que usar a hashtag certa vai salvar o mundo. Sua principal angústia existencial é decidir qual leite vegetal polui menos.",
     politicians: [
       {
         name: "Theodore Roosevelt",
@@ -1030,16 +1059,21 @@ export const ideologies: Ideology[] = [
         link: "https://pt.wikipedia.org/wiki/Justin_Trudeau",
       },
       {
-        name: "Jacinda Ardern",
-        link: "https://pt.wikipedia.org/wiki/Jacinda_Ardern",
+        name: "Simone de Beauvoir",
+        link: "https://pt.wikipedia.org/wiki/Simone_de_Beauvoir",
+      },
+      {
+        name: "Judith Butler",
+        link: "https://pt.wikipedia.org/wiki/Judith_Butler",
       },
     ],
     books: [
       { title: "A Promessa da Vida Americana - Herbert Croly", link: "" },
       { title: "Democracia e Educação - John Dewey", link: "" },
       { title: "Os Anjos Bons da Nossa Natureza - Steven Pinker", link: "" },
+      { title: "O Segundo Sexo - Simone de Beauvoir", link: "" },
+      { title: "Problemas de Gênero - Judith Butler", link: "" },
       { title: "O Capital no Século XXI - Thomas Piketty", link: "" },
-      { title: "Primavera Silenciosa - Rachel Carson", link: "" },
     ],
   },
   {
@@ -1066,8 +1100,16 @@ export const ideologies: Ideology[] = [
     desc: "O Totalitarismo Nacional descreve um regime onde o Estado, geralmente sob o controle de um partido único e um líder supremo, busca regular e controlar todos os aspectos da vida pública e privada. É caracterizado pela supressão total da oposição, uso de propaganda massiva, vigilância constante e mobilização da população em torno de uma ideologia nacionalista. A economia é subserviente aos objetivos do Estado, seja através do controle direto ou do corporativismo.",
     politicians: [
       {
-        name: "(Líderes de regimes totalitários não-fascistas ou comunistas)",
-        link: "",
+        name: "Kim Il-sung (Juche - Coreia do Norte)",
+        link: "https://pt.wikipedia.org/wiki/Kim_Il-sung",
+      },
+      {
+        name: "Saddam Hussein (Iraque)",
+        link: "https://pt.wikipedia.org/wiki/Saddam_Hussein",
+      },
+      {
+        name: "Getúlio Vargas (Estado Novo - BR)",
+        link: "https://pt.wikipedia.org/wiki/Get%C3%BAlio_Vargas",
       },
     ],
     books: [
@@ -1080,7 +1122,8 @@ export const ideologies: Ideology[] = [
     stats: { econ: 50, dipl: 80, govt: 0, scty: 50 },
     desc: "O Totalitarismo Global é um conceito, geralmente explorado na ficção distópica, de um regime mundial unificado que exerce controle absoluto sobre todos os indivíduos e nações. Elimina a soberania nacional e impõe uma ideologia única em escala planetária, utilizando tecnologia avançada para vigilância e controle social. Representa a extensão máxima do poder autoritário, onde não há escapatória ou refúgio da autoridade central.",
     politicians: [
-      { name: "(Personagens de ficção ou figuras hipotéticas)", link: "" },
+      { name: "O Partido (1984 - George Orwell)", link: "" },
+      { name: "Estado Mundial (Admirável Mundo Novo)", link: "" },
     ],
     books: [
       { title: "Admirável Mundo Novo (Aldous Huxley)", link: "" },
@@ -1091,7 +1134,10 @@ export const ideologies: Ideology[] = [
     name: "Tecnocracia",
     stats: { econ: 60, dipl: 60, govt: 20, scty: 70 },
     desc: "A Tecnocracia é um sistema de governo onde os tomadores de decisão são selecionados com base em sua especialização técnica e conhecimento científico, em vez de filiação partidária ou popularidade eleitoral. As políticas são formuladas com base em dados, métodos científicos e eficiência, buscando soluções racionais para os problemas sociais e econômicos. É uma forma de governança elitista, onde o poder reside nos 'especialistas', com o objetivo de otimizar a gestão da sociedade.",
-    politicians: [{ name: "(Movimentos tecnocráticos históricos)", link: "" }],
+    politicians: [
+      { name: "Mario Monti (Itália)", link: "https://pt.wikipedia.org/wiki/Mario_Monti" },
+      { name: "Singapura (Modelo de Governança)", link: "" },
+    ],
     books: [
       { title: "The Technocrats: Prophets of Automation (Elsner)", link: "" },
       { title: "(Literatura sobre governança por especialistas)", link: "" },
@@ -1101,6 +1147,7 @@ export const ideologies: Ideology[] = [
     name: "Centrista",
     stats: { econ: 50, dipl: 50, govt: 50, scty: 50 },
     desc: "O Centrismo é uma posição política que busca um equilíbrio pragmático, rejeitando os extremos do espectro político de esquerda e direita. Os centristas tendem a adotar uma abordagem moderada, combinando políticas de diferentes ideologias conforme a situação. Favorecem a reforma gradual em vez de mudanças radicais, valorizam o consenso e a estabilidade. Podem apoiar uma economia de mercado com uma rede de segurança social, liberdades individuais com responsabilidade cívica, e uma política externa que equilibra interesses nacionais e cooperação internacional.",
+    roast: "Sua opinião mais forte é que não se deve ter opiniões fortes. Você é o equivalente político de pão com água e acha que a virtude está sempre no meio, mesmo que o meio seja uma catástrofe.",
     politicians: [
       {
         name: "Emmanuel Macron (França)",
@@ -1157,18 +1204,23 @@ export const ideologies: Ideology[] = [
     name: "Populismo de Direita",
     stats: { econ: 40, dipl: 30, govt: 30, scty: 30 },
     desc: "O Populismo de Direita combina um forte nacionalismo, políticas anti-imigração e um apelo ao 'povo' contra 'elites' cosmopolitas e progressistas. Defende a soberania nacional, a ordem pública e valores sociais tradicionais. Economicamente, pode ser pró-mercado, mas frequentemente adota medidas protecionistas para proteger a indústria e os trabalhadores nacionais. Está associado a líderes carismáticos e autoritários que afirmam ser a 'voz do povo silencioso'.",
+    roast: "Você compartilha fake news no grupo da família e acha que a terra é plana porque 'a mídia mente'. Para você, qualquer um à esquerda de Gengis Khan é comunista.",
     politicians: [
+      {
+        name: "Jair Bolsonaro (BR)",
+        link: "https://pt.wikipedia.org/wiki/Jair_Bolsonaro",
+      },
       {
         name: "Donald Trump (EUA)",
         link: "https://pt.wikipedia.org/wiki/Donald_Trump",
       },
       {
-        name: "Marine Le Pen (França)",
-        link: "https://pt.wikipedia.org/wiki/Marine_Le_Pen",
+        name: "Javier Milei (Argentina)",
+        link: "https://pt.wikipedia.org/wiki/Javier_Milei",
       },
       {
-        name: "Viktor Orbán (Hungria)",
-        link: "https://pt.wikipedia.org/wiki/Viktor_Orb%C3%A1n",
+        name: "Nikolas Ferreira (BR)",
+        link: "https://pt.wikipedia.org/wiki/Nikolas_Ferreira",
       },
     ],
     books: [
@@ -1196,6 +1248,7 @@ export const ideologies: Ideology[] = [
     name: "Reacionário",
     stats: { econ: 40, dipl: 40, govt: 40, scty: 10 },
     desc: "O Reacionarismo é uma postura política que se opõe radicalmente às mudanças sociais, políticas e econômicas da modernidade (como a Revolução Francesa ou o Iluminismo) e busca restaurar uma ordem social anterior, considerada superior. Idealiza o passado, defendendo estruturas hierárquicas, monarquia, aristocracia e a autoridade da religião. Rejeita conceitos como democracia, igualdade e liberalismo, vendo-os como fontes de decadência e desordem.",
+    roast: "Você quer voltar para 1600, mas provavelmente morreria de disenteria na primeira semana. Acha que a civilização acabou quando permitiram que as pessoas votassem.",
     politicians: [
       {
         name: "Joseph de Maistre (Filósofo)",
@@ -1223,6 +1276,7 @@ export const ideologies: Ideology[] = [
     name: "Libertarianismo",
     stats: { econ: 40, dipl: 60, govt: 80, scty: 60 },
     desc: "O Libertarianismo é uma filosofia política que prioriza a liberdade individual como seu valor fundamental. Defende a maximização da autonomia e da liberdade de escolha, enfatizando a soberania do indivíduo. Advoga por um governo mínimo ('Estado mínimo'), cuja única função legítima é proteger os direitos individuais contra a força e a fraude. Apoia o livre mercado, a propriedade privada e as liberdades civis, e geralmente promove uma política externa não-intervencionista.",
+    roast: "Para você, leis de trânsito são tirania e impostos são literalmente estupro. Você provavelmente explicou o padrão ouro para uma mulher numa festa e ela fingiu desmaiar para fugir.",
     politicians: [
       {
         name: "Ron Paul (EUA)",
@@ -1277,8 +1331,12 @@ export const ideologies: Ideology[] = [
     desc: "A Autocracia é um sistema de governo onde o poder supremo está concentrado nas mãos de uma única pessoa, cujas decisões não estão sujeitas a restrições legais externas nem a mecanismos de controle popular. O autocrata governa sem o consentimento dos governados. A orientação econômica, social e diplomática pode variar enormemente dependendo dos caprichos e objetivos do líder, mas a característica definidora é a ausência de freios e contrapesos e a supressão da dissidência política.",
     politicians: [
       {
-        name: "(Monarcas absolutistas históricos, ditadores modernos)",
-        link: "",
+        name: "Rei Luís XIV (França - Absolutismo)",
+        link: "https://pt.wikipedia.org/wiki/Lu%C3%ADs_XIV_de_Fran%C3%A7a",
+      },
+      {
+        name: "Monarquia Saudita (Atual)",
+        link: "https://pt.wikipedia.org/wiki/Ar%C3%A1bia_Saudita",
       },
     ],
     books: [
@@ -1290,13 +1348,22 @@ export const ideologies: Ideology[] = [
     name: "Fascismo",
     stats: { econ: 40, dipl: 20, govt: 20, scty: 20 },
     desc: "O Fascismo é uma ideologia política de extrema-direita, autoritária e ultranacionalista, caracterizada por um poder ditatorial, supressão da oposição e forte controle da sociedade e da economia. Exalta a nação ou a raça como uma comunidade orgânica que transcende todos os outros interesses, e promove o militarismo, a violência e o culto ao líder. Economicamente, adota o corporativismo, onde o Estado media as relações entre capital e trabalho para servir aos interesses nacionais.",
+    roast: "Você precisa de um abraço ou de terapia, mas escolheu odiar minorias. Sua masculinidade é tão frágil que precisa de um ditador para protegê-la. Ah, e pare de tentar justificar uniformes militares.",
     politicians: [
       {
         name: "Benito Mussolini (Itália)",
         link: "https://pt.wikipedia.org/wiki/Benito_Mussolini",
       },
       {
-        name: "Francisco Franco (Espanha)",
+        name: "Plínio Salgado (Integralismo BR)",
+        link: "https://pt.wikipedia.org/wiki/Pl%C3%ADnio_Salgado",
+      },
+      {
+        name: "António de Oliveira Salazar (Estado Novo - PT)",
+        link: "https://pt.wikipedia.org/wiki/Ant%C3%B3nio_de_Oliveira_Salazar",
+      },
+      {
+        name: "Francisco Franco (Franquismo - ES)",
         link: "https://pt.wikipedia.org/wiki/Francisco_Franco",
       },
     ],
@@ -1312,41 +1379,64 @@ export const ideologies: Ideology[] = [
     desc: "O Fascismo Capitalista é um termo que descreve regimes fascistas que, apesar de seu controle estatal e corporativismo, preservam a propriedade privada e se aliam fortemente aos interesses das grandes corporações e da elite capitalista. Nesse modelo, o Estado autoritário garante a ordem, suprime sindicatos e movimentos de esquerda, e dirige a economia em colaboração com os capitalistas para fortalecer a nação e seus objetivos militares, mantendo a estrutura de classes e o lucro privado.",
     politicians: [
       {
-        name: "(Interpretações de Hitler ou Pinochet podem se encaixar aqui)",
-        link: "",
+        name: "Augusto Pinochet (Chile)",
+        link: "https://pt.wikipedia.org/wiki/Augusto_Pinochet",
+      },
+      {
+        name: "Regime Militar Brasileiro (1964-1985)",
+        link: "https://pt.wikipedia.org/wiki/Ditadura_militar_brasileira",
       },
     ],
-    books: [{ title: "(Análises econômicas de regimes fascistas)", link: "" }],
+    books: [{ title: "A Doutrina do Choque - Naomi Klein", link: "" }],
   },
   {
     name: "Conservadorismo",
     stats: { econ: 30, dipl: 40, govt: 40, scty: 20 },
     desc: "O Conservadorismo é uma filosofia política que prioriza a preservação das instituições e tradições sociais estabelecidas, acreditando que elas representam a sabedoria acumulada de gerações. Apoia a mudança gradual e orgânica em vez de reformas radicais. Valoriza a ordem, a autoridade, a propriedade privada, a religião e a família como pilares da estabilidade social. Economicamente, favorece o livre mercado com prudência fiscal, e politicamente, defende um governo forte mas limitado.",
+    roast: "O mundo moderno te assusta, então você se apega a tradições que nem seus avós seguiam. Acha que 'bons costumes' é sinônimo de proibir o que você não gosta e chama tudo de 'engenharia social'.",
     politicians: [
       {
         name: "Edmund Burke (Filósofo)",
         link: "https://pt.wikipedia.org/wiki/Edmund_Burke",
       },
       {
-        name: "Margaret Thatcher (Reino Unido)",
-        link: "https://pt.wikipedia.org/wiki/Margaret_Thatcher",
+        name: "Gilberto Freyre (BR)",
+        link: "https://pt.wikipedia.org/wiki/Gilberto_Freyre",
       },
       {
-        name: "Ronald Reagan (EUA)",
-        link: "https://pt.wikipedia.org/wiki/Ronald_Reagan",
+        name: "Roger Scruton",
+        link: "https://pt.wikipedia.org/wiki/Roger_Scruton",
+      },
+      {
+        name: "Winston Churchill",
+        link: "https://pt.wikipedia.org/wiki/Winston_Churchill",
+      },
+      {
+        name: "G. K. Chesterton",
+        link: "https://pt.wikipedia.org/wiki/G._K._Chesterton",
       },
     ],
     books: [
-      { title: "Reflexões sobre a Revolução na França", link: "" },
-      { title: "A Política da Prudência", link: "" },
-      { title: "O Caminho da Servidão", link: "" },
+      { title: "O Mínimo que Você Precisa Saber - Olavo de Carvalho", link: "" },
+      { title: "Beleza - Roger Scruton", link: "" },
+      { title: "Ortodoxia - G. K. Chesterton", link: "" },
+      { title: "Compêndio da Doutrina Social da Igreja", link: "" },
     ],
   },
   {
     name: "Neoliberalismo",
     stats: { econ: 30, dipl: 30, govt: 50, scty: 60 },
     desc: "O Neoliberalismo é uma filosofia política e econômica que ressurgiu no final do século XX, enfatizando o livre mercado como o principal mecanismo para o progresso econômico. Suas políticas características incluem privatização de empresas estatais, desregulamentação da economia, liberalização do comércio e do capital, e redução dos gastos públicos e dos impostos. Acredita que a redução da intervenção estatal libera as forças do mercado, gerando maior eficiência e prosperidade.",
+    roast: "Você acredita que o mercado resolve tudo, até seu divórcio. Para você, pessoas pobres são apenas 'externalidades negativas' e o aquecimento global se resolve vendendo créditos de carbono.",
     politicians: [
+      {
+        name: "Roberto Campos (BR)",
+        link: "https://pt.wikipedia.org/wiki/Roberto_Campos",
+      },
+      {
+        name: "Paulo Guedes (BR)",
+        link: "https://pt.wikipedia.org/wiki/Paulo_Guedes",
+      },
       {
         name: "Margaret Thatcher (Reino Unido)",
         link: "https://pt.wikipedia.org/wiki/Margaret_Thatcher",
@@ -1355,15 +1445,11 @@ export const ideologies: Ideology[] = [
         name: "Ronald Reagan (EUA)",
         link: "https://pt.wikipedia.org/wiki/Ronald_Reagan",
       },
-      {
-        name: "Augusto Pinochet (Chile)",
-        link: "https://pt.wikipedia.org/wiki/Augusto_Pinochet",
-      },
     ],
     books: [
-      { title: "O Caminho da Servidão (Hayek)", link: "" },
-      { title: "Capitalismo e Liberdade (Milton Friedman)", link: "" },
-      { title: "A Doutrina do Choque (Naomi Klein - crítica)", link: "" },
+      { title: "A Lanterna na Popa - Roberto Campos", link: "" },
+      { title: "Capitalismo e Liberdade - Milton Friedman", link: "" },
+      { title: "O Caminho da Servidão - Hayek", link: "" },
     ],
   },
   {
@@ -1372,6 +1458,14 @@ export const ideologies: Ideology[] = [
     desc: "O Liberalismo Clássico é a ideologia que floresceu nos séculos XVIII e XIX, baseada nas ideias de filósofos como John Locke e economistas como Adam Smith. Enfatiza a liberdade individual, os direitos naturais (vida, liberdade e propriedade), o governo limitado e constitucional (Estado de Direito), e o livre mercado (laissez-faire). Acredita que a sociedade prospera quando os indivíduos são livres para perseguir seus próprios interesses com mínima interferência do Estado.",
     politicians: [
       {
+        name: "Rui Barbosa (BR)",
+        link: "https://pt.wikipedia.org/wiki/Rui_Barbosa",
+      },
+      {
+        name: "Joaquim Nabuco (BR)",
+        link: "https://pt.wikipedia.org/wiki/Joaquim_Nabuco",
+      },
+      {
         name: "John Locke (Filósofo)",
         link: "https://pt.wikipedia.org/wiki/John_Locke",
       },
@@ -1379,15 +1473,11 @@ export const ideologies: Ideology[] = [
         name: "Adam Smith (Economista)",
         link: "https://pt.wikipedia.org/wiki/Adam_Smith",
       },
-      {
-        name: "Montesquieu (Filósofo)",
-        link: "https://pt.wikipedia.org/wiki/Montesquieu",
-      },
     ],
     books: [
-      { title: "Dois Tratados sobre o Governo", link: "" },
-      { title: "A Riqueza das Nações", link: "" },
-      { title: "O Espírito das Leis", link: "" },
+      { title: "O Abolicionismo - Joaquim Nabuco", link: "" },
+      { title: "A Riqueza das Nações - Adam Smith", link: "" },
+      { title: "Cartas de Inglaterra - Rui Barbosa", link: "" },
     ],
   },
   {
@@ -1418,8 +1508,12 @@ export const ideologies: Ideology[] = [
     desc: "O Capitalismo de Estado é um sistema econômico onde o Estado exerce um controle comercial e administrativo dominante sobre a economia. Embora a propriedade privada e os mercados existam, o Estado é o principal ator econômico, possuindo e operando grandes empresas ('campeões nacionais'), dirigindo investimentos para setores estratégicos e utilizando a economia para alcançar objetivos políticos nacionais. Difere do socialismo de Estado pois o objetivo final não é a abolição do capital, mas sim seu controle pelo Estado.",
     politicians: [
       {
-        name: "(Líderes de países com forte setor estatal como a França)",
-        link: "",
+        name: "Deng Xiaoping (China)",
+        link: "https://pt.wikipedia.org/wiki/Deng_Xiaoping",
+      },
+      {
+        name: "Park Chung-hee (Coreia do Sul)",
+        link: "https://pt.wikipedia.org/wiki/Park_Chung-hee",
       },
     ],
     books: [{ title: "(Análises sobre economias dirigistas)", link: "" }],
@@ -1520,8 +1614,12 @@ export const ideologies: Ideology[] = [
     desc: "O Capitalismo Totalitário é um sistema hipotético que une um controle estatal totalitário sobre a vida dos indivíduos com uma economia de livre mercado desregulada. Nesse cenário distópico, o Estado usa seu poder absoluto não para controlar a economia, mas para suprimir qualquer resistência ao capital, garantindo uma ordem social onde as corporações têm liberdade máxima e os cidadãos, mínima. É a fusão do autoritarismo político extremo com o liberalismo econômico extremo.",
     politicians: [
       {
-        name: "(Interpretações de regimes como o Chile sob Pinochet)",
-        link: "",
+        name: "Augusto Pinochet (Chile)",
+        link: "https://pt.wikipedia.org/wiki/Augusto_Pinochet",
+      },
+      {
+        name: "Jorge Rafael Videla (Argentina)",
+        link: "https://pt.wikipedia.org/wiki/Jorge_Rafael_Videla",
       },
     ],
     books: [
@@ -1532,19 +1630,12 @@ export const ideologies: Ideology[] = [
       },
     ],
   },
-  {
-    name: "Ultracapitalismo",
-    stats: { econ: 0, dipl: 40, govt: 50, scty: 50 },
-    desc: "O Ultracapitalismo representa a defesa da forma mais pura e desinibida de capitalismo, onde a lógica do mercado e a busca pelo lucro permeiam todas as esferas da vida. Defende a minimização extrema de qualquer barreira ao capital, como regulamentações, impostos, fronteiras e considerações éticas ou ambientais. É uma ideologia focada unicamente na eficiência do mercado, independentemente das consequências sociais.",
-    politicians: [
-      { name: "(Figuras associadas a desregulamentação extrema)", link: "" },
-    ],
-    books: [],
-  },
+
   {
     name: "Anarco-Capitalismo",
     stats: { econ: 0, dipl: 50, govt: 100, scty: 50 },
     desc: "O Anarco-Capitalismo é uma filosofia política que defende a eliminação completa do Estado e a organização da sociedade inteiramente através do livre mercado. Acredita que todas as funções atualmente desempenhadas pelo Estado, incluindo a segurança, a justiça e a defesa, poderiam ser fornecidas de forma mais eficiente e ética por agências privadas em concorrência. Baseia-se no princípio de não-agressão, que proíbe o início de força contra pessoas ou sua propriedade.",
+    roast: "Você pagaria para andar na calçada e acha que vender órgãos infantis é 'livre mercado'. Sua utopia é um condomínio fechado armado até os dentes onde a lei é ditada pelo dono da rua.",
     politicians: [
       {
         name: "Murray Rothbard (Teórico)",
@@ -1563,6 +1654,36 @@ export const ideologies: Ideology[] = [
       { title: "Por Uma Nova Liberdade: O Manifesto Libertário", link: "" },
       { title: "A Maquinaria da Liberdade", link: "" },
       { title: "Democracia: O deus que falhou", link: "" },
+    ],
+  },
+  {
+    name: "Neocalvinismo",
+    stats: { econ: 50, dipl: 50, govt: 70, scty: 20 },
+    desc: "O Neocalvinismo, fundamentado no pensamento de Abraham Kuyper, defende a 'Soberania das Esferas', onde cada área da vida (estado, igreja, família, arte, ciência) possui sua própria autoridade dada por Deus, impedindo que o Estado ou qualquer outra instituição se torne totalitária. Promove uma visão de pluralismo social e compromisso cristão com a cultura e a justiça social, equilibrando um profundo conservadorismo moral com a defesa fervorosa da liberdade religiosa e institucional. Rejeita tanto a secularização totalitária quanto o domínio direto da igreja sobre o estado.",
+    roast: "Você acredita piamente que existe um 'palmo quadrado' de autoridade divina até na escolha da marca do café. Sua solução para tudo é criar uma instituição paralela christian-only e depois reclamar que a sociedade está fragmentada.",
+    politicians: [
+      {
+        name: "Abraham Kuyper",
+        link: "https://pt.wikipedia.org/wiki/Abraham_Kuyper",
+      },
+      {
+        name: "Guillaume Groen van Prinsterer",
+        link: "https://pt.wikipedia.org/wiki/Guillaume_Groen_van_Prinsterer",
+      },
+      {
+        name: "Herman Dooyeweerd",
+        link: "https://pt.wikipedia.org/wiki/Herman_Dooyeweerd",
+      },
+      {
+        name: "André Biéler",
+        link: "https://pt.wikipedia.org/wiki/Andr%C3%A9_Bi%C3%A9ler",
+      },
+    ],
+    books: [
+      { title: "Palestras sobre o Calvinismo - Abraham Kuyper", link: "" },
+      { title: "Raiz da Cultura - Herman Dooyeweerd", link: "" },
+      { title: "O Pensamento Econômico e Social de Calvino - André Biéler", link: "" },
+      { title: "No Ritmo do Reino - James K. A. Smith", link: "" },
     ],
   },
 ];

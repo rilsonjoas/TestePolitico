@@ -3,6 +3,7 @@ import "./globals.css";
 import { ThemeToggleButton } from "@/components/ThemeToggleButton";
 import { CookieConsent } from "@/components/CookieConsent";
 import { Footer } from "@/components/Footer";
+import { AdSense } from "@/components/AdSense";
 
 const siteUrl = "https://testepolitico.com.br";
 const siteName = "Teste Político 8 Valores";
@@ -49,6 +50,10 @@ export default function RootLayout({
 }>) {
   return (
         <html lang="pt-br" suppressHydrationWarning>
+          <head>
+            {/* AdSense Publisher ID configurado */}
+            <AdSense pId="ca-pub-5482566824255473" />
+          </head>
           <body className="min-h-screen w-full bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
             <script
               type="application/ld+json"

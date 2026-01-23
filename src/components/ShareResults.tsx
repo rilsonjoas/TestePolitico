@@ -1,8 +1,8 @@
 import { useRef, useState, useEffect } from "react";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import * as domToImage from 'dom-to-image-more';
+// Removed static import to fix SSR error
+// import * as domToImage from 'dom-to-image-more';
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import { useToast } from "./Toast";
 
 type SocialFormat = 'instagram' | 'twitter' | 'square';
@@ -13,22 +13,27 @@ interface ShareResultsProps {
   matchedIdeology?: {
     name: string;
     desc: string;
+    roast?: string;
     politicians: { name: string }[];
     books: { title: string }[];
+
   } | null;
+  enableComparison?: boolean;
 }
 
-export function ShareResults({ targetId, scores, matchedIdeology }: ShareResultsProps) {
+export function ShareResults({ targetId, scores, matchedIdeology, enableComparison = false }: ShareResultsProps) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [supportsClipboard, setSupportsClipboard] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState<SocialFormat>('instagram');
+  const [showRoast, setShowRoast] = useState(false);
   const loadingTimeout = useRef<NodeJS.Timeout | null>(null);
   const { showToast, ToastComponent } = useToast();
 
   const [canShare, setCanShare] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [copiedCompareLink, setCopiedCompareLink] = useState(false);
 
   useEffect(() => {
     setSupportsClipboard(
@@ -89,6 +94,19 @@ export function ShareResults({ targetId, scores, matchedIdeology }: ShareResults
     }
   };
 
+  const handleCopyCompareLink = async () => {
+    if (!scores) return;
+    const compareUrl = `https://testepolitico.com.br/quiz?compareE=${scores.e}&compareD=${scores.d}&compareG=${scores.g}&compareS=${scores.s}`;
+    try {
+      await navigator.clipboard.writeText(compareUrl);
+      setCopiedCompareLink(true);
+      showToast("Link de desafio copiado!", "success");
+      setTimeout(() => setCopiedCompareLink(false), 2000);
+    } catch {
+      showToast("Erro ao copiar link", "error");
+    }
+  };
+
   // --- GERAÇÃO DE IMAGEM ---
 
   const getFormatDimensions = (format: SocialFormat) => {
@@ -114,7 +132,7 @@ export function ShareResults({ targetId, scores, matchedIdeology }: ShareResults
     canvas.height = height;
     
     // --- ESTILO E PALETA ---
-    const isDark = true; // Forçar modo escuro para estética "Premium"
+    // const isDark = true; // Forçar modo escuro para estética "Premium"
     const textPrimary = '#ffffff';
     const textSecondary = '#94a3b8';
     
@@ -315,6 +333,11 @@ export function ShareResults({ targetId, scores, matchedIdeology }: ShareResults
       try {
         console.log('Tentando dom-to-image como fallback...');
         
+        // Dynamically import dom-to-image-more to avoid SSR issues
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const domToImage = (await import('dom-to-image-more')).default;
+
         const target = document.getElementById(targetId);
         if (!target) {
           throw new Error('Elemento não encontrado');
@@ -476,8 +499,30 @@ export function ShareResults({ targetId, scores, matchedIdeology }: ShareResults
                 </span>
               </button>
             </div>
+            </div>
+            
+            {/* Botão de Desafiar Amigo */}
+            {enableComparison && (
+              <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <button
+                  onClick={handleCopyCompareLink}
+                  className={`w-full flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all ${
+                    copiedCompareLink
+                      ? 'border-green-500 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400'
+                      : 'border-purple-500 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20'
+                  }`}
+                >
+                  <span className="font-bold">
+                    {copiedCompareLink ? 'Link Copiado!' : '⚔️ Desafiar um Amigo'}
+                  </span>
+                </button>
+                <p className="text-xs text-center text-gray-500 dark:text-gray-400 mt-2">
+                  Envia um link para seu amigo fazer o teste e comparar com você!
+                </p>
+              </div>
+            )}
           </div>
-        </div>
+
 
         {/* Card 2: Gerar Imagem */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
@@ -572,6 +617,8 @@ export function ShareResults({ targetId, scores, matchedIdeology }: ShareResults
             </div>
           )}
         </div>
+
+
       </div>
     </>
   );
