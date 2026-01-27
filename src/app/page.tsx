@@ -112,12 +112,12 @@ export default function Home() {
             <Logo size={80} showText={false} className="shadow-2xl rounded-full p-2 bg-white dark:bg-gray-800" />
             
             <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-tight max-w-4xl">
-              Descubra seu Verdadeiro <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">Perfil Político</span>
+              Você é de Esquerda <br/> ou <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">Direita</span>? 🤔
             </h1>
             
             <p className="text-xl md:text-2xl text-gray-500 dark:text-gray-400 max-w-2xl font-medium">
-              Analise seu posicionamento através de 8 valores fundamentais e 
-              descubra qual ideologia melhor representa suas convicções.
+              Descubra sua verdadeira ideologia política em apenas 5 minutos! 
+              Mais de <strong>40 ideologias</strong> mapeadas. Compartilhe e compare com seus amigos! 🎯
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mt-8">

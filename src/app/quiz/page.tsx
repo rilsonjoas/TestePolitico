@@ -1,23 +1,45 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { questions } from '@/lib/data';
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
 import { motion, AnimatePresence } from 'framer-motion';
+import { quizEvents } from '@/lib/analytics';
 
 const QuizContent = () => {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
+  const [quizStarted, setQuizStarted] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  // Track quiz start on mount
+  useEffect(() => {
+    if (!quizStarted) {
+      quizEvents.start();
+      setQuizStarted(true);
+    }
+  }, [quizStarted]);
+
+  // Track quiz abandonment on unmount
+  useEffect(() => {
+    return () => {
+      if (questionIndex < questions.length - 1 && answers.length > 0) {
+        quizEvents.abandon(questionIndex + 1, questions.length);
+      }
+    };
+  }, [questionIndex, answers]);
 
   const handleAnswer = (multiplier: number) => {
     const newAnswers = [...answers];
     newAnswers[questionIndex] = multiplier;
     setAnswers(newAnswers);
+
+    // Track answer
+    quizEvents.answer(questionIndex + 1, multiplier);
 
     if (questionIndex < questions.length - 1) {
       setQuestionIndex(questionIndex + 1);

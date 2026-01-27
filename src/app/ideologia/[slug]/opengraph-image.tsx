@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 import { ideologies } from '@/lib/data';
 
-export const runtime = 'edge';
+export const dynamic = 'force-static';
 
 export const alt = 'Teste Político 8 Valores - Detalhes da Ideologia';
 export const size = {

@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import '../results-image.css';
+import { quizEvents, resultEvents } from '@/lib/analytics';
 
 export default function ResultsClient() {
   const searchParams = useSearchParams();
@@ -56,7 +57,19 @@ export default function ResultsClient() {
       });
     }
 
-    setTopIdeologies(getTopMatchedIdeologies(e, d, g, s, 3));
+    const topMatches = getTopMatchedIdeologies(e, d, g, s, 3);
+    setTopIdeologies(topMatches);
+
+    // Track quiz completion and result view
+    if (topMatches[0]) {
+      quizEvents.complete(topMatches[0].name);
+      resultEvents.view(topMatches[0].name, {
+        e: e.toFixed(1),
+        d: d.toFixed(1),
+        g: g.toFixed(1),
+        s: s.toFixed(1)
+      });
+    }
   }, [searchParams]);
 
   const matchedIdeology = topIdeologies[0];

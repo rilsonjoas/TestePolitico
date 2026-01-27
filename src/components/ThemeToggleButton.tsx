@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Moon, Sun, Monitor } from "lucide-react";
+import { uiEvents } from "@/lib/analytics";
 
 const options = [
   { label: "Claro", value: "light", icon: <Sun size={18} /> },
@@ -61,6 +62,9 @@ export function ThemeToggleButton() {
     setOpen(false);
     localStorage.setItem("theme", value);
     applyTheme(value);
+    
+    // Track theme toggle
+    uiEvents.themeToggle(value);
   };
 
   return (

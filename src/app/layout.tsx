@@ -4,19 +4,22 @@ import { ThemeToggleButton } from "@/components/ThemeToggleButton";
 import { CookieConsent } from "@/components/CookieConsent";
 import { Footer } from "@/components/Footer";
 import { AdSense } from "@/components/AdSense";
+import { RouteTracker } from "@/components/RouteTracker";
 
 const siteUrl = "https://testepolitico.com.br";
 const siteName = "Teste Político 8 Valores";
-const siteDescription = "Descubra sua ideologia política! Responda 70 questões e veja seu posicionamento em 8 valores: Igualdade vs Mercado, Nação vs Global, Liberdade vs Autoridade, Tradição vs Progresso.";
+const siteDescription = "Descubra sua ideologia política em 5 minutos! 🎯 Você é de esquerda ou direita? Liberal ou conservador? Faça o teste mais completo do Brasil!";
+const shareTitle = "Descobri Minha Ideologia Política! E Você? 🤔";
+const shareDescription = "Fiz o Teste Político 8 Valores e descobri meu posicionamento! Será que pensamos parecido? Faça o teste e compare! 🎯";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: siteName,
+    default: "Descubra Sua Ideologia Política! 🎯 | Teste 8 Valores",
     template: `%s | ${siteName}`,
   },
   description: siteDescription,
-  keywords: "teste político, ideologia, valores políticos, compass político, quiz político, 8values, espectro político",
+  keywords: "teste político, ideologia, valores políticos, compass político, quiz político, 8values, espectro político, esquerda, direita, liberal, conservador",
   authors: [{ name: "Rilson Joás", url: "https://github.com/rilsonjoas" }],
   creator: "Rilson Joás",
   publisher: siteName,
@@ -33,13 +36,13 @@ export const metadata: Metadata = {
     locale: "pt_BR",
     url: siteUrl,
     siteName: siteName,
-    title: siteName,
-    description: siteDescription,
+    title: shareTitle,
+    description: shareDescription,
   },
   twitter: {
     card: "summary_large_image",
-    title: siteName,
-    description: siteDescription,
+    title: shareTitle,
+    description: shareDescription,
   },
 };
 
@@ -51,6 +54,27 @@ export default function RootLayout({
   return (
         <html lang="pt-br" suppressHydrationWarning>
           <head>
+            {/* Google Analytics 4 */}
+            {process.env.NEXT_PUBLIC_GA_ID && (
+              <>
+                <script
+                  async
+                  src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+                />
+                <script
+                  dangerouslySetInnerHTML={{
+                    __html: `
+                      window.dataLayer = window.dataLayer || [];
+                      function gtag(){dataLayer.push(arguments);}
+                      gtag('js', new Date());
+                      gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', {
+                        page_path: window.location.pathname,
+                      });
+                    `,
+                  }}
+                />
+              </>
+            )}
             {/* Blocking script to prevent theme flicker */}
             <script
               dangerouslySetInnerHTML={{
@@ -81,6 +105,7 @@ export default function RootLayout({
                 }),
               }}
             />
+            <RouteTracker />
             <div className="fixed top-4 right-4 z-50">
               <ThemeToggleButton />
             </div>

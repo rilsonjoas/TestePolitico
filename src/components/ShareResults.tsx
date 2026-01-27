@@ -54,8 +54,8 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
   const shareUrl = `https://testepolitico.com.br/results?e=${scores?.e || 50}&d=${scores?.d || 50}&g=${scores?.g || 50}&s=${scores?.s || 50}`;
 
   const shareText = matchedIdeology
-    ? `Fiz o Teste Político 8 Valores e minha ideologia mais próxima é: ${matchedIdeology.name}!`
-    : `Fiz o Teste Político 8 Valores! Descubra sua ideologia:`;
+    ? `🎯 Descobri que minha ideologia é *${matchedIdeology.name}*! E você, qual será a sua? Faça o teste e descubra! 🤔`
+    : `🎯 Fiz o Teste Político 8 Valores! Você é de esquerda ou direita? Liberal ou conservador? Descubra agora! 🤔`;
 
   const handleNativeShare = async () => {
     if (navigator.share) {
@@ -455,7 +455,7 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
         {/* Card 1: Compartilhar Link */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
           <h3 className="text-lg font-semibold text-center mb-4 text-gray-800 dark:text-gray-100">
-            Compartilhar Resultado
+            🔥 Compartilhe e Desafie Seus Amigos!
           </h3>
 
           <div className="flex flex-col gap-3">

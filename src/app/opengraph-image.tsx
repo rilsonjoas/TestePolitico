@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
+export const dynamic = "force-static";
 
 export const alt = "Teste Político 8 Valores - Descubra sua ideologia política";
 export const size = {
