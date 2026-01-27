@@ -8,7 +8,7 @@ import { RouteTracker } from "@/components/RouteTracker";
 
 const siteUrl = "https://testepolitico.com.br";
 const siteName = "Teste Político 8 Valores";
-const siteDescription = "Descubra sua ideologia política em 5 minutos! 🎯 Você é de esquerda ou direita? Liberal ou conservador? Faça o teste mais completo do Brasil!";
+const siteDescription = "Descubra sua ideologia política em 5 minutos! Você é de esquerda ou direita? Liberal ou conservador? Faça o teste mais completo do Brasil!";
 const shareTitle = "Descobri Minha Ideologia Política! E Você? 🤔";
 const shareDescription = "Fiz o Teste Político 8 Valores e descobri meu posicionamento! Será que pensamos parecido? Faça o teste e compare! 🎯";
 

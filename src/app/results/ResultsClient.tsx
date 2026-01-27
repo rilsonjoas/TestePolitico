@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Ideology, getTopMatchedIdeologies, slugify } from '@/lib/data';
 import { ShareResults } from '@/components/ShareResults';
 import { Logo } from '@/components/Logo';
-import { AmazonLink } from '@/components/AmazonLink';
 import { AdUnit } from '@/components/AdUnit';
 import { 
   TrendingUp, 
@@ -17,7 +16,6 @@ import {
   Flame, 
   ArrowLeft,
   ChevronRight,
-  Info,
   Library,
   Trophy,
   History,

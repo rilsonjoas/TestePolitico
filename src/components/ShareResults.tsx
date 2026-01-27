@@ -2,7 +2,6 @@ import { useRef, useState, useEffect } from "react";
 // Removed static import to fix SSR error
 // import * as domToImage from 'dom-to-image-more';
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
 import { useToast } from "./Toast";
 import { Swords } from "lucide-react";
 
@@ -28,7 +27,6 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
   const [error, setError] = useState<string | null>(null);
   const [supportsClipboard, setSupportsClipboard] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState<SocialFormat>('instagram');
-  const [showRoast, setShowRoast] = useState(false);
   const loadingTimeout = useRef<NodeJS.Timeout | null>(null);
   const { showToast, ToastComponent } = useToast();
 
@@ -54,7 +52,7 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
   const shareUrl = `https://testepolitico.com.br/results?e=${scores?.e || 50}&d=${scores?.d || 50}&g=${scores?.g || 50}&s=${scores?.s || 50}`;
 
   const shareText = matchedIdeology
-    ? `🎯 Descobri que minha ideologia é *${matchedIdeology.name}*! E você, qual será a sua? Faça o teste e descubra! 🤔`
+    ? `🎯 Descobri que minha ideologia é *${matchedIdeology.name}*! E você, qual será a sua? Faça o teste e descubra!`
     : `🎯 Fiz o Teste Político 8 Valores! Você é de esquerda ou direita? Liberal ou conservador? Descubra agora! 🤔`;
 
   const handleNativeShare = async () => {

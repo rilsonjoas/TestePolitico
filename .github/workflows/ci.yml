@@ -97,6 +97,15 @@ jobs:
         env:
           NEXT_TELEMETRY_DISABLED: 1
 
+      - name: Run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.12.x
+          lhci collect --numberOfRuns=1
+          lhci assert
+        continue-on-error: true # Permite que o deploy continue mesmo se os scores forem baixos
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Check for build warnings
         run: |
           if grep -i "warn" .next/build-manifest.json 2>/dev/null; then

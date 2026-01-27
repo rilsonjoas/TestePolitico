@@ -13,7 +13,6 @@ import {
   Shield, 
   ArrowLeft,
   Info,
-  History
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
