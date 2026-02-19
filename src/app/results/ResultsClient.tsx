@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Ideology, getTopMatchedIdeologies, slugify } from '@/lib/data';
+import { Ideology, getTopMatchedIdeologies, slugify, getClosestPolitician, Politician } from '@/lib/data';
 import { ShareResults } from '@/components/ShareResults';
 import { Logo } from '@/components/Logo';
 import { AdUnit } from '@/components/AdUnit';
@@ -30,6 +30,7 @@ export default function ResultsClient() {
   const [scores, setScores] = useState({ e: 50, d: 50, g: 50, s: 50 });
   const [compareScores, setCompareScores] = useState<{ e: number, d: number, g: number, s: number } | null>(null);
   const [topIdeologies, setTopIdeologies] = useState<Ideology[]>([]);
+  const [matchedPolitician, setMatchedPolitician] = useState<Politician | null>(null);
   const [showRoast, setShowRoast] = useState(false);
 
   useEffect(() => {
@@ -58,6 +59,9 @@ export default function ResultsClient() {
     const topMatches = getTopMatchedIdeologies(e, d, g, s, 3);
     setTopIdeologies(topMatches);
 
+    const closest = getClosestPolitician(e, d, g, s);
+    setMatchedPolitician(closest);
+
     // Track quiz completion and result view
     if (topMatches[0]) {
       quizEvents.complete(topMatches[0].name);
@@ -82,11 +86,11 @@ export default function ResultsClient() {
       return "Laissez-faire / Ultraliberalismo";
     }
     if (axisIdx === 1) {
-      if (val1 >= 90) return "Chauvinismo / Isolacionismo";
-      if (val1 >= 60) return "Patriotismo / Nacionalismo";
+      if (val1 >= 90) return "Cosmopolitismo / Globalismo";
+      if (val1 >= 60) return "Internacionalismo / Cooperativo";
       if (val1 >= 40) return "Equilibrado / Realista";
-      if (val1 >= 10) return "Internacionalismo / Cooperativo";
-      return "Cosmopolitismo / Globalismo";
+      if (val1 >= 10) return "Patriotismo / Nacionalismo";
+      return "Chauvinismo / Isolacionismo";
     }
     if (axisIdx === 2) {
       if (val1 >= 90) return "Anarquismo / Libertário Total";
@@ -96,11 +100,11 @@ export default function ResultsClient() {
       return "Totalitário / Orwelliano";
     }
     if (axisIdx === 3) {
-      if (val1 >= 90) return "Reacionário / Fundamentalista";
-      if (val1 >= 60) return "Conservador / Tradicionalista";
+      if (val1 >= 90) return "Revolucionário / Radical";
+      if (val1 >= 60) return "Progressista / Reformista";
       if (val1 >= 40) return "Moderado / Progressista Cauteloso";
-      if (val1 >= 10) return "Progressista / Reformista";
-      return "Revolucionário / Radical";
+      if (val1 >= 10) return "Conservador / Tradicionalista";
+      return "Reacionário / Fundamentalista";
     }
     return "";
   };
@@ -112,8 +116,8 @@ export default function ResultsClient() {
       value1: scores.e, 
       value2: 100 - scores.e, 
       compareValue: compareScores?.e,
-      label1: 'Igualdade', 
-      label2: 'Mercado', 
+      label1: 'Coletivismo', 
+      label2: 'Mercado Livre', 
       color1: '#e63946', 
       color2: '#1d3557' 
     },
@@ -123,32 +127,32 @@ export default function ResultsClient() {
       value1: scores.d, 
       value2: 100 - scores.d, 
       compareValue: compareScores?.d,
-      label1: 'Nação', 
-      label2: 'Global', 
-      color1: '#f77f00', 
-      color2: '#a8dadc' 
+      label1: 'Cooperação Global', 
+      label2: 'Soberania Nacional', 
+      color1: '#a8dadc', 
+      color2: '#f77f00' 
     },
     { 
-      name: 'Civil', 
+      name: 'Governo', 
       icon: <Shield size={20} />,
       value1: scores.g, 
       value2: 100 - scores.g, 
       compareValue: compareScores?.g,
-      label1: 'Liberdade', 
-      label2: 'Autoridade', 
+      label1: 'Liberdade Individual', 
+      label2: 'Autoridade do Estado', 
       color1: '#ffc300', 
       color2: '#457b9d' 
     },
     { 
-      name: 'Social', 
+      name: 'Sociedade', 
       icon: <Users size={20} />,
       value1: scores.s, 
       value2: 100 - scores.s, 
       compareValue: compareScores?.s,
-      label1: 'Tradição', 
-      label2: 'Progresso', 
-      color1: '#8338ec', 
-      color2: '#3a86ff' 
+      label1: 'Progressismo Social', 
+      label2: 'Valores Tradicionais', 
+      color1: '#3a86ff', 
+      color2: '#8338ec' 
     },
   ];
 
@@ -244,6 +248,28 @@ export default function ResultsClient() {
 
             {matchedIdeology && (
               <div className="mt-16 bg-gray-50 dark:bg-gray-900/50 rounded-[2rem] p-8 border border-gray-100 dark:border-gray-800">
+                {matchedPolitician && (
+                    <div className="mb-10 p-6 bg-blue-50 dark:bg-blue-900/20 rounded-2xl border border-blue-100 dark:border-blue-800 flex flex-col items-center text-center">
+                        <div className="text-sm font-black uppercase tracking-widest text-blue-400 mb-2 flex items-center gap-2">
+                             <Users size={16} /> Identidade Política
+                        </div>
+                        <div className="text-gray-500 dark:text-gray-400 text-sm mb-4">
+                            Seus resultados te aproximam de:
+                        </div>
+                        <div className="text-2xl md:text-4xl font-black text-gray-900 dark:text-white mb-2">
+                            {matchedPolitician.name}
+                        </div>
+                        <a 
+                            href={matchedPolitician.link} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-xs font-bold text-blue-500 hover:text-blue-600 dark:text-blue-400 uppercase tracking-widest border-b border-blue-500/30 hover:border-blue-500 pb-0.5 transition-all"
+                        >
+                            Ver Biografia na Wikipédia
+                        </a>
+                    </div>
+                )}
+
                 <div className="flex items-center gap-3 mb-6">
                   <Trophy size={28} className="text-yellow-500" />
                   <div className="text-xl md:text-3xl font-black text-gray-900 dark:text-white">

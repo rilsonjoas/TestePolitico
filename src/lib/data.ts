@@ -11,6 +11,12 @@ export interface Question {
 export interface Politician {
   name: string;
   link: string;
+  stats?: {
+    econ: number;
+    dipl: number;
+    govt: number;
+    scty: number;
+  };
 }
 
 export interface Book {
@@ -45,6 +51,41 @@ export function slugify(text: string) {
     .replace(/-+$/, ''); // Remove hifens do fim
 }
 
+export function getClosestPolitician(e: number, d: number, g: number, s: number) {
+  let closestPolitician: Politician | null = null;
+  let minDistance = Infinity;
+
+  // Flatten all politicians from all ideologies
+  const allPoliticians: Politician[] = [];
+  ideologies.forEach(ideology => {
+    ideology.politicians.forEach(p => {
+      // Only include politicians with stats
+      if (p.stats) {
+        allPoliticians.push(p);
+      }
+    });
+  });
+
+  for (const politician of allPoliticians) {
+    if (!politician.stats) continue;
+
+    // Euclidean distance
+    const distance = Math.sqrt(
+      Math.pow(politician.stats.econ - e, 2) +
+      Math.pow(politician.stats.dipl - d, 2) +
+      Math.pow(politician.stats.govt - g, 2) +
+      Math.pow(politician.stats.scty - s, 2)
+    );
+
+    if (distance < minDistance) {
+      minDistance = distance;
+      closestPolitician = politician;
+    }
+  }
+
+  return closestPolitician;
+}
+
 export const questions: Question[] = [
   {
     question:
@@ -53,7 +94,7 @@ export const questions: Question[] = [
   },
   {
     question:
-      "A intervenção governamental na economia é necessária para proteger os consumidores de práticas injustas.",
+      "O governo deve intervir ativamente na economia — além de apenas coibir monopólios — para proteger consumidores de práticas abusivas de empresas privadas.",
     effect: { econ: 10, dipl: 0, govt: 0, scty: 0 },
   },
   {
@@ -68,22 +109,22 @@ export const questions: Question[] = [
   },
   {
     question:
-      "A pesquisa científica financiada pelo governo traz mais benefícios à sociedade do que a pesquisa deixada puramente ao setor privado.",
+      "O financiamento público de pesquisa científica deve ser priorizado em relação ao privado, pois o mercado tende a negligenciar pesquisas sem retorno comercial imediato.",
     effect: { econ: 10, dipl: 0, govt: 0, scty: 10 },
   },
   {
     question:
       "Impor tarifas sobre produtos importados é importante para proteger e incentivar a indústria nacional.",
-    effect: { econ: 5, dipl: -10, govt: -5, scty: 0 },
+    effect: { econ: 5, dipl: -10, govt: 0, scty: 0 },
   },
   {
     question:
-      "O princípio 'De cada um segundo sua capacidade, a cada um segundo suas necessidades' descreve uma sociedade ideal.",
+      "A distribuição de recursos na sociedade deveria ser baseada nas necessidades de cada pessoa, não na sua capacidade de pagar ou produzir.",
     effect: { econ: 10, dipl: 0, govt: 0, scty: 0 },
   },
   {
     question:
-      "Seria melhor para a sociedade se os programas sociais governamentais fossem substituídos por iniciativas de caridade privada.",
+      "Programas sociais governamentais permanentes fazem mais mal do que bem — a caridade voluntária e a iniciativa privada são formas mais eficazes de ajudar os mais vulneráveis.",
     effect: { econ: -10, dipl: 0, govt: 0, scty: 0 },
   },
   {
@@ -98,7 +139,7 @@ export const questions: Question[] = [
   },
   {
     question:
-      "Serviços essenciais, como fornecimento de água, eletricidade e infraestrutura de transporte, deveriam ser controlados ou de propriedade do setor público.",
+      "Serviços de infraestrutura essencial — como água, energia elétrica e saneamento — devem ser de propriedade ou controle público, pois não podem ser deixados à lógica do lucro privado.",
     effect: { econ: 10, dipl: 0, govt: 0, scty: 0 },
   },
   {
@@ -124,17 +165,17 @@ export const questions: Question[] = [
   {
     question:
       "Organizações internacionais como a ONU possuem influência excessiva e deveriam ter seu poder reduzido ou ser extintas.",
-    effect: { econ: 0, dipl: -10, govt: -5, scty: 0 },
+    effect: { econ: 0, dipl: -10, govt: 0, scty: 0 },
   },
   {
     question:
-      "O uso da força militar pelo nosso país é, por vezes, necessário para defender nossos interesses e segurança nacional.",
+      "O uso da força militar é justificável não apenas em legítima defesa, mas também para proteger interesses estratégicos nacionais no exterior.",
     effect: { econ: 0, dipl: -10, govt: -10, scty: 0 },
   },
   {
     question:
-      "A formação de blocos de cooperação regionais entre países (como a União Europeia) é benéfica e deve ser apoiada.",
-    effect: { econ: -5, dipl: 10, govt: 10, scty: 5 },
+      "A formação de blocos de cooperação regionais entre países (como a União Europeia e o Mercosul) é benéfica e deve ser apoiada.",
+    effect: { econ: -5, dipl: 10, govt: 0, scty: 5 },
   },
   {
     question:
@@ -167,7 +208,7 @@ export const questions: Question[] = [
     effect: { econ: -5, dipl: -10, govt: 0, scty: 0 },
   },
   {
-    question: "Sinto orgulho e considero minha nação superior a muitas outras.",
+    question: "Acredito que minha nação tem uma cultura, história ou valores que a tornam superior à maioria das outras nações.",
     effect: { econ: 0, dipl: -10, govt: 0, scty: 0 },
   },
   {
@@ -182,12 +223,12 @@ export const questions: Question[] = [
   },
   {
     question:
-      "O uso da violência nunca se justifica em protestos políticos, mesmo contra regimes considerados opressores.",
-    effect: { econ: 0, dipl: 5, govt: -5, scty: 0 },
+      "A resistência violenta contra um regime opressor nunca é moralmente justificável — a mudança deve vir sempre por meios pacíficos.",
+    effect: { econ: 0, dipl: 5, govt: 0, scty: 0 },
   },
   {
     question:
-      "É desejável que os valores da minha religião sejam amplamente divulgados e influenciem a sociedade como um todo.",
+      "As leis e políticas públicas do país deveriam refletir os valores e princípios da religião predominante na sociedade.",
     effect: { econ: 0, dipl: -5, govt: -10, scty: -10 },
   },
   {
@@ -197,7 +238,7 @@ export const questions: Question[] = [
   },
   {
     question:
-      "A manutenção da lei, da ordem e da segurança pública deve ser uma das principais prioridades do governo.",
+      "Garantir lei e ordem deve ter prioridade sobre a proteção de liberdades civis quando há conflito entre os dois.",
     effect: { econ: 0, dipl: -5, govt: -10, scty: -5 },
   },
   {
@@ -212,7 +253,7 @@ export const questions: Question[] = [
   },
   {
     question:
-      "Para garantir a segurança contra ameaças como o terrorismo, é aceitável que o governo restrinja algumas liberdades civis.",
+      "Em situações de ameaça à segurança nacional, o governo deve ter autoridade para restringir liberdades civis — como privacidade e liberdade de expressão — mesmo sem mandado judicial.",
     effect: { econ: 0, dipl: 0, govt: -10, scty: 0 },
   },
   {
@@ -228,7 +269,7 @@ export const questions: Question[] = [
   {
     question:
       "Devemos sempre apoiar nosso país, mesmo quando discordamos de suas ações ou governo.",
-    effect: { econ: 0, dipl: -10, govt: -10, scty: -5 },
+    effect: { econ: 0, dipl: -10, govt: -5, scty: -5 },
   },
   {
     question:
@@ -237,7 +278,7 @@ export const questions: Question[] = [
   },
   {
     question:
-      "Uma estrutura de governo claramente hierárquica, com linhas de comando definidas, é a mais eficaz.",
+      "Um governo com liderança forte e hierarquia clara é mais eficaz do que um baseado em consenso e participação horizontal.",
     effect: { econ: 0, dipl: 0, govt: -10, scty: 0 },
   },
   {
@@ -341,21 +382,21 @@ export const questions: Question[] = [
   },
   {
     question:
-      "O aborto deveria ser ilegal ou permitido apenas em circunstâncias extremamente raras, como risco de vida para a mãe.",
+      "O Estado deve proibir o aborto ou permitir apenas em casos extremos — a decisão não deve ser deixada à escolha individual da mulher.",
     effect: { econ: 0, dipl: 0, govt: -10, scty: -10 },
   },
   {
     question:
       "A posse de armas de fogo por civis deveria ser estritamente controlada e permitida apenas para quem demonstrar necessidade comprovada.",
-    effect: { econ: 0, dipl: 0, govt: -10, scty: 0 },
+    effect: { econ: 0, dipl: 0, govt: 5, scty: 0 },
   },
   {
     question:
-      "Defendo um sistema de saúde universal financiado por impostos, onde todos os cidadãos tenham acesso gratuito ou a baixo custo, independentemente da renda.",
+      "O governo deve garantir acesso universal à saúde, financiado por impostos, independentemente da capacidade de pagamento do cidadão.",
     effect: { econ: 10, dipl: 0, govt: 0, scty: 0 },
   },
   {
-    question: "A prostituição deveria ser considerada uma atividade ilegal.",
+    question: "O Estado deve criminalizar a prostituição — ela não deve ser tratada como trabalho legítimo nem regulamentada.",
     effect: { econ: 0, dipl: 0, govt: -10, scty: -10 },
   },
   {
@@ -375,7 +416,7 @@ export const questions: Question[] = [
   },
   {
     question:
-      "As fronteiras do nosso país deveriam ser mais abertas para permitir a entrada de imigrantes que desejam viver e trabalhar aqui.",
+      "O país deve facilitar significativamente a imigração legal de trabalho, reduzindo barreiras burocráticas e cotas restritivas.",
     effect: { econ: 0, dipl: 10, govt: 10, scty: 0 },
   },
   {
@@ -386,12 +427,52 @@ export const questions: Question[] = [
   {
     question:
       "Todas as pessoas devem ser tratadas com igualdade e respeito, independentemente de sua origem, cultura, religião, orientação sexual ou identidade de gênero.",
-    effect: { econ: 10, dipl: 10, govt: 10, scty: 10 },
+    effect: { econ: 0, dipl: 5, govt: 5, scty: 10 },
   },
   {
     question:
-      "Os interesses e objetivos do meu grupo (seja ele nacional, étnico, religioso ou outro) devem ter prioridade sobre os interesses de outros grupos ou da sociedade em geral.",
-    effect: { econ: -10, dipl: -10, govt: -10, scty: -10 },
+      "É legítimo que um governo priorize os interesses de sua população nacional em detrimento de acordos internacionais ou de populações estrangeiras.",
+    effect: { econ: 0, dipl: -10, govt: 0, scty: 0 },
+  },
+  {
+    question:
+      "O crescimento econômico ilimitado é incompatível com a sustentabilidade do planeta — a economia precisa ser reorganizada dentro dos limites ecológicos, não apenas 'verde-lavada'.",
+    effect: { econ: 10, dipl: 10, govt: 0, scty: 10 },
+  },
+  {
+    question:
+      "O combate à crise climática exige uma transformação estrutural do sistema econômico, não apenas ajustes tecnológicos ou incentivos de mercado.",
+    effect: { econ: 10, dipl: 5, govt: 0, scty: 10 },
+  },
+  {
+    question:
+      "O Estado deve garantir por lei a igualdade salarial entre homens e mulheres que exercem as mesmas funções.",
+    effect: { econ: 5, dipl: 0, govt: 0, scty: 10 },
+  },
+  {
+    question:
+      "Cotas de gênero em cargos de liderança — seja no setor público ou privado — são uma ferramenta legítima para corrigir desigualdades históricas.",
+    effect: { econ: 5, dipl: 0, govt: 5, scty: 10 },
+  },
+  {
+    question:
+      "A propriedade privada é legítima apenas quando o proprietário a usa diretamente — quem possui terra ou capital sem trabalhá-los explora o trabalho alheio.",
+    effect: { econ: 10, dipl: 0, govt: 5, scty: 5 },
+  },
+  {
+    question:
+      "Decisões políticas complexas deveriam ser tomadas por especialistas técnicos e científicos, não por políticos eleitos ou pela opinião pública.",
+    effect: { econ: 0, dipl: 0, govt: -10, scty: 5 },
+  },
+  {
+    question:
+      "Todas as funções do Estado — segurança, justiça, defesa — poderiam ser providas de forma mais eficiente por empresas privadas em competição do que pelo governo.",
+    effect: { econ: -10, dipl: 0, govt: 10, scty: 0 },
+  },
+  {
+    question:
+      "O principal problema do país não é esquerda ou direita, mas uma elite corrupta que se serve do Estado às custas do povo trabalhador.",
+    effect: { econ: 5, dipl: -5, govt: -5, scty: -5 },
   },
 ];
 
@@ -405,18 +486,22 @@ export const ideologies: Ideology[] = [
       {
         name: "Piotr Kropotkin",
         link: "https://pt.wikipedia.org/wiki/Piotr_Kropotkin",
+        stats: { econ: 100, dipl: 50, govt: 100, scty: 90 },
       },
       {
         name: "Errico Malatesta",
         link: "https://pt.wikipedia.org/wiki/Errico_Malatesta",
+        stats: { econ: 100, dipl: 40, govt: 100, scty: 85 },
       },
       {
         name: "Nestor Makhno",
         link: "https://pt.wikipedia.org/wiki/Nestor_Makhno",
+        stats: { econ: 95, dipl: 20, govt: 100, scty: 70 },
       },
       {
         name: "Emma Goldman",
         link: "https://pt.wikipedia.org/wiki/Emma_Goldman",
+        stats: { econ: 100, dipl: 60, govt: 100, scty: 100 },
       },
     ],
     books: [
@@ -444,26 +529,28 @@ export const ideologies: Ideology[] = [
       {
         name: "Murray Bookchin",
         link: "https://pt.wikipedia.org/wiki/Murray_Bookchin",
+        stats: { econ: 90, dipl: 70, govt: 90, scty: 95 },
       },
       {
         name: "Maria Lacerda de Moura (BR)",
         link: "https://pt.wikipedia.org/wiki/Maria_Lacerda_de_Moura",
+        stats: { econ: 90, dipl: 60, govt: 95, scty: 90 },
       },
       {
         name: "José Oiticica (BR)",
         link: "https://pt.wikipedia.org/wiki/Jos%C3%A9_Oiticica",
+        stats: { econ: 95, dipl: 50, govt: 95, scty: 80 },
       },
       {
         name: "Abdullah Öcalan",
         link: "https://pt.wikipedia.org/wiki/Abdullah_%C3%96calan",
+        stats: { econ: 85, dipl: 60, govt: 80, scty: 85 },
       },
     ],
     books: [
-      { title: "A Ecologia da Liberdade - Murray Bookchin", link: "" },
-      { title: "Anarquismo: Da Teoria à Prática - Daniel Guérin", link: "" },
-      { title: "Post-Scarcity Anarchism - Murray Bookchin", link: "" },
-      { title: "Confederalismo Democrático - Abdullah Öcalan", link: "" },
-      { title: "O Municipalismo Libertário - Murray Bookchin", link: "" },
+      { title: "A Ecologia da Liberdade - Murray Bookchin", link: "https://amzn.to/3ZG4mRl" },
+      { title: "O anarquismo: Da doutrina à ação - Daniel Guérin", link: "https://amzn.to/3OykDVT" },
+      { title: "Anarquismo: crítica e autocrítica", link: "https://amzn.to/4qMcDOy" },
     ],
   },
   {
@@ -475,26 +562,35 @@ export const ideologies: Ideology[] = [
       {
         name: "Leon Trotsky",
         link: "https://pt.wikipedia.org/wiki/Leon_Trotsky",
+        stats: { econ: 100, dipl: 100, govt: 55, scty: 75 },
       },
       {
         name: "Ernest Mandel",
         link: "https://pt.wikipedia.org/wiki/Ernest_Mandel",
+        stats: { econ: 95, dipl: 90, govt: 65, scty: 85 },
       },
       {
         name: "James P. Cannon",
         link: "https://pt.wikipedia.org/wiki/James_P._Cannon",
+        stats: { econ: 90, dipl: 80, govt: 55, scty: 75 },
       },
       {
         name: "Nahuel Moreno",
         link: "https://pt.wikipedia.org/wiki/Nahuel_Moreno",
+        stats: { econ: 95, dipl: 70, govt: 50, scty: 70 },
+      },
+      {
+        name: "Raya Dunayevskaya (EUA)",
+        link: "https://pt.wikipedia.org/wiki/Raya_Dunayevskaya",
+        stats: { econ: 90, dipl: 80, govt: 60, scty: 85 },
       },
     ],
     books: [
-      { title: "A Revolução Permanente - Trotsky", link: "" },
-      { title: "História da Revolução Russa - Trotsky", link: "" },
-      { title: "A Revolução Traída - Trotsky", link: "" },
-      { title: "O Programa de Transição - Trotsky", link: "" },
-      { title: "Capitalismo Tardio - Ernest Mandel", link: "" },
+      { title: "A Revolução Permanente - Trotsky", link: "https://amzn.to/46Rxk4n" },
+      { title: "História da Revolução Russa - Trotsky", link: "https://amzn.to/4tQ26Vt" },
+      { title: "A Revolução Traída - Trotsky", link: "https://amzn.to/4c2ox3k" },
+      { title: "O Programa de Transição - Trotsky", link: "https://amzn.to/4qJUkJR" },
+      { title: "Capitalismo Tardio - Ernest Mandel", link: "https://amzn.to/46fBXFh" },
     ],
   },
   {
@@ -506,289 +602,220 @@ export const ideologies: Ideology[] = [
       {
         name: "Karl Marx",
         link: "https://pt.wikipedia.org/wiki/Karl_Marx",
+        stats: { econ: 100, dipl: 60, govt: 40, scty: 70 },
       },
       {
         name: "Antonio Gramsci",
         link: "https://pt.wikipedia.org/wiki/Antonio_Gramsci",
+        stats: { econ: 95, dipl: 60, govt: 50, scty: 75 },
       },
       {
-        name: "Theodor Adorno (Escola de Frankfurt)",
+        name: "Theodor Adorno",
         link: "https://pt.wikipedia.org/wiki/Theodor_W._Adorno",
+        stats: { econ: 85, dipl: 60, govt: 60, scty: 85 },
       },
       {
         name: "Luís Carlos Prestes (BR)",
         link: "https://pt.wikipedia.org/wiki/Lu%C3%ADs_Carlos_Prestes",
+        stats: { econ: 100, dipl: 30, govt: 20, scty: 50 },
       },
       {
         name: "Álvaro Cunhal (PT)",
         link: "https://pt.wikipedia.org/wiki/%C3%81lvaro_Cunhal",
+        stats: { econ: 100, dipl: 40, govt: 30, scty: 50 },
       },
     ],
     books: [
-      { title: "O Manifesto Comunista - Marx e Engels", link: "" },
-      { title: "Formação do Brasil Contemporâneo - Caio Prado Jr.", link: "" },
-      { title: "O Cavaleiro da Esperança - Jorge Amado", link: "" },
-      { title: "Cadernos do Cárcere - Gramsci", link: "" },
-      { title: "Dialética do Esclarecimento - Adorno e Horkheimer", link: "" },
-      { title: "O Capital - Karl Marx", link: "" },
-    ],
-  },
-  {
-    name: "De Leonismo",
-    stats: { econ: 100, dipl: 30, govt: 30, scty: 80 },
-    desc: "O caminho para o socialismo passa pela organização simultânea no campo político e no econômico. Defendemos sindicatos industriais revolucionários que, organizados por setor produtivo, formarão a base de uma república socialista industrial. O voto socialista nas urnas dará legitimidade à transformação; os sindicatos industriais darão a ela substância econômica. O Estado burguês será substituído por um congresso de representantes dos trabalhadores de cada indústria. Rejeitamos tanto o reformismo impotente quanto o anarquismo desorganizado. A classe trabalhadora, organizada e consciente, será sua própria libertadora.",
-    roast: "Você é o único que ainda acredita que a revolução virá através de sindicatos industriais e um partido político que ninguém conhece. Seu plano é tão detalhado que ninguém consegue entender, e você passa mais tempo discutindo a pureza ideológica do que agindo.",
-    politicians: [
-      {
-        name: "Daniel De Leon",
-        link: "https://pt.wikipedia.org/wiki/Daniel_De_Leon",
-      },
-      {
-        name: "James Connolly",
-        link: "https://pt.wikipedia.org/wiki/James_Connolly",
-      },
-      {
-        name: "Arnold Petersen",
-        link: "https://en.wikipedia.org/wiki/Arnold_Petersen",
-      },
-    ],
-    books: [
-      { title: "Reforma ou Revolução - Daniel De Leon", link: "" },
-      { title: "Reconstrução Socialista da Sociedade - De Leon", link: "" },
-      { title: "Sindicalismo Industrial - De Leon", link: "" },
-      { title: "O Que Significa De Leonismo - Arnold Petersen", link: "" },
+      { title: "O Manifesto Comunista - Marx e Engels", link: "https://amzn.to/4roqkUZ" },
+      { title: "Formação do Brasil Contemporâneo - Caio Prado Jr.", link: "https://amzn.to/4tJEmC4" },
+      { title: "O Cavaleiro da Esperança - Jorge Amado", link: "https://amzn.to/4cGOk0W" },
+      { title: "Cadernos do Cárcere - Gramsci", link: "https://amzn.to/3MNNQvC" },
+      { title: "Dialética do Esclarecimento - Adorno e Horkheimer", link: "https://amzn.to/4aBVYan" },
+      { title: "O Capital - Karl Marx", link: "https://amzn.to/3OmVEoy" },
     ],
   },
   {
     name: "Leninismo",
     stats: { econ: 100, dipl: 40, govt: 20, scty: 70 },
     desc: "A classe trabalhadora, por si só, não desenvolve espontaneamente consciência revolucionária. É necessário um partido de vanguarda, disciplinado e organizado pelo centralismo democrático, para trazer essa consciência de fora e liderar as massas na tomada do poder. O imperialismo é a fase superior do capitalismo, e sua derrota exige uma estratégia revolucionária coordenada. A ditadura do proletariado, através de sovietes e conselhos populares, esmaga a resistência da burguesia e inicia a construção socialista. O Estado eventualmente definha quando as classes desaparecem.",
+    roast: "Você acha que democracia é uma invenção burguesa e que a única liberdade real é obedecer ao Comitê Central. Se alguém discorda de você, é obviamente um agente da CIA ou um 'revisionista'.",
     politicians: [
       {
         name: "Vladimir Lênin",
         link: "https://pt.wikipedia.org/wiki/Vladimir_Lenin",
+        stats: { econ: 100, dipl: 35, govt: 15, scty: 65 },
       },
       {
         name: "Alexandra Kollontai",
         link: "https://pt.wikipedia.org/wiki/Alexandra_Kollontai",
+        stats: { econ: 95, dipl: 50, govt: 30, scty: 80 },
       },
       {
         name: "Nikolai Bukharin",
         link: "https://pt.wikipedia.org/wiki/Nikolai_Bukharin",
+        stats: { econ: 90, dipl: 60, govt: 40, scty: 70 },
       },
       {
         name: "Fidel Castro",
         link: "https://pt.wikipedia.org/wiki/Fidel_Castro",
+        stats: { econ: 100, dipl: 30, govt: 15, scty: 60 },
       },
     ],
     books: [
-      { title: "O Estado e a Revolução - Lênin", link: "" },
-      { title: "Que Fazer? - Lênin", link: "" },
-      { title: "Imperialismo, Fase Superior do Capitalismo - Lênin", link: "" },
-      { title: "As Teses de Abril - Lênin", link: "" },
-      { title: "Esquerdismo: Doença Infantil do Comunismo - Lênin", link: "" },
+      { title: "O Estado e a Revolução - Lênin", link: "https://amzn.to/4c2246o" },
+      { title: "O que fazer?: questões candentes de nosso movimento - Lênin", link: "https://amzn.to/46KdAzG" },
+      { title: "Imperialismo, Fase Superior do Capitalismo - Lênin", link: "https://amzn.to/4rihrwa" },
+      { title: "Teses de Abril - Lênin", link: "https://amzn.to/4kF3zJM" },
+      { title: "Esquerdismo, doença infantil do comunismo - Lênin", link: "https://amzn.to/4qNfiaB" },
     ],
   },
   {
     name: "Stalinismo/Maoismo",
     stats: { econ: 100, dipl: 20, govt: 0, scty: 60 },
     desc: "É possível e necessário construir o socialismo em um só país, cercado por potências hostis. Isso exige industrialização acelerada, coletivização da agricultura e um partido forte que elimine implacavelmente inimigos de classe e sabotadores. O Maoismo adapta esses princípios às condições do Terceiro Mundo, reconhecendo o campesinato como força revolucionária principal e desenvolvendo a estratégia de guerra popular prolongada. A luta de classes continua sob o socialismo, exigindo vigilância constante e revolução cultural para combater a restauração capitalista. A linha de massas garante que o partido nunca se afaste do povo.",
+    roast: "Você tem um pôster de um ditador bigodudo no quarto e acha que Gulags eram apenas 'colônias de férias para reeducação'. Sua solução para qualquer problema econômico é fuzilar os sabotadores.",
     politicians: [
       {
         name: "Josef Stalin",
         link: "https://pt.wikipedia.org/wiki/Josef_Stalin",
+        stats: { econ: 100, dipl: 20, govt: 0, scty: 30 },
       },
       {
         name: "Mao Tsé-Tung",
         link: "https://pt.wikipedia.org/wiki/Mao_Ts%C3%A9-Tung",
-      },
-      {
-        name: "Kim Il-sung",
-        link: "https://pt.wikipedia.org/wiki/Kim_Il-sung",
+        stats: { econ: 100, dipl: 10, govt: 10, scty: 40 },
       },
       {
         name: "Enver Hoxha",
         link: "https://pt.wikipedia.org/wiki/Enver_Hoxha",
+        stats: { econ: 100, dipl: 5, govt: 5, scty: 20 },
       },
     ],
     books: [
-      { title: "Fundamentos do Leninismo - Stalin", link: "" },
-      { title: "O Livro Vermelho - Mao Tsé-Tung", link: "" },
-      { title: "Sobre a Prática e a Contradição - Mao", link: "" },
-      {
-        title: "Problemas Econômicos do Socialismo na URSS - Stalin",
-        link: "",
-      },
-      { title: "Sobre a Guerra Prolongada - Mao", link: "" },
-    ],
-  },
-  {
-    name: "Comunismo Religioso",
-    stats: { econ: 100, dipl: 50, govt: 30, scty: 30 },
-    desc: "A comunhão de bens não é uma invenção moderna, está nas Escrituras: 'Nenhum deles considerava exclusivamente sua coisa alguma que possuísse, mas tudo entre eles era comum.' A verdadeira fé exige que vivamos como irmãos, partilhando o pão e o trabalho, sem propriedade privada que corrompe a alma com a ganância. A igualdade radical foi o plano divino desde o início; a propriedade é o pecado original da sociedade. Comunidades de fé que vivem em comum realizam na terra o Reino dos Céus, onde não há meu nem teu, mas apenas nosso sob os olhos de Deus.",
-    politicians: [
-      {
-        name: "Thomas Müntzer",
-        link: "https://pt.wikipedia.org/wiki/Thomas_M%C3%BCntzer",
-      },
-      {
-        name: "Gerrard Winstanley",
-        link: "https://pt.wikipedia.org/wiki/Gerrard_Winstanley",
-      },
-      {
-        name: "Camilo Torres",
-        link: "https://pt.wikipedia.org/wiki/Camilo_Torres_Restrepo",
-      },
-    ],
-    books: [
-      { title: "A Lei da Liberdade - Gerrard Winstanley", link: "" },
-      { title: "A Nova Lei da Retidão - Winstanley", link: "" },
-      { title: "Sermões Revolucionários - Thomas Müntzer", link: "" },
-      { title: "Atos dos Apóstolos (Bíblia)", link: "" },
+      { title: "Fundamentos do Leninismo - Stalin", link: "https://amzn.to/46V7g8w" },
+      { title: "O Livro Vermelho - Mao Tsé-Tung", link: "https://amzn.to/4s3RcK5" },
+      { title: "Sobre a Prática e a Contradição - Mao", link: "https://amzn.to/46gKvfb" },
+      { title: "Sobre a Guerra Prolongada - Mao", link: "https://amzn.to/4rXE0Gf" },
     ],
   },
   {
     name: "Socialismo de Estado",
     stats: { econ: 80, dipl: 30, govt: 30, scty: 70 },
     desc: "O Estado é o instrumento mais eficaz para transformar a sociedade e garantir justiça econômica. Através da propriedade pública dos setores estratégicos, planejamento centralizado e administração técnica, podemos superar a anarquia do mercado e suas crises cíclicas. A industrialização dirigida pelo Estado desenvolve a nação e eleva o padrão de vida do povo trabalhador. A burocracia estatal, quando bem organizada, distribui recursos de forma mais racional que a mão invisível do mercado. O desenvolvimento nacional vem antes das utopias internacionalistas.",
+    roast: "Você ama preencher formulários em triplicata e acha que a fila do cartório é o auge da civilização. Seu sonho é um mundo onde tudo é funcionário público e nada funciona sem um carimbo.",
     politicians: [
-      {
-        name: "Getúlio Vargas",
-        link: "https://pt.wikipedia.org/wiki/Get%C3%BAlio_Vargas",
-      },
-      {
-        name: "Juan Perón",
-        link: "https://pt.wikipedia.org/wiki/Juan_Per%C3%B3n",
-      },
       {
         name: "Gamal Abdel Nasser",
         link: "https://pt.wikipedia.org/wiki/Gamal_Abdel_Nasser",
+        stats: { econ: 85, dipl: 20, govt: 25, scty: 60 },
       },
       {
         name: "Jawaharlal Nehru",
         link: "https://pt.wikipedia.org/wiki/Jawaharlal_Nehru",
-      },
-    ],
-    books: [
-      { title: "A Descoberta da Índia - Nehru", link: "" },
-      { title: "Filosofia do Peronismo - Juan Perón", link: "" },
-      { title: "A Economia do Desenvolvimento - diversos autores", link: "" },
-      { title: "Planejamento Econômico - Oscar Lange", link: "" },
-    ],
-  },
-  {
-    name: "Socialismo Teocrático",
-    stats: { econ: 80, dipl: 50, govt: 30, scty: 20 },
-    desc: "A justiça social e a justiça divina são uma só. A lei de Deus condena tanto a exploração do homem pelo homem quanto a imoralidade da sociedade secular. Defendemos um Estado que implemente a economia socialista sob orientação dos princípios sagrados e da liderança religiosa. A riqueza deve ser distribuída conforme os mandamentos divinos, e a sociedade deve viver segundo a moralidade prescrita pela fé verdadeira. Rejeitamos tanto o capitalismo materialista quanto o comunismo ateu. A revolução espiritual e a revolução social caminham juntas.",
-    politicians: [
-      {
-        name: "Ali Shariati",
-        link: "https://pt.wikipedia.org/wiki/Ali_Shariati",
+        stats: { econ: 70, dipl: 50, govt: 40, scty: 75 },
       },
       {
         name: "Muammar Gaddafi",
         link: "https://pt.wikipedia.org/wiki/Muammar_Gaddafi",
+        stats: { econ: 75, dipl: 25, govt: 20, scty: 30 },
       },
       {
-        name: "Ruhollah Khomeini (aspectos econômicos)",
-        link: "https://pt.wikipedia.org/wiki/Ruhollah_Khomeini",
+        name: "Hugo Chávez",
+        link: "https://pt.wikipedia.org/wiki/Hugo_Ch%C3%A1vez",
+        stats: { econ: 75, dipl: 20, govt: 10, scty: 50 },
       },
     ],
     books: [
-      { title: "Religião contra Religião - Ali Shariati", link: "" },
-      { title: "O Livro Verde - Muammar Gaddafi", link: "" },
-      { title: "Marxismo e Outras Falácias Ocidentais - Shariati", link: "" },
-      { title: "Economia Islâmica - diversos autores", link: "" },
+      { title: "A terceira teoria universal: O Livro Verde - Muammar Gaddafi", link: "https://amzn.to/4s1Dasn" },
+      { title: "Estratégia do Desenvolvimento Econômico - Albert Hirschman", link: "https://amzn.to/4rrjbDv" },
+      { title: "A Economia Política do Desenvolvimento - Paul Baran", link: "https://amzn.to/4qCWlHD" },
+      { title: "A Economia Mundial e o Imperialismo - Nikolai Bukharin", link: "https://amzn.to/4azS5Tj" },
     ],
   },
   {
     name: "Socialismo Religioso",
     stats: { econ: 80, dipl: 50, govt: 70, scty: 20 },
     desc: "A fé verdadeira exige compromisso com os pobres e oprimidos. Os profetas sempre denunciaram a injustiça e a acumulação de riquezas. A Teologia da Libertação nos ensina que pecar não é apenas transgressão individual, mas também estruturas sociais que perpetuam a miséria. Cristo estava entre os pobres, e nós devemos estar também. Defendemos reformas econômicas radicais, redistribuição de terras e riquezas, educação e saúde para todos, dentro de um quadro democrático. A libertação é espiritual e material, pessoal e coletiva.",
+    roast: "Você vai à missa com uma camiseta de Che Guevara e deixa o padre confuso. Acha que Jesus multiplicou os pães e os peixes como uma crítica à cadeia de suprimentos capitalista.",
     politicians: [
       {
         name: "Frei Betto",
         link: "https://pt.wikipedia.org/wiki/Frei_Betto",
+        stats: { econ: 80, dipl: 45, govt: 65, scty: 25 },
       },
       {
         name: "Leonardo Boff",
         link: "https://pt.wikipedia.org/wiki/Leonardo_Boff",
+        stats: { econ: 75, dipl: 60, govt: 75, scty: 30 },
       },
       {
         name: "Oscar Romero",
         link: "https://pt.wikipedia.org/wiki/%C3%93scar_Romero",
-      },
-      {
-        name: "Martin Luther King Jr.",
-        link: "https://pt.wikipedia.org/wiki/Martin_Luther_King_Jr.",
+        stats: { econ: 85, dipl: 40, govt: 60, scty: 15 },
       },
     ],
     books: [
-      { title: "Teologia da Libertação - Gustavo Gutiérrez", link: "" },
-      { title: "Jesus Cristo Libertador - Leonardo Boff", link: "" },
-      { title: "Batismo de Sangue - Frei Betto", link: "" },
-      { title: "Força para Amar - Martin Luther King Jr.", link: "" },
-      { title: "Igreja: Carisma e Poder - Leonardo Boff", link: "" },
+      { title: "Teologia da Libertação - Gustavo Gutiérrez", link: "https://amzn.to/3OPlVvN" },
+      { title: "Jesus Cristo Libertador - Leonardo Boff", link: "https://amzn.to/3OPlX6T" },
+      { title: "Batismo de Sangue - Frei Betto", link: "https://amzn.to/3Mlf0Kd" },
+      { title: "Igreja: Carisma e Poder - Leonardo Boff", link: "https://amzn.to/4cCc9Hj" },
     ],
   },
   {   
     name: "Socialismo Democrático",
     stats: { econ: 80, dipl: 50, govt: 50, scty: 80 },
     desc: "O socialismo deve ser conquistado através da democracia, e a democracia só é plena quando se estende à esfera econômica. Lutamos nas urnas, nos sindicatos e nos movimentos sociais por uma transformação gradual mas profunda da sociedade. Os setores estratégicos da economia devem ser controlados democraticamente pelo povo, não por acionistas ou burocratas. Um Estado de bem-estar robusto garante saúde, educação e moradia como direitos, não mercadorias. Rejeitamos tanto o capitalismo selvagem quanto o autoritarismo que se disfarçou de socialismo no século XX.",
+    roast: "Você é radical demais para os liberais e moderado demais para os comunistas, então ninguém te convida para as festas. Acha que pode derrubar o sistema votando nele a cada 4 anos.",
     politicians: [
       {
         name: "Leonel Brizola (BR)",
         link: "https://pt.wikipedia.org/wiki/Leonel_Brizola",
+        stats: { econ: 75, dipl: 40, govt: 50, scty: 60 },
       },
       {
         name: "Pepe Mujica (Uruguai)",
         link: "https://pt.wikipedia.org/wiki/Jos%C3%A9_Mujica",
-      },
-      {
-        name: "Salvador Allende",
-        link: "https://pt.wikipedia.org/wiki/Salvador_Allende",
+        stats: { econ: 70, dipl: 60, govt: 70, scty: 80 },
       },
       {
         name: "Alexandria Ocasio-Cortez",
         link: "https://pt.wikipedia.org/wiki/Alexandria_Ocasio-Cortez",
+        stats: { econ: 60, dipl: 50, govt: 60, scty: 90 },
       },
     ],
     books: [
-      { title: "O Caminho para o Poder - Karl Kautsky", link: "" },
-      { title: "Fios da História - Uma Biografia de Brizola", link: "" },
-      { title: "Por Que Não o Socialismo? - G.A. Cohen", link: "" },
-      { title: "A Alma do Homem sob o Socialismo - Oscar Wilde", link: "" },
-      { title: "O ABC do Socialismo - Leo Huberman", link: "" },
+      { title: "O Caminho para o Poder - Karl Kautsky", link: "https://amzn.to/4kG2Vfa" },
+      { title: "Por Que Não o Socialismo? - G.A. Cohen", link: "https://amzn.to/3ZFM9mT" },
+      { title: "Socialismo Evolucionário - Eduard Bernstein", link: "https://amzn.to/4qIpLEg" },
     ],
   },
   {
     name: "Socialismo Revolucionário",
     stats: { econ: 80, dipl: 20, govt: 50, scty: 70 },
     desc: "O reformismo é uma ilusão! A burguesia nunca entregará seu poder pacificamente. A história mostra que toda conquista dos trabalhadores foi arrancada pela luta, e que toda concessão pode ser retirada. A via parlamentar está bloqueada pelos interesses do capital. Somente a ação revolucionária das massas organizadas pode destruir o Estado burguês e construir uma nova sociedade. Não queremos reformar o capitalismo, queremos superá-lo. A revolução não é um momento, é um processo que exige organização, consciência de classe e disposição para a luta.",
+    roast: "Você usa boina em dias quentes e chama qualquer um que tenha um iPhone de 'pequeno-burguês'. Vive esperando o Grande Dia da Revolução enquanto reclama do preço do latão.",
     politicians: [
       {
         name: "Che Guevara",
         link: "https://pt.wikipedia.org/wiki/Che_Guevara",
-      },
-      {
-        name: "Subcomandante Marcos",
-        link: "https://pt.wikipedia.org/wiki/Subcomandante_Marcos",
+        stats: { econ: 80, dipl: 20, govt: 50, scty: 70 },
       },
       {
         name: "Thomas Sankara",
         link: "https://pt.wikipedia.org/wiki/Thomas_Sankara",
+        stats: { econ: 90, dipl: 40, govt: 40, scty: 70 },
       },
       {
         name: "Hugo Blanco",
         link: "https://pt.wikipedia.org/wiki/Hugo_Blanco",
+        stats: { econ: 85, dipl: 30, govt: 55, scty: 75 },
       },
     ],
     books: [
-      { title: "O Estado e a Revolução - Lênin", link: "" },
-      { title: "Guerra de Guerrilhas - Che Guevara", link: "" },
-      { title: "O Homem e o Socialismo em Cuba - Che Guevara", link: "" },
-      { title: "Os Condenados da Terra - Frantz Fanon", link: "" },
-      { title: "Nosotros Decimos No - Eduardo Galeano", link: "" },
+      { title: "O socialismo humanista - Che Guevara", link: "https://amzn.to/4apCLtH" },
+      { title: "De moto pela América do Sul - Che Guevara", link: "https://amzn.to/4aJG65X" },
+      { title: "Os Condenados da Terra - Frantz Fanon", link: "https://amzn.to/4tNT6jC" },
+      { title: "A Situação da Classe Trabalhadora na Inglaterra - Friedrich Engels", link: "https://amzn.to/4c1l4C3" },
     ],
   },
   {
@@ -800,29 +827,29 @@ export const ideologies: Ideology[] = [
       {
         name: "Noam Chomsky",
         link: "https://pt.wikipedia.org/wiki/Noam_Chomsky",
+        stats: { econ: 80, dipl: 80, govt: 90, scty: 90 },
       },
       {
         name: "Howard Zinn",
         link: "https://pt.wikipedia.org/wiki/Howard_Zinn",
+        stats: { econ: 85, dipl: 85, govt: 90, scty: 95 },
       },
       {
         name: "David Graeber",
         link: "https://pt.wikipedia.org/wiki/David_Graeber",
+        stats: { econ: 90, dipl: 80, govt: 95, scty: 90 },
       },
       {
-        name: "Angela Davis",
-        link: "https://pt.wikipedia.org/wiki/Angela_Davis",
+        name: "Murray Bookchin (EUA)",
+        link: "https://pt.wikipedia.org/wiki/Murray_Bookchin",
+        stats: { econ: 85, dipl: 75, govt: 95, scty: 85 },
       },
     ],
     books: [
-      {
-        title: "Uma História Popular dos Estados Unidos - Howard Zinn",
-        link: "",
-      },
-      { title: "Sobre Anarquismo - Noam Chomsky", link: "" },
-      { title: "Dívida: Os Primeiros 5000 Anos - David Graeber", link: "" },
-      { title: "Mulheres, Raça e Classe - Angela Davis", link: "" },
-      { title: "Razões para Agir - Noam Chomsky", link: "" },
+      { title: "Quem manda no mundo? - Noam Chomsky", link: "https://amzn.to/46VAvYQ" },
+      { title: "Dívida: Os Primeiros 5000 Anos - David Graeber", link: "https://amzn.to/46ZZudB" },
+      { title: "Textos anarquistas - Mikhail Bakunin", link: "https://amzn.to/4aWrh0S" },
+      { title: "Ecologia social e outros ensaios - Murray Bookchin", link: "https://amzn.to/4qLV4hF" },
     ],
   },
   {
@@ -834,18 +861,22 @@ export const ideologies: Ideology[] = [
       {
         name: "Edgard Leuenroth (BR)",
         link: "https://pt.wikipedia.org/wiki/Edgard_Leuenroth",
+        stats: { econ: 80, dipl: 50, govt: 100, scty: 80 },
       },
       {
         name: "Buenaventura Durruti",
         link: "https://pt.wikipedia.org/wiki/Buenaventura_Durruti",
+        stats: { econ: 85, dipl: 40, govt: 100, scty: 75 },
       },
       {
         name: "Neno Vasco (PT)",
         link: "https://pt.wikipedia.org/wiki/Neno_Vasco",
+        stats: { econ: 75, dipl: 55, govt: 95, scty: 80 },
       },
       {
         name: "Rudolf Rocker",
         link: "https://pt.wikipedia.org/wiki/Rudolf_Rocker",
+        stats: { econ: 80, dipl: 60, govt: 90, scty: 85 },
       },
     ],
     books: [
@@ -856,7 +887,6 @@ export const ideologies: Ideology[] = [
       { title: "Homenagem à Catalunha - George Orwell", link: "" },
       { title: "Ação Direta - Émile Pouget", link: "" },
       { title: "A CNT na Revolução Espanhola - José Peirats", link: "" },
-      { title: "O Que É a Propriedade? - Proudhon", link: "" },
     ],
   },
   {
@@ -868,18 +898,22 @@ export const ideologies: Ideology[] = [
       {
         name: "Lula (Luiz Inácio Lula da Silva)",
         link: "https://pt.wikipedia.org/wiki/Luiz_In%C3%A1cio_Lula_da_Silva",
+        stats: { econ: 65, dipl: 35, govt: 35, scty: 65 },
       },
       {
         name: "Dilma Rousseff",
         link: "https://pt.wikipedia.org/wiki/Dilma_Rousseff",
+        stats: { econ: 65, dipl: 35, govt: 25, scty: 65 },
       },
       {
         name: "Guilherme Boulos",
         link: "https://pt.wikipedia.org/wiki/Guilherme_Boulos",
+        stats: { econ: 70, dipl: 45, govt: 40, scty: 80 },
       },
       {
-        name: "Hugo Chávez",
-        link: "https://pt.wikipedia.org/wiki/Hugo_Ch%C3%A1vez",
+        name: "Juan Perón",
+        link: "https://pt.wikipedia.org/wiki/Juan_Per%C3%B3n",
+        stats: { econ: 70, dipl: 30, govt: 25, scty: 55 },
       },
     ],
     books: [
@@ -894,18 +928,22 @@ export const ideologies: Ideology[] = [
     name: "Distributismo Católico",
     stats: { econ: 60, dipl: 40, govt: 30, scty: 20 },
     desc: "A doutrina social da Igreja nos ensina que tanto o capitalismo de poucos quanto o coletivismo do Estado violam a dignidade humana. A propriedade deve estar amplamente distribuída entre as famílias, permitindo que cada um viva do próprio trabalho com dignidade. As guildas, cooperativas e pequenas empresas familiares são o modelo, não as grandes corporações nem a burocracia estatal. Mas essa ordem econômica só é estável quando a sociedade é guiada pelos princípios da fé verdadeira e da lei moral, sob a orientação da autoridade espiritual.",
+    roast: "Você odeia o estado moderno e o capitalismo moderno, então sua solução é voltar para a Idade Média. Acha que o mundo seria perfeito se todos fossem camponeses felizes pagando dízimo.",
     politicians: [
       {
         name: "Papa Leão XIII",
         link: "https://pt.wikipedia.org/wiki/Papa_Le%C3%A3o_XIII",
+        stats: { econ: 55, dipl: 35, govt: 25, scty: 15 },
       },
       {
         name: "Papa Pio XI",
         link: "https://pt.wikipedia.org/wiki/Papa_Pio_XI",
+        stats: { econ: 65, dipl: 45, govt: 35, scty: 25 },
       },
       {
-        name: "Engelbert Dollfuss",
-        link: "https://pt.wikipedia.org/wiki/Engelbert_Dollfuss",
+        name: "Alceu Amoroso Lima (BR)",
+        link: "https://pt.wikipedia.org/wiki/Alceu_Amoroso_Lima",
+        stats: { econ: 55, dipl: 45, govt: 35, scty: 20 },
       },
     ],
     books: [
@@ -924,18 +962,22 @@ export const ideologies: Ideology[] = [
       {
         name: "G. K. Chesterton",
         link: "https://pt.wikipedia.org/wiki/G._K._Chesterton",
+        stats: { econ: 65, dipl: 55, govt: 55, scty: 25 },
       },
       {
         name: "Hilaire Belloc",
         link: "https://pt.wikipedia.org/wiki/Hilaire_Belloc",
+        stats: { econ: 55, dipl: 45, govt: 45, scty: 15 },
       },
       {
         name: "E. F. Schumacher",
         link: "https://pt.wikipedia.org/wiki/E._F._Schumacher",
+        stats: { econ: 70, dipl: 60, govt: 60, scty: 40 },
       },
       {
         name: "Dorothy Day",
         link: "https://pt.wikipedia.org/wiki/Dorothy_Day",
+        stats: { econ: 80, dipl: 70, govt: 70, scty: 50 },
       },
     ],
     books: [
@@ -944,6 +986,8 @@ export const ideologies: Ideology[] = [
       { title: "O Negócio é Ser Pequeno - E. F. Schumacher", link: "" },
       { title: "O Esboço da Sanidade - G. K. Chesterton", link: "" },
       { title: "A Restauração da Propriedade - Belloc", link: "" },
+      { title: "Ortodoxia - G. K. Chesterton", link: "" },
+      { title: "Compêndio da Doutrina Social da Igreja", link: "" },
     ],
   },
   {
@@ -955,18 +999,32 @@ export const ideologies: Ideology[] = [
       {
         name: "Geraldo Alckmin",
         link: "https://pt.wikipedia.org/wiki/Geraldo_Alckmin",
+        stats: { econ: 50, dipl: 50, govt: 50, scty: 60 },
       },
       {
         name: "Fernando Henrique Cardoso (BR)",
         link: "https://pt.wikipedia.org/wiki/Fernando_Henrique_Cardoso",
+        stats: { econ: 55, dipl: 60, govt: 55, scty: 70 },
       },
       {
         name: "Joe Biden (EUA)",
         link: "https://pt.wikipedia.org/wiki/Joe_Biden",
+        stats: { econ: 50, dipl: 60, govt: 60, scty: 70 },
       },
       {
         name: "Barack Obama",
         link: "https://pt.wikipedia.org/wiki/Barack_Obama",
+        stats: { econ: 55, dipl: 70, govt: 65, scty: 80 },
+      },
+      {
+        name: "Theodore Roosevelt (EUA)",
+        link: "https://pt.wikipedia.org/wiki/Theodore_Roosevelt",
+        stats: { econ: 55, dipl: 60, govt: 55, scty: 65 },
+      },
+      {
+        name: "Martin Luther King Jr. (EUA)",
+        link: "https://pt.wikipedia.org/wiki/Martin_Luther_King_Jr.",
+        stats: { econ: 60, dipl: 75, govt: 70, scty: 95 },
       },
     ],
     books: [
@@ -975,28 +1033,34 @@ export const ideologies: Ideology[] = [
       { title: "O Relatório Beveridge", link: "" },
       { title: "Liberalismo - L. T. Hobhouse", link: "" },
       { title: "Justiça como Equidade - John Rawls", link: "" },
+      { title: "Força para Amar - Martin Luther King Jr.", link: "" },
     ],
   },
   {
     name: "Democracia Cristã",
     stats: { econ: 60, dipl: 60, govt: 50, scty: 30 },
     desc: "A política deve ser guiada por princípios morais enraizados na tradição cristã: dignidade da pessoa humana, solidariedade, subsidiariedade e bem comum. Defendemos uma economia social de mercado, onde a livre iniciativa é equilibrada pela responsabilidade social e pela proteção dos mais fracos. A família é a célula fundamental da sociedade e merece proteção especial. Somos favoráveis à cooperação internacional e à integração europeia, pois a paz e a prosperidade dependem da colaboração entre nações. Moderação, não extremismo; reforma, não revolução.",
+    roast: "Você é o político padrão da Europa: entediante, burocrático e levemente religioso. Sua maior aventura é aumentar a taxa de juros em 0,25%.",
     politicians: [
       {
         name: "Konrad Adenauer",
         link: "https://pt.wikipedia.org/wiki/Konrad_Adenauer",
+        stats: { econ: 55, dipl: 55, govt: 45, scty: 25 },
       },
       {
         name: "Alcide De Gasperi",
         link: "https://pt.wikipedia.org/wiki/Alcide_De_Gasperi",
+        stats: { econ: 65, dipl: 65, govt: 55, scty: 35 },
       },
       {
         name: "Angela Merkel",
         link: "https://pt.wikipedia.org/wiki/Angela_Merkel",
+        stats: { econ: 50, dipl: 70, govt: 60, scty: 50 },
       },
       {
         name: "Robert Schuman",
         link: "https://pt.wikipedia.org/wiki/Robert_Schuman",
+        stats: { econ: 55, dipl: 75, govt: 60, scty: 40 },
       },
     ],
     books: [
@@ -1015,18 +1079,22 @@ export const ideologies: Ideology[] = [
       {
         name: "Mário Soares (PT)",
         link: "https://pt.wikipedia.org/wiki/M%C3%A1rio_Soares",
+        stats: { econ: 55, dipl: 65, govt: 55, scty: 75 },
       },
       {
         name: "Olof Palme",
         link: "https://pt.wikipedia.org/wiki/Olof_Palme",
+        stats: { econ: 70, dipl: 70, govt: 60, scty: 80 },
       },
       {
         name: "Willy Brandt",
         link: "https://pt.wikipedia.org/wiki/Willy_Brandt",
+        stats: { econ: 65, dipl: 75, govt: 65, scty: 85 },
       },
       {
         name: "Ulysses Guimarães (BR)",
         link: "https://pt.wikipedia.org/wiki/Ulysses_Guimar%C3%A3es",
+        stats: { econ: 50, dipl: 60, govt: 70, scty: 70 },
       },
     ],
     books: [
@@ -1047,31 +1115,25 @@ export const ideologies: Ideology[] = [
     roast: "Você cancela pessoas no Twitter por esporte e acha que usar a hashtag certa vai salvar o mundo. Sua principal angústia existencial é decidir qual leite vegetal polui menos.",
     politicians: [
       {
-        name: "Theodore Roosevelt",
-        link: "https://pt.wikipedia.org/wiki/Theodore_Roosevelt",
-      },
-      {
         name: "Elizabeth Warren",
         link: "https://pt.wikipedia.org/wiki/Elizabeth_Warren",
+        stats: { econ: 65, dipl: 85, govt: 70, scty: 95 },
       },
       {
         name: "Justin Trudeau",
         link: "https://pt.wikipedia.org/wiki/Justin_Trudeau",
-      },
-      {
-        name: "Simone de Beauvoir",
-        link: "https://pt.wikipedia.org/wiki/Simone_de_Beauvoir",
+        stats: { econ: 55, dipl: 80, govt: 65, scty: 90 },
       },
       {
         name: "Judith Butler",
         link: "https://pt.wikipedia.org/wiki/Judith_Butler",
+        stats: { econ: 70, dipl: 90, govt: 80, scty: 100 },
       },
     ],
     books: [
       { title: "A Promessa da Vida Americana - Herbert Croly", link: "" },
       { title: "Democracia e Educação - John Dewey", link: "" },
       { title: "Os Anjos Bons da Nossa Natureza - Steven Pinker", link: "" },
-      { title: "O Segundo Sexo - Simone de Beauvoir", link: "" },
       { title: "Problemas de Gênero - Judith Butler", link: "" },
       { title: "O Capital no Século XXI - Thomas Piketty", link: "" },
     ],
@@ -1080,36 +1142,55 @@ export const ideologies: Ideology[] = [
     name: "Anarco-Mutualismo",
     stats: { econ: 60, dipl: 50, govt: 100, scty: 70 },
     desc: "O Anarco-Mutualismo é uma forma de anarquismo de mercado associada a Pierre-Joseph Proudhon. Defende uma sociedade sem Estado onde os indivíduos ou coletivos possuem seus meios de produção e trocam bens e serviços em um mercado livre. A propriedade é legitimada pelo 'uso e ocupação', não pelo título legal, o que se opõe à propriedade ausente e à exploração através de aluguel e juros. Propõe a criação de 'bancos do povo' que forneceriam crédito sem juros para permitir que os trabalhadores adquirissem seu próprio capital.",
+    roast: "Você gosta de mercado livre mas odeia patrões, então criou uma teoria que ninguém além de você entende para justificar isso. Acha que 'banco do povo' não vai virar um agiota glorificado.",
     politicians: [
       {
         name: "Pierre-Joseph Proudhon (Filósofo)",
         link: "https://pt.wikipedia.org/wiki/Pierre-Joseph_Proudhon",
+        stats: { econ: 60, dipl: 50, govt: 100, scty: 70 },
+      },
+      {
+        name: "Lysander Spooner (EUA)",
+        link: "https://pt.wikipedia.org/wiki/Lysander_Spooner",
+        stats: { econ: 55, dipl: 55, govt: 95, scty: 75 },
+      },
+      {
+        name: "Benjamin Tucker (EUA)",
+        link: "https://pt.wikipedia.org/wiki/Benjamin_Tucker",
+        stats: { econ: 50, dipl: 50, govt: 100, scty: 65 },
       },
     ],
     books: [
-      { title: "O Que é a Propriedade?", link: "" },
-      {
-        title: "Sistema das Contradições Econômicas ou Filosofia da Miséria",
-        link: "",
-      },
+      { title: "O Que é a Propriedade? - Pierre-Joseph Proudhon", link: "" },
+      { title: "Sistema das Contradições Econômicas - Pierre-Joseph Proudhon", link: "" },
+      { title: "Sem Traidor, Sem Mestre - Benjamin Tucker", link: "" },
     ],
   },
   {
     name: "Totalitarismo Nacional",
     stats: { econ: 50, dipl: 20, govt: 0, scty: 50 },
     desc: "O Totalitarismo Nacional descreve um regime onde o Estado, geralmente sob o controle de um partido único e um líder supremo, busca regular e controlar todos os aspectos da vida pública e privada. É caracterizado pela supressão total da oposição, uso de propaganda massiva, vigilância constante e mobilização da população em torno de uma ideologia nacionalista. A economia é subserviente aos objetivos do Estado, seja através do controle direto ou do corporativismo.",
+    roast: "Você acha que '1984' era um manual de instruções, não um aviso. Sua ideia de fim de semana divertido é marchar em linha reta e denunciar seus vizinhos.",
     politicians: [
       {
         name: "Kim Il-sung (Juche - Coreia do Norte)",
         link: "https://pt.wikipedia.org/wiki/Kim_Il-sung",
+        stats: { econ: 100, dipl: 0, govt: 0, scty: 5 },
       },
       {
         name: "Saddam Hussein (Iraque)",
         link: "https://pt.wikipedia.org/wiki/Saddam_Hussein",
+        stats: { econ: 55, dipl: 15, govt: 5, scty: 40 },
       },
       {
         name: "Getúlio Vargas (Estado Novo - BR)",
         link: "https://pt.wikipedia.org/wiki/Get%C3%BAlio_Vargas",
+        stats: { econ: 80, dipl: 30, govt: 30, scty: 70 },
+      },
+      {
+        name: "Pol Pot (Camboja)",
+        link: "https://pt.wikipedia.org/wiki/Pol_Pot",
+        stats: { econ: 95, dipl: 5, govt: 0, scty: 20 },
       },
     ],
     books: [
@@ -1121,26 +1202,51 @@ export const ideologies: Ideology[] = [
     name: "Totalitarismo Global",
     stats: { econ: 50, dipl: 80, govt: 0, scty: 50 },
     desc: "O Totalitarismo Global é um conceito, geralmente explorado na ficção distópica, de um regime mundial unificado que exerce controle absoluto sobre todos os indivíduos e nações. Elimina a soberania nacional e impõe uma ideologia única em escala planetária, utilizando tecnologia avançada para vigilância e controle social. Representa a extensão máxima do poder autoritário, onde não há escapatória ou refúgio da autoridade central.",
+    roast: "Seu vilão favorito é o Império Galáctico. Você acha que a única coisa errada com ditaduras é que elas não controlam o mundo inteiro ainda.",
     politicians: [
-      { name: "O Partido (1984 - George Orwell)", link: "" },
-      { name: "Estado Mundial (Admirável Mundo Novo)", link: "" },
+      {
+        name: "H. G. Wells (Escritor/Teórico)",
+        link: "https://pt.wikipedia.org/wiki/H._G._Wells",
+        stats: { econ: 60, dipl: 80, govt: 20, scty: 60 },
+      },
+      {
+        name: "Zbigniew Brzezinski (Teórico)",
+        link: "https://pt.wikipedia.org/wiki/Zbigniew_Brzezinski",
+        stats: { econ: 40, dipl: 70, govt: 30, scty: 50 },
+      },
     ],
     books: [
-      { title: "Admirável Mundo Novo (Aldous Huxley)", link: "" },
-      { title: "(Ensaios sobre globalização e poder supranacional)", link: "" },
+      { title: "Admirável Mundo Novo - Aldous Huxley", link: "" },
+      { title: "1984 - George Orwell", link: "" },
+      { title: "O Estado Mundial - H. G. Wells", link: "" },
     ],
   },
   {
     name: "Tecnocracia",
     stats: { econ: 60, dipl: 60, govt: 20, scty: 70 },
     desc: "A Tecnocracia é um sistema de governo onde os tomadores de decisão são selecionados com base em sua especialização técnica e conhecimento científico, em vez de filiação partidária ou popularidade eleitoral. As políticas são formuladas com base em dados, métodos científicos e eficiência, buscando soluções racionais para os problemas sociais e econômicos. É uma forma de governança elitista, onde o poder reside nos 'especialistas', com o objetivo de otimizar a gestão da sociedade.",
+    roast: "Você acha que política é uma equação de matemática e que as pessoas são apenas variáveis ineficientes. Se pudesse, substituiria o Congresso por uma planilha de Excel.",
     politicians: [
-      { name: "Mario Monti (Itália)", link: "https://pt.wikipedia.org/wiki/Mario_Monti" },
-      { name: "Singapura (Modelo de Governança)", link: "" },
+      {
+        name: "Mario Monti (Itália)",
+        link: "https://pt.wikipedia.org/wiki/Mario_Monti",
+        stats: { econ: 60, dipl: 60, govt: 20, scty: 70 },
+      },
+      {
+        name: "Mario Draghi (Itália/BCE)",
+        link: "https://pt.wikipedia.org/wiki/Mario_Draghi",
+        stats: { econ: 55, dipl: 65, govt: 25, scty: 65 },
+      },
+      {
+        name: "Lee Kuan Yew (Singapura)",
+        link: "https://pt.wikipedia.org/wiki/Lee_Kuan_Yew",
+        stats: { econ: 30, dipl: 50, govt: 15, scty: 40 },
+      },
     ],
     books: [
-      { title: "The Technocrats: Prophets of Automation (Elsner)", link: "" },
-      { title: "(Literatura sobre governança por especialistas)", link: "" },
+      { title: "The Technocrats: Prophets of Automation - Elsner", link: "" },
+      { title: "A Terceira Onda - Alvin Toffler", link: "" },
+      { title: "O Fim da História e o Último Homem - Francis Fukuyama", link: "" },
     ],
   },
   {
@@ -1152,10 +1258,12 @@ export const ideologies: Ideology[] = [
       {
         name: "Emmanuel Macron (França)",
         link: "https://pt.wikipedia.org/wiki/Emmanuel_Macron",
+        stats: { econ: 40, dipl: 60, govt: 50, scty: 60 },
       },
       {
         name: "Tony Blair (Reino Unido)",
         link: "https://pt.wikipedia.org/wiki/Tony_Blair",
+        stats: { econ: 45, dipl: 65, govt: 55, scty: 70 },
       },
     ],
     books: [
@@ -1167,32 +1275,45 @@ export const ideologies: Ideology[] = [
     name: "Liberalismo de Esquerda",
     stats: { econ: 50, dipl: 60, govt: 60, scty: 60 },
     desc: "No contexto contemporâneo, especialmente nos Estados Unidos, o Liberalismo refere-se a uma posição de centro-esquerda. Apoia uma economia de mercado regulada para proteger os consumidores e o meio ambiente, juntamente com uma rede de segurança social financiada por impostos progressivos. Defende fortemente as liberdades civis, os direitos das minorias, a separação entre Igreja e Estado e uma política externa baseada na diplomacia e em alianças internacionais.",
+    roast: "Você é tão mente aberta que seu cérebro caiu. Apoia todas as causas atuais até que elas afetem levemente o valor do seu imóvel.",
     politicians: [
       {
         name: "Barack Obama (EUA)",
         link: "https://pt.wikipedia.org/wiki/Barack_Obama",
+        stats: { econ: 55, dipl: 70, govt: 65, scty: 80 },
       },
       {
         name: "Joe Biden (EUA)",
         link: "https://pt.wikipedia.org/wiki/Joe_Biden",
+        stats: { econ: 50, dipl: 60, govt: 60, scty: 70 },
+      },
+      {
+        name: "Hillary Clinton (EUA)",
+        link: "https://pt.wikipedia.org/wiki/Hillary_Clinton",
+        stats: { econ: 50, dipl: 65, govt: 60, scty: 75 },
       },
     ],
     books: [
-      { title: "Liberalism and its Discontents (Francis Fukuyama)", link: "" },
+      { title: "Liberalism and its Discontents - Francis Fukuyama", link: "" },
+      { title: "A Audácia da Esperança - Barack Obama", link: "" },
+      { title: "Uma Teoria da Justiça - John Rawls", link: "" },
     ],
   },
   {
     name: "Anarquismo Religioso",
     stats: { econ: 50, dipl: 50, govt: 100, scty: 20 },
     desc: "O Anarquismo Religioso, como o anarquismo cristão de Tolstói, rejeita o Estado e outras formas de autoridade coercitiva com base em princípios religiosos. Argumenta que a única autoridade legítima é a de Deus e que o Estado, com sua violência e coerção, usurpa essa autoridade e contradiz os ensinamentos de paz e amor ao próximo. Defende a não-violência, a resistência passiva e a formação de comunidades voluntárias baseadas na fé e na ajuda mútua, sendo socialmente tradicional.",
+    roast: "Você é pacifista demais para o mundo real e religioso demais para os anarquistas. Acha que pode derrotar um tanque de guerra rezando e oferecendo a outra face.",
     politicians: [
       {
-        name: "Liev Tolstói (Escritor/Filósofo)",
+        name: "León Tolstói (Escritor/Filósofo)",
         link: "https://pt.wikipedia.org/wiki/Liev_Tolst%C3%B3i",
+        stats: { econ: 50, dipl: 50, govt: 100, scty: 20 },
       },
       {
         name: "Dorothy Day (Ativista)",
         link: "https://pt.wikipedia.org/wiki/Dorothy_Day",
+        stats: { econ: 80, dipl: 70, govt: 70, scty: 50 },
       },
     ],
     books: [
@@ -1209,18 +1330,32 @@ export const ideologies: Ideology[] = [
       {
         name: "Jair Bolsonaro (BR)",
         link: "https://pt.wikipedia.org/wiki/Jair_Bolsonaro",
+        stats: { econ: 20, dipl: 20, govt: 20, scty: 20 },
       },
       {
         name: "Donald Trump (EUA)",
         link: "https://pt.wikipedia.org/wiki/Donald_Trump",
+        stats: { econ: 30, dipl: 20, govt: 40, scty: 30 },
       },
       {
         name: "Javier Milei (Argentina)",
         link: "https://pt.wikipedia.org/wiki/Javier_Milei",
+        stats: { econ: 5, dipl: 20, govt: 20, scty: 50 },
       },
       {
         name: "Nikolas Ferreira (BR)",
         link: "https://pt.wikipedia.org/wiki/Nikolas_Ferreira",
+        stats: { econ: 15, dipl: 25, govt: 25, scty: 15 },
+      },
+      {
+        name: "Viktor Orbán",
+        link: "https://pt.wikipedia.org/wiki/Viktor_Orb%C3%A1n",
+        stats: { econ: 40, dipl: 10, govt: 20, scty: 20 },
+      },
+      {
+        name: "Olavo de Carvalho (BR)",
+        link: "https://pt.wikipedia.org/wiki/Olavo_de_Carvalho",
+        stats: { econ: 15, dipl: 15, govt: 20, scty: 15 },
       },
     ],
     books: [
@@ -1232,14 +1367,17 @@ export const ideologies: Ideology[] = [
     name: "Conservadorismo Moderado",
     stats: { econ: 40, dipl: 40, govt: 50, scty: 30 },
     desc: "O Conservadorismo Moderado busca preservar as instituições e valores tradicionais através de mudanças graduais e prudentes, em vez de uma resistência reacionária. Apoia a economia de mercado com responsabilidade fiscal, um governo limitado mas eficaz na manutenção da ordem e da segurança, e uma nação forte que se engaja diplomaticamente. Aceita algumas reformas sociais, desde que não ameacem a estabilidade da sociedade. É uma abordagem pragmática que valoriza a experiência histórica sobre teorias abstratas.",
+    roast: "Você tem medo de mudanças bruscas, tipo trocar a marca do chá. Sua maior ambição é manter tudo exatamente como está, só que um pouquinho 'mais eficiente'.",
     politicians: [
       {
         name: "David Cameron (Reino Unido)",
         link: "https://pt.wikipedia.org/wiki/David_Cameron",
+        stats: { econ: 40, dipl: 40, govt: 50, scty: 30 },
       },
       {
         name: "Mitt Romney (EUA)",
         link: "https://pt.wikipedia.org/wiki/Mitt_Romney",
+        stats: { econ: 35, dipl: 45, govt: 55, scty: 35 },
       },
     ],
     books: [{ title: "O Conservadorismo (Michael Oakeshott)", link: "" }],
@@ -1253,6 +1391,7 @@ export const ideologies: Ideology[] = [
       {
         name: "Joseph de Maistre (Filósofo)",
         link: "https://pt.wikipedia.org/wiki/Joseph_de_Maistre",
+        stats: { econ: 40, dipl: 40, govt: 40, scty: 10 },
       },
     ],
     books: [
@@ -1264,10 +1403,12 @@ export const ideologies: Ideology[] = [
     name: "Libertarianismo Social",
     stats: { econ: 60, dipl: 70, govt: 80, scty: 70 },
     desc: "O Libertarianismo Social, por vezes chamado de Geolibertarianismo, combina um forte compromisso com a liberdade individual e o ceticismo em relação ao Estado com uma preocupação com a justiça social. Defende que a terra e os recursos naturais são propriedade comum da humanidade e que, embora os indivíduos possam ter o uso exclusivo, devem compensar a sociedade por isso através de um 'imposto único sobre o valor da terra'. A receita desse imposto poderia financiar serviços públicos ou uma renda básica, eliminando outros impostos.",
+    roast: "Você ama o livre mercado mas odeia quem tem terreno. Sua solução mágica para a economia é taxar a terra e esperar que o resto se resolva sozinho.",
     politicians: [
       {
         name: "Henry George (Economista)",
         link: "https://pt.wikipedia.org/wiki/Henry_George",
+        stats: { econ: 60, dipl: 65, govt: 80, scty: 75 },
       },
     ],
     books: [{ title: "Progresso e Pobreza", link: "" }],
@@ -1281,10 +1422,12 @@ export const ideologies: Ideology[] = [
       {
         name: "Ron Paul (EUA)",
         link: "https://pt.wikipedia.org/wiki/Ron_Paul",
+        stats: { econ: 35, dipl: 65, govt: 85, scty: 65 },
       },
       {
         name: "Jo Jorgensen (EUA)",
         link: "https://pt.wikipedia.org/wiki/Jo_Jorgensen",
+        stats: { econ: 35, dipl: 65, govt: 85, scty: 70 },
       },
     ],
     books: [
@@ -1294,34 +1437,25 @@ export const ideologies: Ideology[] = [
     ],
   },
   {
-    name: "Anarco-Egoísmo",
-    stats: { econ: 40, dipl: 50, govt: 100, scty: 50 },
-    desc: "O Anarco-Egoísmo é uma forma radical de anarquismo individualista, baseada na filosofia de Max Stirner. Rejeita todas as abstrações e 'fantasmas' que limitam o indivíduo, como o Estado, a moralidade, a religião, a propriedade e até mesmo a 'humanidade'. O egoísta reconhece apenas a si mesmo e sua própria vontade como supremos. A sociedade seria uma 'União de Egoístas', uma associação voluntária e não sistemática que os indivíduos formam para seu próprio benefício e podem abandonar a qualquer momento.",
-    politicians: [
-      {
-        name: "Max Stirner (Filósofo)",
-        link: "https://pt.wikipedia.org/wiki/Max_Stirner",
-      },
-    ],
-    books: [{ title: "O Único e a Sua Propriedade", link: "" }],
-  },
-  {
     name: "Nazismo",
     stats: { econ: 40, dipl: 0, govt: 0, scty: 5 },
     desc: "O Nazismo (Nacional-Socialismo) foi a ideologia totalitária do regime de Adolf Hitler na Alemanha. Baseava-se em um ultranacionalismo racial extremo, a crença na superioridade da 'raça ariana', um antissemitismo virulento que culminou no Holocausto, e um forte expansionismo militar (Lebensraum). Rejeitava a democracia, o liberalismo e o comunismo, promovendo o culto ao líder (Führerprinzip), a eugenia e um estado de partido único com controle absoluto sobre a sociedade. A economia era corporativista, subserviente aos objetivos de guerra do Estado.",
+    roast: "Seu lugar não é na política, é numa cela ou num hospício. Você consegue estar errado em todas as dimensões morais possíveis simultaneamente.",
     politicians: [
       {
         name: "Adolf Hitler (Alemanha)",
         link: "https://pt.wikipedia.org/wiki/Adolf_Hitler",
+        stats: { econ: 40, dipl: 0, govt: 0, scty: 5 },
       },
     ],
     books: [
-      { title: "Minha Luta (Mein Kampf)", link: "" },
-      { title: "Mito do Século XX (Alfred Rosenberg)", link: "" },
+      { title: "Minha Luta (Adolf Hitler)", link: "https://archive.org/details/meinkampf_minha_luta" },
+      { title: "Os diários de Alfred Rosenberg", link: "https://amzn.to/4az5kDS" },
+      { title: "Hitler (Joachim Fest)", link: "https://www.amazon.com.br/Box-Hitler-Joachim-Fest-ebook/dp/B072863DP1?_encoding=UTF8&dib_tag=se&dib=eyJ2IjoiMSJ9.oE9QqywuLP_ENk0c5YZDiH1WNFQlkg_7x7XWfbMM_vBd92UJxkdG77XtEbr1yxQmWhyolm6OUgeCIHetPFjLtRlPg2C_9RVP1tLNwEHxQJyEm9L9z73maWJggooEbC40c9AbXu23u2Q-W-URA5rnOE3z7LyVd4I6unxkkz9uXrrAePkK9ZtbqemYQzvO7Fs7SK30M15jWZzbT2nPy4ZrjI0VeWPiTcn5IvCXgpdCZ1MK8_vY6PrJU6isjhWipHOaM60f2jxppLE-K7AKOsax2Qw0q20uKD6SHXnvs8l528k.DY_mxTCdvFduqY9v0Ug8zJyR_BNieixEniRspB9Cf4A&qid=1771446526&sr=8-7" },
       {
         title:
-          "('Ascensão e Queda do Terceiro Reich' de Shirer é essencial para entender)",
-        link: "",
+          "Ascensão e Queda do Terceiro Reich (Walter Shirer)",
+        link: "https://amzn.to/46gNvIq",
       },
     ],
   },
@@ -1329,19 +1463,27 @@ export const ideologies: Ideology[] = [
     name: "Autocracia",
     stats: { econ: 50, dipl: 20, govt: 20, scty: 50 },
     desc: "A Autocracia é um sistema de governo onde o poder supremo está concentrado nas mãos de uma única pessoa, cujas decisões não estão sujeitas a restrições legais externas nem a mecanismos de controle popular. O autocrata governa sem o consentimento dos governados. A orientação econômica, social e diplomática pode variar enormemente dependendo dos caprichos e objetivos do líder, mas a característica definidora é a ausência de freios e contrapesos e a supressão da dissidência política.",
+    roast: "Você só quer um rei para chamar de seu. Tem fetiche por coroas e tronos e acha que 'direitos humanos' atrapalham a estética do palácio.",
     politicians: [
       {
         name: "Rei Luís XIV (França - Absolutismo)",
         link: "https://pt.wikipedia.org/wiki/Lu%C3%ADs_XIV_de_Fran%C3%A7a",
+        stats: { econ: 55, dipl: 25, govt: 25, scty: 55 },
       },
       {
-        name: "Monarquia Saudita (Atual)",
-        link: "https://pt.wikipedia.org/wiki/Ar%C3%A1bia_Saudita",
+        name: "Mohammed bin Salman (Arábia Saudita)",
+        link: "https://pt.wikipedia.org/wiki/Mohammed_bin_Salman",
+        stats: { econ: 25, dipl: 15, govt: 5, scty: 10 },
+      },
+      {
+        name: "Alexandre, o Grande (Macedônia)",
+        link: "https://pt.wikipedia.org/wiki/Alexandre,_o_Grande",
+        stats: { econ: 50, dipl: 30, govt: 15, scty: 50 },
       },
     ],
     books: [
-      { title: "O Príncipe (Maquiavel)", link: "" },
-      { title: "(Biografias de autocratas específicos)", link: "" },
+      { title: "O Príncipe - Maquiavel", link: "" },
+      { title: "O Leviatã - Thomas Hobbes", link: "" },
     ],
   },
   {
@@ -1353,41 +1495,24 @@ export const ideologies: Ideology[] = [
       {
         name: "Benito Mussolini (Itália)",
         link: "https://pt.wikipedia.org/wiki/Benito_Mussolini",
-      },
-      {
-        name: "Plínio Salgado (Integralismo BR)",
-        link: "https://pt.wikipedia.org/wiki/Pl%C3%ADnio_Salgado",
+        stats: { econ: 40, dipl: 20, govt: 20, scty: 20 },
       },
       {
         name: "António de Oliveira Salazar (Estado Novo - PT)",
         link: "https://pt.wikipedia.org/wiki/Ant%C3%B3nio_de_Oliveira_Salazar",
+        stats: { econ: 35, dipl: 15, govt: 15, scty: 10 },
       },
       {
         name: "Francisco Franco (Franquismo - ES)",
         link: "https://pt.wikipedia.org/wiki/Francisco_Franco",
+        stats: { econ: 30, dipl: 10, govt: 10, scty: 5 },
       },
     ],
     books: [
-      { title: "A Doutrina do Fascismo", link: "" },
-      { title: "As Origens do Totalitarismo (Arendt)", link: "" },
-      { title: "Anatomia do Fascismo (Robert Paxton)", link: "" },
+      { title: "A Doutrina do Fascismo - Benito Mussolini", link: "" },
+      { title: "As Origens do Totalitarismo - Hannah Arendt", link: "" },
+      { title: "Anatomia do Fascismo - Robert Paxton", link: "" },
     ],
-  },
-  {
-    name: "Fascismo Capitalista",
-    stats: { econ: 20, dipl: 20, govt: 20, scty: 20 },
-    desc: "O Fascismo Capitalista é um termo que descreve regimes fascistas que, apesar de seu controle estatal e corporativismo, preservam a propriedade privada e se aliam fortemente aos interesses das grandes corporações e da elite capitalista. Nesse modelo, o Estado autoritário garante a ordem, suprime sindicatos e movimentos de esquerda, e dirige a economia em colaboração com os capitalistas para fortalecer a nação e seus objetivos militares, mantendo a estrutura de classes e o lucro privado.",
-    politicians: [
-      {
-        name: "Augusto Pinochet (Chile)",
-        link: "https://pt.wikipedia.org/wiki/Augusto_Pinochet",
-      },
-      {
-        name: "Regime Militar Brasileiro (1964-1985)",
-        link: "https://pt.wikipedia.org/wiki/Ditadura_militar_brasileira",
-      },
-    ],
-    books: [{ title: "A Doutrina do Choque - Naomi Klein", link: "" }],
   },
   {
     name: "Conservadorismo",
@@ -1398,29 +1523,40 @@ export const ideologies: Ideology[] = [
       {
         name: "Edmund Burke (Filósofo)",
         link: "https://pt.wikipedia.org/wiki/Edmund_Burke",
+        stats: { econ: 40, dipl: 30, govt: 50, scty: 30 },
+      },
+      {
+        name: "Russell Kirk (EUA)",
+        link: "https://pt.wikipedia.org/wiki/Russell_Kirk",
+        stats: { econ: 35, dipl: 35, govt: 45, scty: 20 },
       },
       {
         name: "Gilberto Freyre (BR)",
         link: "https://pt.wikipedia.org/wiki/Gilberto_Freyre",
+        stats: { econ: 30, dipl: 40, govt: 40, scty: 20 },
       },
       {
         name: "Roger Scruton",
         link: "https://pt.wikipedia.org/wiki/Roger_Scruton",
+        stats: { econ: 25, dipl: 35, govt: 45, scty: 15 },
       },
       {
         name: "Winston Churchill",
         link: "https://pt.wikipedia.org/wiki/Winston_Churchill",
+        stats: { econ: 35, dipl: 20, govt: 40, scty: 35 },
       },
       {
         name: "G. K. Chesterton",
         link: "https://pt.wikipedia.org/wiki/G._K._Chesterton",
+        stats: { econ: 55, dipl: 45, govt: 50, scty: 20 },
       },
     ],
     books: [
-      { title: "O Mínimo que Você Precisa Saber - Olavo de Carvalho", link: "" },
+      { title: "Reflexões sobre a Revolução em França - Edmund Burke", link: "" },
+      { title: "A Mente Conservadora - Russell Kirk", link: "" },
+      { title: "Como Ser um Conservador - Roger Scruton", link: "" },
       { title: "Beleza - Roger Scruton", link: "" },
-      { title: "Ortodoxia - G. K. Chesterton", link: "" },
-      { title: "Compêndio da Doutrina Social da Igreja", link: "" },
+      { title: "O Mínimo que Você Precisa Saber - Olavo de Carvalho", link: "" },
     ],
   },
   {
@@ -1432,18 +1568,22 @@ export const ideologies: Ideology[] = [
       {
         name: "Roberto Campos (BR)",
         link: "https://pt.wikipedia.org/wiki/Roberto_Campos",
+        stats: { econ: 20, dipl: 60, govt: 70, scty: 60 },
       },
       {
         name: "Paulo Guedes (BR)",
         link: "https://pt.wikipedia.org/wiki/Paulo_Guedes",
+        stats: { econ: 20, dipl: 55, govt: 70, scty: 65 },
       },
       {
         name: "Margaret Thatcher (Reino Unido)",
         link: "https://pt.wikipedia.org/wiki/Margaret_Thatcher",
+        stats: { econ: 30, dipl: 40, govt: 50, scty: 40 },
       },
       {
         name: "Ronald Reagan (EUA)",
         link: "https://pt.wikipedia.org/wiki/Ronald_Reagan",
+        stats: { econ: 25, dipl: 45, govt: 55, scty: 35 },
       },
     ],
     books: [
@@ -1456,28 +1596,39 @@ export const ideologies: Ideology[] = [
     name: "Liberalismo Clássico",
     stats: { econ: 30, dipl: 60, govt: 60, scty: 80 },
     desc: "O Liberalismo Clássico é a ideologia que floresceu nos séculos XVIII e XIX, baseada nas ideias de filósofos como John Locke e economistas como Adam Smith. Enfatiza a liberdade individual, os direitos naturais (vida, liberdade e propriedade), o governo limitado e constitucional (Estado de Direito), e o livre mercado (laissez-faire). Acredita que a sociedade prospera quando os indivíduos são livres para perseguir seus próprios interesses com mínima interferência do Estado.",
+    roast: "Você acredita que o mercado livre resolve tudo e que o governo é o problema, mas vive em uma cidade com calçadas públicas. Cita Adam Smith em festas e acha que o século XIX foi o auge da civilização.",
     politicians: [
       {
         name: "Rui Barbosa (BR)",
         link: "https://pt.wikipedia.org/wiki/Rui_Barbosa",
+        stats: { econ: 30, dipl: 60, govt: 60, scty: 80 },
       },
       {
         name: "Joaquim Nabuco (BR)",
         link: "https://pt.wikipedia.org/wiki/Joaquim_Nabuco",
+        stats: { econ: 40, dipl: 70, govt: 70, scty: 90 },
       },
       {
         name: "John Locke (Filósofo)",
         link: "https://pt.wikipedia.org/wiki/John_Locke",
+        stats: { econ: 30, dipl: 60, govt: 60, scty: 80 },
       },
       {
         name: "Adam Smith (Economista)",
         link: "https://pt.wikipedia.org/wiki/Adam_Smith",
+        stats: { econ: 20, dipl: 50, govt: 70, scty: 70 },
+      },
+      {
+        name: "John Stuart Mill (Filósofo)",
+        link: "https://pt.wikipedia.org/wiki/John_Stuart_Mill",
+        stats: { econ: 35, dipl: 65, govt: 70, scty: 85 },
       },
     ],
     books: [
       { title: "O Abolicionismo - Joaquim Nabuco", link: "" },
       { title: "A Riqueza das Nações - Adam Smith", link: "" },
       { title: "Cartas de Inglaterra - Rui Barbosa", link: "" },
+      { title: "Sobre a Liberdade - John Stuart Mill", link: "" },
     ],
   },
   {
@@ -1488,10 +1639,12 @@ export const ideologies: Ideology[] = [
       {
         name: "Lee Kuan Yew (Singapura)",
         link: "https://pt.wikipedia.org/wiki/Lee_Kuan_Yew",
+        stats: { econ: 15, dipl: 35, govt: 15, scty: 35 },
       },
       {
         name: "Augusto Pinochet (Chile)",
         link: "https://pt.wikipedia.org/wiki/Augusto_Pinochet",
+        stats: { econ: 20, dipl: 20, govt: 20, scty: 20 },
       },
     ],
     books: [
@@ -1510,52 +1663,79 @@ export const ideologies: Ideology[] = [
       {
         name: "Deng Xiaoping (China)",
         link: "https://pt.wikipedia.org/wiki/Deng_Xiaoping",
+        stats: { econ: 15, dipl: 55, govt: 25, scty: 45 },
       },
       {
         name: "Park Chung-hee (Coreia do Sul)",
         link: "https://pt.wikipedia.org/wiki/Park_Chung-hee",
+        stats: { econ: 25, dipl: 40, govt: 25, scty: 45 },
       },
     ],
-    books: [{ title: "(Análises sobre economias dirigistas)", link: "" }],
+    books: [
+      { title: "O Capitalismo de Estado Chinês - Nicholas Lardy", link: "" },
+      { title: "Como a China Escapa da Armadilha - Yuen Yuen Ang", link: "" },
+      { title: "O Milagre Asiático - Joe Studwell", link: "" },
+    ],
   },
   {
     name: "Neoconservadorismo",
     stats: { econ: 20, dipl: 20, govt: 40, scty: 20 },
-    desc: "O Neoconservadorismo é uma vertente do conservadorismo que se distingue por uma política externa assertiva, intervencionista e moralista. Defende a promoção da democracia e dos interesses nacionais no exterior, se necessário através do uso da força militar ('paz pela força'). Acreditam que os Estados Unidos, como única superpotência, têm a responsabilidade de liderar o mundo e confrontar regimes hostis. Domesticamente, são geralmente conservadores em questões econômicas e sociais.",
+    desc: "O Neoconservadorismo é uma vertente do conservadorismo que se distingue por uma política externa assertiva, intervencionista e moralista. Defende a promoção da democracia e dos interesses nacionais no exterior, se necessário através do uso da força militar ('paz pela força'). Acreditam que os Estados Unidos, como única superpotência, têm a responsabilidade de liderar o mundo e confrontar regimes hostís. Domesticamente, são geralmente conservadores em questões econômicas e sociais.",
+    roast: "Você acha que a solução para todo problema internacional é bombardear e depois perguntar. Chama qualquer país que não tem McDonald's de 'ameaça à democracia'.",
     politicians: [
       {
         name: "George W. Bush (EUA)",
         link: "https://pt.wikipedia.org/wiki/George_W._Bush",
+        stats: { econ: 25, dipl: 15, govt: 35, scty: 25 },
       },
       {
         name: "Dick Cheney (EUA)",
         link: "https://pt.wikipedia.org/wiki/Dick_Cheney",
+        stats: { econ: 15, dipl: 15, govt: 35, scty: 15 },
       },
       {
         name: "Paul Wolfowitz (EUA)",
         link: "https://pt.wikipedia.org/wiki/Paul_Wolfowitz",
+        stats: { econ: 25, dipl: 25, govt: 45, scty: 25 },
+      },
+      {
+        name: "Irving Kristol (Teórico)",
+        link: "https://pt.wikipedia.org/wiki/Irving_Kristol",
+        stats: { econ: 25, dipl: 20, govt: 45, scty: 25 },
       },
     ],
     books: [
-      {
-        title: "(Artigos de publicações como 'The Weekly Standard')",
-        link: "",
-      },
-      { title: "(Análises sobre a Guerra do Iraque)", link: "" },
+      { title: "O Fim da História e o Último Homem - Francis Fukuyama", link: "" },
+      { title: "O Caso para a Democracia - Natan Sharansky", link: "" },
+      { title: "Of Paradise and Power - Robert Kagan", link: "" },
+      { title: "Reflexos de uma Era de Ouro - Charles Krauthammer", link: "" },
     ],
   },
   {
     name: "Fundamentalismo",
     stats: { econ: 20, dipl: 30, govt: 30, scty: 5 },
     desc: "O Fundamentalismo é uma postura que defende a adesão estrita e literal a um conjunto de crenças e princípios, geralmente de natureza religiosa. Rejeita interpretações modernas ou seculares e busca impor seus preceitos na sociedade, muitas vezes através da lei e do poder do Estado (teocracia). É caracterizado pela intolerância a visões de mundo diferentes e por uma visão reacionária da sociedade, buscando restaurar uma pureza original percebida na fé e nos costumes.",
+    roast: "Você acha que o maior problema do mundo é que as pessoas não estão seguindo o livro certo da maneira certa. Sua solução para tudo é mais fé e menos perguntas.",
     politicians: [
       {
         name: "Ruhollah Khomeini (Irã)",
         link: "https://pt.wikipedia.org/wiki/Ruhollah_Khomeini",
+        stats: { econ: 25, dipl: 25, govt: 25, scty: 0 },
+      },
+      {
+        name: "Osama bin Laden (Al-Qaeda)",
+        link: "https://pt.wikipedia.org/wiki/Osama_bin_Laden",
+        stats: { econ: 30, dipl: 5, govt: 5, scty: 0 },
+      },
+      {
+        name: "Abu Bakr al-Baghdadi (ISIS)",
+        link: "https://pt.wikipedia.org/wiki/Abu_Bakr_al-Baghdadi",
+        stats: { econ: 40, dipl: 0, govt: 0, scty: 0 },
       },
     ],
     books: [
-      { title: "As Batalhas de Deus (Gilles Kepel - análise)", link: "" },
+      { title: "As Batalhas de Deus - Gilles Kepel (análise)", link: "" },
+      { title: "O Choque de Civilizações - Samuel Huntington", link: "" },
     ],
   },
   {
@@ -1566,6 +1746,7 @@ export const ideologies: Ideology[] = [
       {
         name: "Robert Nozick (Filósofo)",
         link: "https://pt.wikipedia.org/wiki/Robert_Nozick",
+        stats: { econ: 15, dipl: 55, govt: 85, scty: 65 },
       },
     ],
     books: [
@@ -1581,10 +1762,12 @@ export const ideologies: Ideology[] = [
       {
         name: "Samuel Edward Konkin III (Agorismo)",
         link: "https://en.wikipedia.org/wiki/Samuel_Edward_Konkin_III",
+        stats: { econ: 15, dipl: 55, govt: 100, scty: 55 },
       },
       {
         name: "Kevin Carson (Mutualista)",
         link: "https://en.wikipedia.org/wiki/Kevin_Carson",
+        stats: { econ: 30, dipl: 60, govt: 90, scty: 60 },
       },
     ],
     books: [
@@ -1600,6 +1783,7 @@ export const ideologies: Ideology[] = [
       {
         name: "Ayn Rand (Filósofa/Escritora)",
         link: "https://pt.wikipedia.org/wiki/Ayn_Rand",
+        stats: { econ: 5, dipl: 55, govt: 95, scty: 35 },
       },
     ],
     books: [
@@ -1612,22 +1796,22 @@ export const ideologies: Ideology[] = [
     name: "Capitalismo Totalitário",
     stats: { econ: 0, dipl: 30, govt: 0, scty: 50 },
     desc: "O Capitalismo Totalitário é um sistema hipotético que une um controle estatal totalitário sobre a vida dos indivíduos com uma economia de livre mercado desregulada. Nesse cenário distópico, o Estado usa seu poder absoluto não para controlar a economia, mas para suprimir qualquer resistência ao capital, garantindo uma ordem social onde as corporações têm liberdade máxima e os cidadãos, mínima. É a fusão do autoritarismo político extremo com o liberalismo econômico extremo.",
+    roast: "Você quer um Estado que bata nos trabalhadores e desregule as empresas ao mesmo tempo. Seu herói é um CEO com um exército particular.",
     politicians: [
-      {
-        name: "Augusto Pinochet (Chile)",
-        link: "https://pt.wikipedia.org/wiki/Augusto_Pinochet",
-      },
       {
         name: "Jorge Rafael Videla (Argentina)",
         link: "https://pt.wikipedia.org/wiki/Jorge_Rafael_Videla",
+        stats: { econ: 10, dipl: 10, govt: 0, scty: 30 },
+      },
+      {
+        name: "Efraín Ríos Montt (Guatemala)",
+        link: "https://pt.wikipedia.org/wiki/Efra%C3%ADn_R%C3%ADos_Montt",
+        stats: { econ: 15, dipl: 15, govt: 5, scty: 25 },
       },
     ],
     books: [
-      {
-        title:
-          "(Análises sobre a compatibilidade de totalitarismo e capitalismo)",
-        link: "",
-      },
+      { title: "A Doutrina do Choque - Naomi Klein", link: "" },
+      { title: "Capitalismo e Liberdade - Milton Friedman (crítica)", link: "" },
     ],
   },
 
@@ -1640,14 +1824,17 @@ export const ideologies: Ideology[] = [
       {
         name: "Murray Rothbard (Teórico)",
         link: "https://pt.wikipedia.org/wiki/Murray_Rothbard",
+        stats: { econ: 0, dipl: 50, govt: 100, scty: 50 },
       },
       {
         name: "David Friedman (Teórico)",
         link: "https://pt.wikipedia.org/wiki/David_D._Friedman",
+        stats: { econ: 5, dipl: 55, govt: 95, scty: 55 },
       },
       {
         name: "Hans-Hermann Hoppe (Teórico)",
         link: "https://pt.wikipedia.org/wiki/Hans-Hermann_Hoppe",
+        stats: { econ: 0, dipl: 30, govt: 100, scty: 40 },
       },
     ],
     books: [
@@ -1665,18 +1852,22 @@ export const ideologies: Ideology[] = [
       {
         name: "Abraham Kuyper",
         link: "https://pt.wikipedia.org/wiki/Abraham_Kuyper",
+        stats: { econ: 50, dipl: 45, govt: 65, scty: 15 },
       },
       {
         name: "Guillaume Groen van Prinsterer",
         link: "https://pt.wikipedia.org/wiki/Guillaume_Groen_van_Prinsterer",
+        stats: { econ: 45, dipl: 45, govt: 65, scty: 15 },
       },
       {
         name: "Herman Dooyeweerd",
         link: "https://pt.wikipedia.org/wiki/Herman_Dooyeweerd",
+        stats: { econ: 55, dipl: 55, govt: 75, scty: 25 },
       },
       {
         name: "André Biéler",
         link: "https://pt.wikipedia.org/wiki/Andr%C3%A9_Bi%C3%A9ler",
+        stats: { econ: 60, dipl: 60, govt: 80, scty: 30 },
       },
     ],
     books: [
@@ -1695,18 +1886,22 @@ export const ideologies: Ideology[] = [
       {
         name: "Roberto Campos",
         link: "https://pt.wikipedia.org/wiki/Roberto_Campos",
+        stats: { econ: 20, dipl: 60, govt: 70, scty: 70 },
       },
       {
         name: "Paulo Guedes",
         link: "https://pt.wikipedia.org/wiki/Paulo_Guedes",
+        stats: { econ: 20, dipl: 55, govt: 70, scty: 70 },
       },
       {
         name: "Kim Kataguiri (MBL)",
         link: "https://pt.wikipedia.org/wiki/Kim_Kataguiri",
+        stats: { econ: 25, dipl: 50, govt: 75, scty: 75 },
       },
       {
         name: "Friedrich Hayek",
         link: "https://pt.wikipedia.org/wiki/Friedrich_Hayek",
+        stats: { econ: 15, dipl: 60, govt: 80, scty: 80 },
       },
     ],
     books: [
@@ -1714,6 +1909,130 @@ export const ideologies: Ideology[] = [
       { title: "O Caminho da Servidão - Friedrich Hayek", link: "" },
       { title: "As Seis Lições - Ludwig von Mises", link: "" },
       { title: "Livre para Escolher - Milton Friedman", link: "" },
+    ],
+  },
+  {
+    name: "Integralismo Brasileiro",
+    stats: { econ: 50, dipl: 10, govt: 10, scty: 5 },
+    desc: "O Integralismo foi o principal movimento fascista brasileiro, fundado por Plínio Salgado na década de 1930. Diferente do fascismo europeu, incorporou forte ênfase no catolicismo, no espiritualismo e na identidade nacional brasileira, com o lema 'Deus, Pátria e Família'. Defendia um Estado corporativista e autoritário, anticomunista e antiliberal, que unisse as classes sociais sob a liderança nacional. Adotava a camisa verde e o sigma (Σ) como símbolo, e chegou a ter centenas de milhares de membros antes de ser proibido por Vargas em 1937.",
+    roast: "Você usa camisa verde e acha que o Brasil seria perfeito se fosse governado por um intelectual católico de mão de ferro. Sua solução para a luta de classes é fazer todo mundo rezar junto e obedecer ao líder.",
+    politicians: [
+      {
+        name: "Plínio Salgado (BR)",
+        link: "https://pt.wikipedia.org/wiki/Pl%C3%ADnio_Salgado",
+        stats: { econ: 50, dipl: 10, govt: 10, scty: 5 },
+      },
+      {
+        name: "Gustavo Barroso (BR)",
+        link: "https://pt.wikipedia.org/wiki/Gustavo_Barroso",
+        stats: { econ: 45, dipl: 5, govt: 10, scty: 5 },
+      },
+      {
+        name: "Miguel Reale (BR - fase integralista)",
+        link: "https://pt.wikipedia.org/wiki/Miguel_Reale",
+        stats: { econ: 55, dipl: 15, govt: 15, scty: 10 },
+      },
+    ],
+    books: [
+      { title: "O que é o Integralismo - Plínio Salgado", link: "" },
+      { title: "A Doutrina do Sigma - Plínio Salgado", link: "" },
+      { title: "Brasil, Colônia de Banqueiros - Gustavo Barroso", link: "" },
+    ],
+  },
+  {
+    name: "Conservadorismo Liberal",
+    stats: { econ: 20, dipl: 50, govt: 65, scty: 35 },
+    desc: "O Conservadorismo Liberal, ou Liberalconservadorismo, combina o compromisso com a liberdade econômica e o livre mercado com a valorização das instituições, tradições e valores morais estabelecidos. Defende privatizações, responsabilidade fiscal e desregulamentação, mas dentro de um quadro de respeito à ordem constitucional, à família e à cultura nacional. No Brasil, representa correntes como o Partido Novo e setores do MBL, que rejeitam tanto o estatismo da esquerda quanto o autoritarismo da direita radical.",
+    roast: "Você quer um Estado mínimo, mas só para a economia. Para os costumes, quer um Estado bem presente na sua cama. Acha que liberdade é poder demitir funcionários sem aviso, mas não poder casar com quem quiser.",
+    politicians: [
+      {
+        name: "João Amoêdo (BR)",
+        link: "https://pt.wikipedia.org/wiki/Jo%C3%A3o_Amoêdo",
+        stats: { econ: 20, dipl: 50, govt: 65, scty: 35 },
+      },
+      {
+        name: "Luís Felipe d'Avila (BR)",
+        link: "https://pt.wikipedia.org/wiki/Lu%C3%ADs_Felipe_d%27Avila",
+        stats: { econ: 15, dipl: 55, govt: 70, scty: 40 },
+      },
+      {
+        name: "Gustavo Franco (BR)",
+        link: "https://pt.wikipedia.org/wiki/Gustavo_Franco",
+        stats: { econ: 20, dipl: 60, govt: 70, scty: 50 },
+      },
+    ],
+    books: [
+      { title: "O Caminho da Servidão - Friedrich Hayek", link: "" },
+      { title: "Capitalismo e Liberdade - Milton Friedman", link: "" },
+      { title: "A Mente Conservadora - Russell Kirk", link: "" },
+    ],
+  },
+  {
+    name: "Ecossocialismo",
+    stats: { econ: 80, dipl: 70, govt: 50, scty: 80 },
+    desc: "O Ecossocialismo parte da crítica marxista ao capitalismo e a aprofunda: a destruição ambiental não é um acidente do sistema, é sua lógica central. A acumulação infinita de capital é incompatível com um planeta finito. Defendemos a socialização dos meios de produção e a planificação democrática da economia orientada para as necessidades humanas e os limites ecológicos, não para o lucro. A transição energética, a agroecologia e a soberania alimentar são bandeiras centrais. Não há socialismo em um planeta morto.",
+    roast: "Você quer fazer a revolução, mas só se for carbono neutro. Sua maior angústia é decidir se o coletivo de bicicletas é suficientemente anticapitalista ou apenas uma startup de mobilidade urbana.",
+    politicians: [
+      {
+        name: "Chico Mendes (BR)",
+        link: "https://pt.wikipedia.org/wiki/Chico_Mendes",
+        stats: { econ: 85, dipl: 60, govt: 55, scty: 75 },
+      },
+      {
+        name: "Joel Kovel (EUA)",
+        link: "https://pt.wikipedia.org/wiki/Joel_Kovel",
+        stats: { econ: 80, dipl: 70, govt: 50, scty: 80 },
+      },
+      {
+        name: "Michael Löwy (BR/França)",
+        link: "https://pt.wikipedia.org/wiki/Michael_L%C3%B6wy",
+        stats: { econ: 85, dipl: 75, govt: 55, scty: 85 },
+      },
+      {
+        name: "Vandana Shiva (Índia)",
+        link: "https://pt.wikipedia.org/wiki/Vandana_Shiva",
+        stats: { econ: 75, dipl: 80, govt: 60, scty: 90 },
+      },
+    ],
+    books: [
+      { title: "Ecossocialismo - Michael Löwy", link: "" },
+      { title: "O Capitalismo e a Destruição do Mundo - Joel Kovel", link: "" },
+      { title: "Monocultures of the Mind - Vandana Shiva", link: "" },
+      { title: "Chico Mendes: Crime e Castigo - Zuenir Ventura", link: "" },
+    ],
+  },
+  {
+    name: "Feminismo Liberal",
+    stats: { econ: 45, dipl: 70, govt: 65, scty: 100 },
+    desc: "O Feminismo Liberal busca a igualdade plena entre homens e mulheres dentro das estruturas políticas e econômicas existentes. Luta pela igualdade de direitos civis e políticos, pelo fim da discriminação de gênero no mercado de trabalho, pela representação feminina nas instituições e pela autonomia sobre o próprio corpo. Não questiona o capitalismo em si, mas exige que ele funcione sem discriminação de gênero. Acredita que a mudança vem pela legislação, pela educação e pela participação política.",
+    roast: "Você acha que o feminismo venceu quando uma mulher se torna CEO de uma empresa que paga mal as funcionárias. Sua revolução é ter 50% de mulheres no conselho de administração do banco que financia o agronegócio.",
+    politicians: [
+      {
+        name: "Mary Wollstonecraft (Reino Unido)",
+        link: "https://pt.wikipedia.org/wiki/Mary_Wollstonecraft",
+        stats: { econ: 50, dipl: 70, govt: 70, scty: 100 },
+      },
+      {
+        name: "Betty Friedan (EUA)",
+        link: "https://pt.wikipedia.org/wiki/Betty_Friedan",
+        stats: { econ: 45, dipl: 65, govt: 65, scty: 100 },
+      },
+      {
+        name: "Gloria Steinem (EUA)",
+        link: "https://pt.wikipedia.org/wiki/Gloria_Steinem",
+        stats: { econ: 50, dipl: 75, govt: 70, scty: 100 },
+      },
+      {
+        name: "Simone de Beauvoir (França)",
+        link: "https://pt.wikipedia.org/wiki/Simone_de_Beauvoir",
+        stats: { econ: 60, dipl: 80, govt: 75, scty: 100 },
+      },
+    ],
+    books: [
+      { title: "A Vindication of the Rights of Woman - Mary Wollstonecraft", link: "" },
+      { title: "A Mística Feminina - Betty Friedan", link: "" },
+      { title: "O Segundo Sexo - Simone de Beauvoir", link: "" },
+      { title: "Revolução por Dentro - Gloria Steinem", link: "" },
     ],
   },
 ];

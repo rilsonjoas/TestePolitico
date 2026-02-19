@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "./Toast";
 import { Swords } from "lucide-react";
+import { shareEvents } from "@/lib/analytics";
 
 type SocialFormat = 'instagram' | 'twitter' | 'square';
 
@@ -32,6 +33,7 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
 
   const [canShare, setCanShare] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [copiedText, setCopiedText] = useState(false);
   const [copiedCompareLink, setCopiedCompareLink] = useState(false);
 
   useEffect(() => {
@@ -63,6 +65,7 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
           text: shareText,
           url: shareUrl,
         });
+        shareEvents.share('native', matchedIdeology?.name || 'unknown');
         showToast("Compartilhado com sucesso!", "success");
       } catch (err) {
         if ((err as Error).name !== 'AbortError') {
@@ -74,10 +77,12 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
 
   const handleShareTwitter = () => {
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+    shareEvents.share('twitter', matchedIdeology?.name || 'unknown');
     window.open(twitterUrl, '_blank', 'width=600,height=400');
   };
 
   const handleShareWhatsApp = () => {
+    shareEvents.share('whatsapp', matchedIdeology?.name || 'unknown');
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`;
     window.open(whatsappUrl, '_blank');
   };
@@ -90,6 +95,17 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
       setTimeout(() => setCopiedLink(false), 2000);
     } catch {
       showToast("Erro ao copiar link", "error");
+    }
+  };
+
+  const handleCopyResultText = async () => {
+    try {
+      await navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
+      setCopiedText(true);
+      showToast("Texto e link copiados!", "success");
+      setTimeout(() => setCopiedText(false), 2000);
+    } catch {
+      showToast("Erro ao copiar texto", "error");
     }
   };
 
@@ -442,6 +458,7 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    shareEvents.download(selectedFormat);
     showToast(`Imagem ${formatNames[selectedFormat]} baixada!`, "success");
   };
 
@@ -470,7 +487,7 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
                </button>
              )}
 
-            <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={handleShareWhatsApp}
                 className="flex flex-col items-center gap-2 p-4 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
@@ -520,7 +537,36 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
                 <span className={`text-xs font-medium ${
                   copiedLink ? 'text-green-700 dark:text-green-400' : 'text-gray-700 dark:text-gray-300'
                 }`}>
-                  {copiedLink ? 'Copiado!' : 'Copiar'}
+                  {copiedLink ? 'Copiado!' : 'Link'}
+                </span>
+              </button>
+
+              <button
+                onClick={handleCopyResultText}
+                className={`flex flex-col items-center gap-2 p-4 rounded-lg transition-colors ${
+                  copiedText 
+                    ? 'bg-green-100 dark:bg-green-900/30 border border-green-500' 
+                    : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
+                }`}
+                title="Copiar Texto + Link"
+              >
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+                  copiedText ? 'bg-green-500' : 'bg-indigo-500'
+                }`}>
+                  {copiedText ? (
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  )}
+                </div>
+                <span className={`text-xs font-medium ${
+                  copiedText ? 'text-green-700 dark:text-green-400' : 'text-gray-700 dark:text-gray-300'
+                }`}>
+                  {copiedText ? 'Copiado!' : 'Texto'}
                 </span>
               </button>
             </div>

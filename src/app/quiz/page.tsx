@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { Logo } from '@/components/Logo';
 import { motion, AnimatePresence } from 'framer-motion';
 import { quizEvents } from '@/lib/analytics';
+import { Swords } from 'lucide-react';
 
 const QuizContent = () => {
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -110,15 +111,29 @@ const QuizContent = () => {
   // Progress percentage
   const progress = ((questionIndex) / questions.length) * 100;
 
+  // Check if in challenge mode
+  const isChallengeMode = searchParams.get('compareE') !== null;
+
   return (
     <div className="container mx-auto p-4 md:p-8 flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       <header className="text-center my-8 w-full max-w-2xl">
         <div className="flex flex-col items-center gap-4 mb-6">
-          <Link href="/" className="hover:opacity-80 transition-opacity">
-            <Logo size={64} showText={false} />
-          </Link>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100">Teste Político</h1>
         </div>
+        
+        {isChallengeMode && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 bg-yellow-100 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700/50 rounded-xl p-4 flex items-center justify-center gap-3 text-yellow-800 dark:text-yellow-200"
+          >
+            <Swords className="w-6 h-6" />
+            <div>
+              <p className="font-bold text-base">Modo Desafio</p>
+              <p className="text-sm opacity-90">Você foi desafiado! Complete o teste para comparar seus resultados.</p>
+            </div>
+          </motion.div>
+        )}
         
         {/* Barra de Progresso */}
         <div className="w-full bg-gray-200 dark:bg-gray-700 h-2.5 rounded-full overflow-hidden mb-2">

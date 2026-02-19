@@ -1,231 +1,100 @@
-/**
- * Google Analytics 4 Event Tracking
- * 
- * This module provides type-safe event tracking for GA4.
- * All events are tracked only in production and when GA_ID is configured.
- */
+type GTagEvent = {
+  action: string;
+  category: string;
+  label?: string;
+  value?: number;
+};
 
-// Extend Window interface for gtag
+// Variável global do GTM/GA4
 declare global {
   interface Window {
-    gtag?: (
-      command: 'config' | 'event' | 'js',
-      targetId: string,
-      config?: Record<string, string | number | boolean>
+    gtag: (
+      command: 'event',
+      action: string,
+      params: {
+        event_category?: string;
+        event_label?: string;
+        value?: number;
+        page_title?: string;
+        page_location?: string;
+        send_to?: string;
+        [key: string]: any;
+      }
     ) => void;
-    dataLayer?: Record<string, unknown>[];
   }
 }
 
-/**
- * GA4 Event Names
- */
-export const GA_EVENTS = {
-  // Quiz Events
-  QUIZ_START: 'quiz_start',
-  QUIZ_COMPLETE: 'quiz_complete',
-  QUIZ_ABANDON: 'quiz_abandon',
-  QUESTION_ANSWER: 'question_answer',
-  
-  // Result Events
-  RESULT_VIEW: 'result_view',
-  RESULT_SHARE: 'result_share',
-  RESULT_DOWNLOAD: 'result_download',
-  
-  // Navigation Events
-  PAGE_VIEW: 'page_view',
-  
-  // Engagement Events
-  THEME_TOGGLE: 'theme_toggle',
-  EXTERNAL_LINK_CLICK: 'external_link_click',
-} as const;
-
-export type GAEventName = typeof GA_EVENTS[keyof typeof GA_EVENTS];
-
-/**
- * Check if GA4 is available and configured
- */
-export function isGAAvailable(): boolean {
-  return (
-    typeof window !== 'undefined' &&
-    typeof window.gtag === 'function' &&
-    !!process.env.NEXT_PUBLIC_GA_ID
-  );
-}
-
-/**
- * Track a custom event
- * @param eventName - Name of the event
- * @param eventParams - Additional parameters for the event
- */
-export function trackEvent(
-  eventName: GAEventName | string,
-  eventParams?: Record<string, string | number | boolean | undefined>
-): void {
-  if (!isGAAvailable()) {
-    // Log in development for debugging
-    if (process.env.NODE_ENV === 'development') {
-      console.log('[GA4 Event]', eventName, eventParams);
-    }
-    return;
+export const trackPageView = (url: string) => {
+  if (typeof window !== 'undefined' && window.gtag && process.env.NEXT_PUBLIC_GA_ID) {
+    window.gtag('event', 'page_view', {
+      page_title: document.title,
+      page_location: url,
+      send_to: process.env.NEXT_PUBLIC_GA_ID,
+    });
   }
+};
 
-  try {
-    window.gtag!('event', eventName, eventParams as Record<string, string | number | boolean>);
-  } catch (error) {
-    console.error('[GA4] Error tracking event:', error);
+export const trackEvent = ({ action, category, label, value }: GTagEvent) => {
+  if (typeof window !== 'undefined' && window.gtag && process.env.NEXT_PUBLIC_GA_ID) {
+    window.gtag('event', action, {
+      event_category: category,
+      event_label: label,
+      value: value,
+    });
   }
-}
+};
 
-/**
- * Track page view
- * @param url - Page URL
- * @param title - Page title
- */
-export function trackPageView(url: string, title?: string): void {
-  if (!isGAAvailable()) return;
-
-  try {
-    const config: Record<string, string> = { page_path: url };
-    if (title) {
-      config.page_title = title;
-    }
-    window.gtag!('config', process.env.NEXT_PUBLIC_GA_ID!, config);
-  } catch (error) {
-    console.error('[GA4] Error tracking page view:', error);
-  }
-}
-
-/**
- * Quiz Event Trackers
- */
 export const quizEvents = {
-  /**
-   * Track quiz start
-   */
-  start: () => {
-    trackEvent(GA_EVENTS.QUIZ_START, {
-      event_category: 'engagement',
-      event_label: 'Quiz Started',
-    });
-  },
-
-  /**
-   * Track quiz completion
-   * @param ideology - The ideology result
-   */
-  complete: (ideology: string) => {
-    trackEvent(GA_EVENTS.QUIZ_COMPLETE, {
-      event_category: 'conversion',
-      event_label: ideology,
-      ideology,
-      value: 1,
-    });
-  },
-
-  /**
-   * Track quiz abandonment
-   * @param questionNumber - Question number where user abandoned
-   * @param totalQuestions - Total number of questions
-   */
-  abandon: (questionNumber: number, totalQuestions: number) => {
-    trackEvent(GA_EVENTS.QUIZ_ABANDON, {
-      event_category: 'engagement',
-      event_label: `Abandoned at question ${questionNumber}`,
-      question_number: questionNumber,
-      total_questions: totalQuestions,
-      completion_percentage: Math.round((questionNumber / totalQuestions) * 100),
-    });
-  },
-
-  /**
-   * Track individual question answer
-   * @param questionNumber - Question number (1-indexed)
-   * @param answer - Answer value (-1.0 to 1.0)
-   */
-  answer: (questionNumber: number, answer: number) => {
-    trackEvent(GA_EVENTS.QUESTION_ANSWER, {
-      event_category: 'engagement',
-      question_number: questionNumber,
-      answer_value: answer,
-      non_interaction: true, // Don't affect bounce rate
-    });
-  },
+  start: () => trackEvent({
+    action: 'start',
+    category: 'quiz',
+    label: 'Quiz Started'
+  }),
+  complete: (result: string) => trackEvent({
+    action: 'complete',
+    category: 'quiz',
+    label: result
+  }),
+  answer: (question: number, value: number) => trackEvent({
+    action: 'answer_question',
+    category: 'quiz',
+    label: `Q${question}`,
+    value: value
+  }),
+  abandon: (question: number, total: number) => trackEvent({
+    action: 'abandon_quiz',
+    category: 'quiz',
+    label: `Abandoned at Q${question}/${total}`,
+    value: question
+  })
 };
 
-/**
- * Result Event Trackers
- */
 export const resultEvents = {
-  /**
-   * Track result view
-   * @param ideology - The ideology result
-   * @param scores - User's scores
-   */
-  view: (ideology: string, scores: { e: string; d: string; g: string; s: string }) => {
-    trackEvent(GA_EVENTS.RESULT_VIEW, {
-      event_category: 'engagement',
-      event_label: ideology,
-      ideology,
-      economic_score: parseFloat(scores.e),
-      diplomatic_score: parseFloat(scores.d),
-      government_score: parseFloat(scores.g),
-      society_score: parseFloat(scores.s),
-    });
-  },
-
-  /**
-   * Track result share
-   * @param method - Share method (e.g., 'twitter', 'facebook', 'copy_link')
-   */
-  share: (method: string) => {
-    trackEvent(GA_EVENTS.RESULT_SHARE, {
-      event_category: 'engagement',
-      event_label: method,
-      method,
-    });
-  },
-
-  /**
-   * Track result download
-   * @param format - Download format (e.g., 'png', 'jpg')
-   */
-  download: (format: string = 'png') => {
-    trackEvent(GA_EVENTS.RESULT_DOWNLOAD, {
-      event_category: 'engagement',
-      event_label: format,
-      format,
-    });
-  },
+  view: (ideology: string, scores: any) => trackEvent({
+    action: 'view_result',
+    category: 'results',
+    label: ideology,
+    value: undefined // Scores could be sent as custom params if needed in future
+  })
 };
 
-/**
- * UI Event Trackers
- */
-export const uiEvents = {
-  /**
-   * Track theme toggle
-   * @param theme - New theme value ('light', 'dark', 'system')
-   */
-  themeToggle: (theme: string) => {
-    trackEvent(GA_EVENTS.THEME_TOGGLE, {
-      event_category: 'engagement',
-      event_label: theme,
-      theme,
-    });
-  },
+export const shareEvents = {
+  share: (method: string, ideology: string) => trackEvent({
+    action: 'share',
+    category: 'engagement',
+    label: `${method} - ${ideology}`
+  }),
+  download: (format: string) => trackEvent({
+    action: 'download_image',
+    category: 'engagement',
+    label: format
+  })
+};
 
-  /**
-   * Track external link click
-   * @param url - External URL
-   * @param label - Link label/description
-   */
-  externalLinkClick: (url: string, label?: string) => {
-    trackEvent(GA_EVENTS.EXTERNAL_LINK_CLICK, {
-      event_category: 'engagement',
-      event_label: label || url,
-      url,
-      outbound: true,
-    });
-  },
+export const uiEvents = {
+  themeToggle: (theme: string) => trackEvent({
+    action: 'toggle_theme',
+    category: 'ui',
+    label: theme
+  })
 };

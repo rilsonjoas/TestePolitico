@@ -40,6 +40,18 @@ export function Footer() {
               Ideologias
             </Link>
             <Link 
+              href="/sobre" 
+              className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >
+              Sobre
+            </Link>
+            <Link 
+              href="/contato" 
+              className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >
+              Contato
+            </Link>
+            <Link 
               href="/privacidade" 
               className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >

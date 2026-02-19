@@ -16,7 +16,7 @@ import {
   Lock,
   MessageSquare
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 
 export default function Home() {
   const jsonLd = {
@@ -89,12 +89,16 @@ export default function Home() {
     visible: { y: 0, opacity: 1 }
   };
 
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <div className="min-h-screen w-full bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 selection:bg-blue-500 selection:text-white">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+        suppressHydrationWarning
+      >
+        {JSON.stringify(jsonLd)}
+      </script>
       
       {/* Hero Section */}
       <div className="relative overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-32">
@@ -105,8 +109,9 @@ export default function Home() {
 
         <div className="container mx-auto px-4">
           <motion.div 
-            initial={{ opacity: 0, y: -20 }}
+            initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={shouldReduceMotion ? { duration: 0 } : undefined}
             className="flex flex-col items-center text-center gap-6"
           >
             <Logo size={80} showText={false} className="shadow-2xl rounded-full p-2 bg-white dark:bg-gray-800" />
@@ -134,8 +139,8 @@ export default function Home() {
             </div>
 
             <motion.div 
-              animate={{ y: [0, 10, 0] }}
-              transition={{ repeat: Infinity, duration: 2 }}
+              animate={shouldReduceMotion ? {} : { y: [0, 10, 0] }}
+              transition={shouldReduceMotion ? { duration: 0 } : { repeat: Infinity, duration: 2 }}
               className="mt-16 text-gray-400"
             >
               <ChevronDown size={32} />
@@ -152,10 +157,10 @@ export default function Home() {
             <p className="text-3xl md:text-4xl font-black">Os 8 Valores Políticos</p>
           </div>
 
-          <motion.div 
+          <motion.div
             variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
+            initial={shouldReduceMotion ? "visible" : "hidden"}
+            whileInView={shouldReduceMotion ? undefined : "visible"}
             viewport={{ once: true }}
             className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 md:gap-6"
           >
@@ -186,9 +191,9 @@ export default function Home() {
 
       {/* Axis Information */}
       <section id="anchor" className="py-24 container mx-auto px-4 max-w-6xl">
-        <motion.div 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+        <motion.div
+          initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
+          whileInView={shouldReduceMotion ? undefined : { opacity: 1 }}
           viewport={{ once: true }}
           className="space-y-20"
         >
@@ -202,10 +207,10 @@ export default function Home() {
 
           <div className="grid gap-10">
             {axes.map((axis, i) => (
-              <motion.div 
+              <motion.div
                 key={axis.name}
-                initial={{ x: i % 2 === 0 ? -50 : 50, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
+                initial={shouldReduceMotion ? { x: 0, opacity: 1 } : { x: i % 2 === 0 ? -50 : 50, opacity: 0 }}
+                whileInView={shouldReduceMotion ? undefined : { x: 0, opacity: 1 }}
                 viewport={{ once: true }}
                 className="flex flex-col lg:flex-row items-stretch gap-8 p-8 md:p-12 rounded-[2.5rem] bg-white dark:bg-gray-800/40 border border-gray-100 dark:border-gray-800 shadow-2xl relative overflow-hidden group"
               >
