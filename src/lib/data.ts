@@ -761,7 +761,7 @@ export const ideologies: Ideology[] = [
       { title: "Igreja: Carisma e Poder - Leonardo Boff", link: "https://amzn.to/4cCc9Hj" },
     ],
   },
-  {   
+  {
     name: "Socialismo Democrático",
     stats: { econ: 80, dipl: 50, govt: 50, scty: 80 },
     desc: "O socialismo deve ser conquistado através da democracia, e a democracia só é plena quando se estende à esfera econômica. Lutamos nas urnas, nos sindicatos e nos movimentos sociais por uma transformação gradual mas profunda da sociedade. Os setores estratégicos da economia devem ser controlados democraticamente pelo povo, não por acionistas ou burocratas. Um Estado de bem-estar robusto garante saúde, educação e moradia como direitos, não mercadorias. Rejeitamos tanto o capitalismo selvagem quanto o autoritarismo que se disfarçou de socialismo no século XX.",
@@ -853,43 +853,6 @@ export const ideologies: Ideology[] = [
     ],
   },
   {
-    name: "Anarco-Sindicalismo",
-    stats: { econ: 80, dipl: 50, govt: 100, scty: 80 },
-    desc: "Os trabalhadores não precisam de políticos ou burocratas para se libertar. Através de sindicatos revolucionários organizados por indústria, construímos o poder para derrubar o capitalismo e a estrutura para a nova sociedade simultaneamente. A greve geral é nossa arma mais poderosa. Quando os trabalhadores cruzam os braços unidos, o sistema para. E quando tomam as fábricas em suas próprias mãos, o capitalismo acaba. A sociedade futura será uma federação de coletivos autogeridos, onde quem trabalha decide. Ação direta, não eleições; autogestão, não delegação!",
-    roast: "Sua solução para tudo é uma greve geral. Se o pneu furar? Greve geral. Se chover no domingo? Greve geral. Você acha que organizar um sindicato é mais fácil do que organizar um churrasco.",
-    politicians: [
-      {
-        name: "Edgard Leuenroth (BR)",
-        link: "https://pt.wikipedia.org/wiki/Edgard_Leuenroth",
-        stats: { econ: 80, dipl: 50, govt: 100, scty: 80 },
-      },
-      {
-        name: "Buenaventura Durruti",
-        link: "https://pt.wikipedia.org/wiki/Buenaventura_Durruti",
-        stats: { econ: 85, dipl: 40, govt: 100, scty: 75 },
-      },
-      {
-        name: "Neno Vasco (PT)",
-        link: "https://pt.wikipedia.org/wiki/Neno_Vasco",
-        stats: { econ: 75, dipl: 55, govt: 95, scty: 80 },
-      },
-      {
-        name: "Rudolf Rocker",
-        link: "https://pt.wikipedia.org/wiki/Rudolf_Rocker",
-        stats: { econ: 80, dipl: 60, govt: 90, scty: 85 },
-      },
-    ],
-    books: [
-      {
-        title: "Anarco-Sindicalismo: Teoria e Prática - Rudolf Rocker",
-        link: "",
-      },
-      { title: "Homenagem à Catalunha - George Orwell", link: "" },
-      { title: "Ação Direta - Émile Pouget", link: "" },
-      { title: "A CNT na Revolução Espanhola - José Peirats", link: "" },
-    ],
-  },
-  {
     name: "Populismo de Esquerda",
     stats: { econ: 60, dipl: 40, govt: 30, scty: 70 },
     desc: "O povo contra a oligarquia! Por décadas, uma elite corrupta governou em benefício próprio, privatizando o público, entregando nossas riquezas ao capital estrangeiro e empobrecendo a maioria. Chegou a hora do povo retomar o que é seu. Nacionalização dos recursos estratégicos, redistribuição de renda, serviços públicos de qualidade e soberania nacional. Não somos nem esquerda nem direita tradicionais; representamos os de baixo contra os de cima. A democracia deve servir ao povo, não aos banqueiros. Pátria, povo e dignidade!",
@@ -917,47 +880,17 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "A Verdade Vencerá - Lula", link: "" },
-      { title: "O Povo Brasileiro - Darcy Ribeiro", link: "" },
-      { title: "As Veias Abertas da América Latina - Galeano", link: "" },
-      { title: "A Razão Populista - Ernesto Laclau", link: "" },
-      { title: "O Que é Populismo? - Jan-Werner Müller", link: "" },
-    ],
-  },
-  {
-    name: "Distributismo Católico",
-    stats: { econ: 60, dipl: 40, govt: 30, scty: 20 },
-    desc: "A doutrina social da Igreja nos ensina que tanto o capitalismo de poucos quanto o coletivismo do Estado violam a dignidade humana. A propriedade deve estar amplamente distribuída entre as famílias, permitindo que cada um viva do próprio trabalho com dignidade. As guildas, cooperativas e pequenas empresas familiares são o modelo, não as grandes corporações nem a burocracia estatal. Mas essa ordem econômica só é estável quando a sociedade é guiada pelos princípios da fé verdadeira e da lei moral, sob a orientação da autoridade espiritual.",
-    roast: "Você odeia o estado moderno e o capitalismo moderno, então sua solução é voltar para a Idade Média. Acha que o mundo seria perfeito se todos fossem camponeses felizes pagando dízimo.",
-    politicians: [
-      {
-        name: "Papa Leão XIII",
-        link: "https://pt.wikipedia.org/wiki/Papa_Le%C3%A3o_XIII",
-        stats: { econ: 55, dipl: 35, govt: 25, scty: 15 },
-      },
-      {
-        name: "Papa Pio XI",
-        link: "https://pt.wikipedia.org/wiki/Papa_Pio_XI",
-        stats: { econ: 65, dipl: 45, govt: 35, scty: 25 },
-      },
-      {
-        name: "Alceu Amoroso Lima (BR)",
-        link: "https://pt.wikipedia.org/wiki/Alceu_Amoroso_Lima",
-        stats: { econ: 55, dipl: 45, govt: 35, scty: 20 },
-      },
-    ],
-    books: [
-      { title: "Rerum Novarum - Papa Leão XIII", link: "" },
-      { title: "Quadragesimo Anno - Papa Pio XI", link: "" },
-      { title: "Centesimus Annus - Papa João Paulo II", link: "" },
-      { title: "O Estado Servil - Hilaire Belloc", link: "" },
+      { title: "A Verdade Vencerá - Lula", link: "https://amzn.to/4kSNxMP" },
+      { title: "As Veias Abertas da América Latina - Galeano", link: "https://amzn.to/3OXp8JK" },
+      { title: "A Razão Populista - Ernesto Laclau", link: "https://amzn.to/3MoHYZJ" },
+      { title: "O Que é Populismo? - Jan-Werner Müller", link: "https://amzn.to/4c3huau" },
     ],
   },
   {
     name: "Distributismo",
-    stats: { econ: 60, dipl: 50, govt: 50, scty: 20 },
-    desc: "Três acres e uma vaca! Nem capitalismo de monopólios nem socialismo de burocratas. A propriedade é boa, tão boa que todos deveriam tê-la. Defendemos uma sociedade de pequenos proprietários: agricultores em suas terras, artesãos em suas oficinas, comerciantes em suas lojas, todos donos dos meios de seu próprio sustento. As cooperativas e guildas organizam a produção sem criar nem plutocratas nem comissários. A família é a unidade básica da sociedade, e a comunidade local é onde a democracia realmente funciona. Grande demais é ruim, seja empresa ou Estado.",
-    roast: "Você quer viver no Condado dos Hobbits. Acha que o problema do mundo é que não temos vacas suficientes e que o feudalismo foi injustiçado pela história.",
+    stats: { econ: 60, dipl: 45, govt: 40, scty: 20 },
+    desc: "Três acres e uma vaca! Nem capitalismo de monopólios nem socialismo de burocratas. A propriedade deve estar amplamente distribuída entre as famílias, baseada nos princípios da justiça e da Doutrina Social da Igreja (como a Rerum Novarum). Defendemos uma sociedade de pequenos proprietários: agricultores em suas terras e artesãos em suas oficinas, organizando a produção via guildas e cooperativas. A família é a unidade básica da sociedade, e a comunidade local é onde a democracia realmente funciona. Grande demais é ruim, seja empresa ou Estado.",
+    roast: "Você quer viver no Condado dos Hobbits pagando dízimo. Acha que o problema do mundo é que não temos vacas suficientes e que o feudalismo foi injustiçado pela história, então sua solução para a internet é criar uma cooperativa católica de fibra ótica.",
     politicians: [
       {
         name: "G. K. Chesterton",
@@ -965,14 +898,14 @@ export const ideologies: Ideology[] = [
         stats: { econ: 65, dipl: 55, govt: 55, scty: 25 },
       },
       {
+        name: "Papa Leão XIII",
+        link: "https://pt.wikipedia.org/wiki/Papa_Le%C3%A3o_XIII",
+        stats: { econ: 55, dipl: 35, govt: 25, scty: 15 },
+      },
+      {
         name: "Hilaire Belloc",
         link: "https://pt.wikipedia.org/wiki/Hilaire_Belloc",
         stats: { econ: 55, dipl: 45, govt: 45, scty: 15 },
-      },
-      {
-        name: "E. F. Schumacher",
-        link: "https://pt.wikipedia.org/wiki/E._F._Schumacher",
-        stats: { econ: 70, dipl: 60, govt: 60, scty: 40 },
       },
       {
         name: "Dorothy Day",
@@ -981,13 +914,11 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "O Que Há de Errado com o Mundo - Chesterton", link: "" },
-      { title: "O Estado Servil - Hilaire Belloc", link: "" },
-      { title: "O Negócio é Ser Pequeno - E. F. Schumacher", link: "" },
-      { title: "O Esboço da Sanidade - G. K. Chesterton", link: "" },
-      { title: "A Restauração da Propriedade - Belloc", link: "" },
-      { title: "Ortodoxia - G. K. Chesterton", link: "" },
-      { title: "Compêndio da Doutrina Social da Igreja", link: "" },
+      { title: "Rerum Novarum - Papa Leão XIII", link: "https://amzn.to/4s5hz1V" },
+      { title: "Quadragesimo Anno - Papa Pio XI", link: "https://amzn.to/46m4Ek0" },
+      { title: "Centesimus Annus - Papa João Paulo II", link: "https://amzn.to/4ryabwv" },
+      { title: "O Estado Servil - Hilaire Belloc", link: "https://amzn.to/4qTUs9I" },
+      { title: "Um esboço da sanidade - Chesterton", link: "https://amzn.to/4tQCLus" },
     ],
   },
   {
@@ -1028,12 +959,11 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "Uma Teoria da Justiça - John Rawls", link: "" },
-      { title: "Desenvolvimento como Liberdade - Amartya Sen", link: "" },
-      { title: "O Relatório Beveridge", link: "" },
-      { title: "Liberalismo - L. T. Hobhouse", link: "" },
-      { title: "Justiça como Equidade - John Rawls", link: "" },
-      { title: "Força para Amar - Martin Luther King Jr.", link: "" },
+      { title: "Uma Teoria da Justiça - John Rawls", link: "https://amzn.to/4ruzSOa" },
+      { title: "Desenvolvimento como Liberdade - Amartya Sen", link: "https://amzn.to/4avdrCF" },
+      { title: "Liberalismo - L. T. Hobhouse", link: "https://amzn.to/4rvQkOh" },
+      { title: "Justiça como Equidade - John Rawls", link: "https://amzn.to/4l9kKDT" },
+      { title: "A dádiva do amor - Martin Luther King Jr.", link: "https://amzn.to/4tRaELs" },
     ],
   },
   {
@@ -1064,10 +994,9 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "Rerum Novarum - Papa Leão XIII", link: "" },
-      { title: "Economia Social de Mercado - Alfred Müller-Armack", link: "" },
-      { title: "Populorum Progressio - Papa Paulo VI", link: "" },
-      { title: "Doutrina Social da Igreja - Compêndio", link: "" },
+      { title: "Rerum Novarum - Papa Leão XIII", link: "https://amzn.to/4s5hz1V" },
+      { title: "Populorum Progressio - Papa Paulo VI", link: "https://amzn.to/4aQOqkj" },
+      { title: "Doutrina Social da Igreja - Compêndio", link: "https://amzn.to/4tOK45T" },
     ],
   },
   {
@@ -1076,11 +1005,6 @@ export const ideologies: Ideology[] = [
     desc: "O capitalismo pode ser civilizado. Através de sindicatos fortes, negociação coletiva, regulação do mercado e um Estado de bem-estar universal e generoso, podemos garantir que a prosperidade seja compartilhada por todos. Saúde universal, educação pública de qualidade, aposentadoria digna, seguro-desemprego e licenças parentais são direitos, não privilégios. A democracia não termina na urna; ela deve se estender ao local de trabalho e à economia. Buscamos uma sociedade onde todos tenham segurança material para viver com dignidade e liberdade real.",
     roast: "Você quer a revolução, desde que ela não atrase seu brunch. Acha que votar em partidos de esquerda moderada é um ato radical de rebeldia.",
     politicians: [
-      {
-        name: "Mário Soares (PT)",
-        link: "https://pt.wikipedia.org/wiki/M%C3%A1rio_Soares",
-        stats: { econ: 55, dipl: 65, govt: 55, scty: 75 },
-      },
       {
         name: "Olof Palme",
         link: "https://pt.wikipedia.org/wiki/Olof_Palme",
@@ -1092,20 +1016,18 @@ export const ideologies: Ideology[] = [
         stats: { econ: 65, dipl: 75, govt: 65, scty: 85 },
       },
       {
-        name: "Ulysses Guimarães (BR)",
-        link: "https://pt.wikipedia.org/wiki/Ulysses_Guimar%C3%A3es",
+        name: "Fernando Henrique Cardoso (BR)",
+        link: "https://pt.wikipedia.org/wiki/Fernando_Henrique_Cardoso",
         stats: { econ: 50, dipl: 60, govt: 70, scty: 70 },
       },
     ],
     books: [
-      { title: "O Futuro do Socialismo - Anthony Crosland", link: "" },
-      { title: "A Terceira Via - Anthony Giddens", link: "" },
-      { title: "O Modelo Nórdico - diversos autores", link: "" },
+      { title: "A Terceira Via - Anthony Giddens", link: "https://amzn.to/4axxf8x" },
       {
-        title: "Ideias Socialistas em Transformação - Norberto Bobbio",
-        link: "",
+        title: "Nem com Marx, nem contra Marx - Norberto Bobbio",
+        link: "https://amzn.to/4kVrzJ4",
       },
-      { title: "Capital no Século XXI - Thomas Piketty", link: "" },
+      { title: "Capital no Século XXI - Thomas Piketty", link: "https://amzn.to/4kVq3Xq" },
     ],
   },
   {
@@ -1125,17 +1047,16 @@ export const ideologies: Ideology[] = [
         stats: { econ: 55, dipl: 80, govt: 65, scty: 90 },
       },
       {
-        name: "Judith Butler",
-        link: "https://pt.wikipedia.org/wiki/Judith_Butler",
-        stats: { econ: 70, dipl: 90, govt: 80, scty: 100 },
+        name: "Erika Hilton (BR)",
+        link: "https://pt.wikipedia.org/wiki/Erika_Hilton",
+        stats: { econ: 70, dipl: 80, govt: 70, scty: 100 },
       },
     ],
     books: [
-      { title: "A Promessa da Vida Americana - Herbert Croly", link: "" },
-      { title: "Democracia e Educação - John Dewey", link: "" },
-      { title: "Os Anjos Bons da Nossa Natureza - Steven Pinker", link: "" },
-      { title: "Problemas de Gênero - Judith Butler", link: "" },
-      { title: "O Capital no Século XXI - Thomas Piketty", link: "" },
+      { title: "A Promessa da Vida Americana - Herbert Croly", link: "https://amzn.to/4qPLrhO" },
+      { title: "Democracia e Educação - John Dewey", link: "https://amzn.to/4cHICMo" },
+      { title: "Pequeno Manual Antirracista - Djamila Ribeiro", link: "https://amzn.to/3OUM68R" },
+      { title: "O Capital no Século XXI - Thomas Piketty", link: "https://amzn.to/4kVq3Xq" },
     ],
   },
   {
@@ -1629,6 +1550,7 @@ export const ideologies: Ideology[] = [
       { title: "A Riqueza das Nações - Adam Smith", link: "" },
       { title: "Cartas de Inglaterra - Rui Barbosa", link: "" },
       { title: "Sobre a Liberdade - John Stuart Mill", link: "" },
+      { title: "Os Anjos Bons da Nossa Natureza - Steven Pinker", link: "https://amzn.to/4s3SlBd" },
     ],
   },
   {
@@ -2002,10 +1924,10 @@ export const ideologies: Ideology[] = [
     ],
   },
   {
-    name: "Feminismo Liberal",
-    stats: { econ: 45, dipl: 70, govt: 65, scty: 100 },
-    desc: "O Feminismo Liberal busca a igualdade plena entre homens e mulheres dentro das estruturas políticas e econômicas existentes. Luta pela igualdade de direitos civis e políticos, pelo fim da discriminação de gênero no mercado de trabalho, pela representação feminina nas instituições e pela autonomia sobre o próprio corpo. Não questiona o capitalismo em si, mas exige que ele funcione sem discriminação de gênero. Acredita que a mudança vem pela legislação, pela educação e pela participação política.",
-    roast: "Você acha que o feminismo venceu quando uma mulher se torna CEO de uma empresa que paga mal as funcionárias. Sua revolução é ter 50% de mulheres no conselho de administração do banco que financia o agronegócio.",
+    name: "Feminismo",
+    stats: { econ: 50, dipl: 75, govt: 70, scty: 100 },
+    desc: "O Feminismo busca a libertação da mulher e a desconstrução das hierarquias de gênero. Luta pela igualdade de direitos, pelo fim da discriminação, pela autonomia sobre o próprio corpo e, em suas vertentes mais radicais, pelo fim das estruturas patriarcais e da opressão sistêmica. Diferentes correntes feministas podem questionar estruturas como o capitalismo, a linguagem ou até mesmo o conceito de gênero, mas todas compartilham o objetivo de emancipar não apenas as mulheres, mas toda a sociedade dos papéis de gênero opressivos.",
+    roast: "Sua citação preferida é 'lugar de mulher é onde ela quiser', exceto se for pra discordar de você no Twitter. Você cancelaria o Papai Noel por não ser uma entidade agênero.",
     politicians: [
       {
         name: "Mary Wollstonecraft (Reino Unido)",
@@ -2027,12 +1949,17 @@ export const ideologies: Ideology[] = [
         link: "https://pt.wikipedia.org/wiki/Simone_de_Beauvoir",
         stats: { econ: 60, dipl: 80, govt: 75, scty: 100 },
       },
+      {
+        name: "Judith Butler",
+        link: "https://pt.wikipedia.org/wiki/Judith_Butler",
+        stats: { econ: 70, dipl: 90, govt: 80, scty: 100 },
+      },
     ],
     books: [
       { title: "A Vindication of the Rights of Woman - Mary Wollstonecraft", link: "" },
       { title: "A Mística Feminina - Betty Friedan", link: "" },
       { title: "O Segundo Sexo - Simone de Beauvoir", link: "" },
-      { title: "Revolução por Dentro - Gloria Steinem", link: "" },
+      { title: "Problemas de Gênero - Judith Butler", link: "" },
     ],
   },
 ];
@@ -2054,7 +1981,7 @@ export function getTopMatchedIdeologies(e: number, d: number, g: number, s: numb
   });
 
   results.sort((a, b) => a.distance - b.distance);
-  
+
   return results.slice(0, count).map(r => r.ideology);
 }
 
