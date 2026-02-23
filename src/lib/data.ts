@@ -1055,7 +1055,7 @@ export const ideologies: Ideology[] = [
     books: [
       { title: "A Promessa da Vida Americana - Herbert Croly", link: "https://amzn.to/4qPLrhO" },
       { title: "Democracia e Educação - John Dewey", link: "https://amzn.to/4cHICMo" },
-      { title: "Pequeno Manual Antirracista - Djamila Ribeiro", link: "https://amzn.to/3OUM68R" },
+      { title: "Pequeno Manual Antirracista - Djamila Ribeiro", link: "https://amzn.to/4tQyiI4" },
       { title: "O Capital no Século XXI - Thomas Piketty", link: "https://amzn.to/4kVq3Xq" },
     ],
   },
