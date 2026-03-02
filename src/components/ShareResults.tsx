@@ -192,21 +192,20 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
     if (format === 'twitter') {
       // ── TWITTER 1200 × 675 ─────────────────────────────────────────
       // Compact header above two columns: bars left | compass right.
-      // Heights: 675px total. Logo(18)+header(~130)+bars(~280)+gap+footer = use ~530px.
       const bsX = 60, bsW = 530, bH = 28, bSp = 88;
-      const bsY = 260;                              // bar-centre y of 1st bar
-      const barTop  = bsY - bH / 2 - 14;           // topmost label pixel ≈ 232
-      const barBot  = bsY + 3 * bSp + bH / 2;      // last bar bottom      ≈ 538
-      const barMidY = (barTop + barBot) / 2;        // vertical centre      ≈ 385
+      const bsY = 272;                              // bar-centre y of 1st bar
+      const barTop  = bsY - bH / 2 - 10;           // topmost label pixel ≈ 244
+      const barBot  = bsY + 3 * bSp + bH / 2;      // last bar bottom      ≈ 550
+      const barMidY = (barTop + barBot) / 2;        // ≈ 397
       const cs = 270;
       const compassAreaX = 620, compassAreaW = 545;
       const cxT = compassAreaX + (compassAreaW - cs) / 2; // ≈ 757
-      const cyT = barMidY - cs / 2;                       // ≈ 250, bottom ≈ 520
+      const cyT = barMidY - cs / 2;                       // ≈ 262, bottom ≈ 532
       L = {
         logoSize: 40, logoY: 18,
-        titleFontSize: 26, titleY: 72,
-        ideologyLabelFontSize: 16, ideologyLabelY: 104,
-        ideologyNameFontSize: 38, ideologyNameY: 144,
+        titleFontSize: 26, titleY: 80,           // logo bottom=58 → gap 32px ✓
+        ideologyLabelFontSize: 16, ideologyLabelY: 122, // accent line≈108 → gap 14px ✓
+        ideologyNameFontSize: 38, ideologyNameY: 162,   // label 122 + ~font height ✓
         barStartX: bsX, maxBarWidth: bsW,
         barStartY: bsY, barSpacing: bSp, barHeight: bH, barFontSize: 14,
         compassX: cxT, compassY: cyT, compassSize: cs, compassLblSize: 12,
@@ -237,24 +236,24 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
     } else {
       // ── INSTAGRAM 1080 × 1920 ──────────────────────────────────────
       // Stacked: header (2-line) → ideology → bars → large compass → footer.
-      const bH = 48, bSp = 98, bsW = 920;
+      const bH = 52, bSp = 112, bsW = 920;
       const bsX = (1080 - bsW) / 2;
-      const bsY = 530;
-      const barBot = bsY + 3 * bSp + bH / 2; // ≈ 848
-      const cs = 660;
+      const bsY = 478;
+      const barBot = bsY + 3 * bSp + bH / 2; // = 478+336+26 = 840
+      const cs = 720;
       const cx = (1080 - cs) / 2;
-      const cy = barBot + 100;                 // ≈ 948: more breathing room between bars and compass
-      // compass bottom: 948+660=1608, "Libertário" label ≈1630
-      // footer divider at 1840 → ~210px breathing room ✓
+      const cy = barBot + 95;                  // = 935
+      // Compass bottom: 935+720=1655, "Libertário" label ≈1672
+      // Footer divider at 1825, gap = 153px ✓
       L = {
-        logoSize: 80, logoY: 55,
-        titleFontSize: 40, titleY: 185,
-        titleLine2: '8 VALORES', titleLine2Y: 238,
-        ideologyLabelFontSize: 24, ideologyLabelY: 345,
-        ideologyNameFontSize: 72, ideologyNameY: 425,
+        logoSize: 80, logoY: 60,
+        titleFontSize: 46, titleY: 184,
+        titleLine2: '8 Valores', titleLine2Y: 232,
+        ideologyLabelFontSize: 25, ideologyLabelY: 306,
+        ideologyNameFontSize: 76, ideologyNameY: 392,
         barStartX: bsX, maxBarWidth: bsW,
-        barStartY: bsY, barSpacing: bSp, barHeight: bH, barFontSize: 22,
-        compassX: cx, compassY: cy, compassSize: cs, compassLblSize: 16,
+        barStartY: bsY, barSpacing: bSp, barHeight: bH, barFontSize: 23,
+        compassX: cx, compassY: cy, compassSize: cs, compassLblSize: 17,
         footerY: 1875,
       };
     }
@@ -282,12 +281,30 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
     ctx.fillStyle = textPrimary;
     ctx.font = `900 ${L.titleFontSize}px Arial`;
     if (L.titleLine2) {
-      // instagram: two-line title
-      ctx.fillText('TESTE POLÍTICO', canvas.width / 2, L.titleY);
+      // instagram: two-line title — main line white, subtitle blue
+      ctx.fillText('Teste Político', canvas.width / 2, L.titleY);
       ctx.fillStyle = '#3b82f6';
+      ctx.font = `700 ${Math.round(L.titleFontSize * 0.85)}px Arial`;
       ctx.fillText(L.titleLine2, canvas.width / 2, L.titleLine2Y!);
     } else {
-      ctx.fillText('TESTE POLÍTICO 8 VALORES', canvas.width / 2, L.titleY);
+      ctx.fillText('Teste Político', canvas.width / 2, L.titleY);
+    }
+
+    // thin accent line under title (all formats)
+    {
+      const lineW = format === 'twitter' ? 300 : 400;
+      const lineY = L.titleLine2Y ? L.titleLine2Y! + 22 : L.titleY + 18;
+      const grad = ctx.createLinearGradient(canvas.width / 2 - lineW / 2, 0, canvas.width / 2 + lineW / 2, 0);
+      grad.addColorStop(0, 'transparent');
+      grad.addColorStop(0.3, '#3b82f6');
+      grad.addColorStop(0.7, '#3b82f6');
+      grad.addColorStop(1, 'transparent');
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(canvas.width / 2 - lineW / 2, lineY);
+      ctx.lineTo(canvas.width / 2 + lineW / 2, lineY);
+      ctx.stroke();
     }
 
     // ─────────────────────────────────────────────────────────────────
@@ -378,7 +395,7 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
 
       const { compassX: cx, compassY: cy, compassSize: cs, compassLblSize: lblSize } = L;
 
-      // Clip all compass drawing to its box (prevents dot glow bleeding outside)
+      // Clip only the fill/grid — NOT the dot (dot can be at a corner and would be half-cut)
       ctx.save();
       ctx.beginPath();
       ctx.rect(cx, cy, cs, cs);
@@ -399,6 +416,9 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
         ctx.beginPath(); ctx.moveTo(cx, cy + p * cs); ctx.lineTo(cx + cs, cy + p * cs); ctx.stroke();
       }
 
+      // Restore clip — draw border, axes, dot OUTSIDE clip so nothing is cut
+      ctx.restore();
+
       // border
       ctx.strokeStyle = '#475569'; ctx.lineWidth = 2;
       ctx.strokeRect(cx, cy, cs, cs);
@@ -408,25 +428,22 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
       ctx.beginPath(); ctx.moveTo(cx + cs / 2, cy); ctx.lineTo(cx + cs / 2, cy + cs); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(cx, cy + cs / 2); ctx.lineTo(cx + cs, cy + cs / 2); ctx.stroke();
 
-      // user dot (still inside clip so glow is masked by border)
+      // user dot (drawn outside clip — always fully visible even at corners)
       const dotX = cx + dotNormX * cs;
       const dotY = cy + dotNormY * cs;
-      const dotR = Math.max(8, cs * 0.04);
+      const dotR = Math.max(9, cs * 0.04);
 
-      const glow = ctx.createRadialGradient(dotX, dotY, 0, dotX, dotY, dotR * 3.5);
-      glow.addColorStop(0, 'rgba(59,130,246,0.6)');
+      const glow = ctx.createRadialGradient(dotX, dotY, 0, dotX, dotY, dotR * 4);
+      glow.addColorStop(0, 'rgba(59,130,246,0.65)');
       glow.addColorStop(1, 'rgba(59,130,246,0)');
       ctx.fillStyle = glow;
-      ctx.beginPath(); ctx.arc(dotX, dotY, dotR * 3.5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(dotX, dotY, dotR * 4, 0, Math.PI * 2); ctx.fill();
 
       ctx.fillStyle = '#3b82f6';
       ctx.beginPath(); ctx.arc(dotX, dotY, dotR, 0, Math.PI * 2); ctx.fill();
 
       ctx.fillStyle = '#ffffff';
       ctx.beginPath(); ctx.arc(dotX, dotY, dotR * 0.45, 0, Math.PI * 2); ctx.fill();
-
-      // Restore clip — everything below is OUTSIDE the compass box
-      ctx.restore();
 
       // axis labels (outside compass, clip is lifted)
       ctx.font = `bold ${lblSize}px Arial`;
