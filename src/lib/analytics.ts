@@ -1,42 +1,35 @@
-type GTagEvent = {
-  action: string;
-  category: string;
-  label?: string;
-  value?: number;
+// Substitua SUA_TAG_AQUI pela tag do seu painel do Google Analytics
+// Exemplo: G-1234567890
+export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_ID || "G-RILSON";
+
+// https://developers.google.com/analytics/devguides/collection/gtagjs/pages
+export const pageview = (url: string) => {
+  if (typeof window.gtag !== "undefined") {
+    window.gtag("config", GA_TRACKING_ID, {
+      page_path: url,
+    });
+  }
 };
 
 // Variável global do GTM/GA4
 declare global {
   interface Window {
-    gtag: (
-      command: 'event',
-      action: string,
-      params: {
-        event_category?: string;
-        event_label?: string;
-        value?: number;
-        page_title?: string;
-        page_location?: string;
-        send_to?: string;
-        [key: string]: any;
-      }
-    ) => void;
+    gtag?: (...args: unknown[]) => void;
+    dataLayer?: unknown[];
   }
 }
 
-export const trackPageView = (url: string) => {
-  if (typeof window !== 'undefined' && window.gtag && process.env.NEXT_PUBLIC_GA_ID) {
-    window.gtag('event', 'page_view', {
-      page_title: document.title,
-      page_location: url,
-      send_to: process.env.NEXT_PUBLIC_GA_ID,
-    });
-  }
+// https://developers.google.com/analytics/devguides/collection/gtagjs/events
+type GTagEvent = {
+  action: string;
+  category: string;
+  label: string;
+  value: number;
 };
 
-export const trackEvent = ({ action, category, label, value }: GTagEvent) => {
-  if (typeof window !== 'undefined' && window.gtag && process.env.NEXT_PUBLIC_GA_ID) {
-    window.gtag('event', action, {
+export const event = ({ action, category, label, value }: GTagEvent) => {
+  if (typeof window.gtag !== "undefined") {
+    window.gtag("event", action, {
       event_category: category,
       event_label: label,
       value: value,
@@ -44,57 +37,67 @@ export const trackEvent = ({ action, category, label, value }: GTagEvent) => {
   }
 };
 
-export const quizEvents = {
-  start: () => trackEvent({
-    action: 'start',
-    category: 'quiz',
-    label: 'Quiz Started'
-  }),
-  complete: (result: string) => trackEvent({
-    action: 'complete',
-    category: 'quiz',
-    label: result
-  }),
-  answer: (question: number, value: number) => trackEvent({
-    action: 'answer_question',
-    category: 'quiz',
-    label: `Q${question}`,
-    value: value
-  }),
-  abandon: (question: number, total: number) => trackEvent({
-    action: 'abandon_quiz',
-    category: 'quiz',
-    label: `Abandoned at Q${question}/${total}`,
-    value: question
-  })
+// --- Funções Auxiliares Específicas para o Teste ---
+
+export const trackQuizStart = () => {
+  event({
+    action: "started",
+    category: "quiz",
+    label: "Teste Iniciado",
+    value: 1,
+  });
 };
 
-export const resultEvents = {
-  view: (ideology: string, scores: any) => trackEvent({
-    action: 'view_result',
-    category: 'results',
-    label: ideology,
-    value: undefined // Scores could be sent as custom params if needed in future
-  })
+export const trackQuizCompletion = () => {
+  event({
+    action: "completed",
+    category: "quiz",
+    label: "Teste Finalizado",
+    value: 1,
+  });
+};
+
+export const trackResultShare = (platform: "whatsapp" | "twitter" | "facebook") => {
+  event({
+    action: "share",
+    category: "results",
+    label: platform,
+    value: 1,
+  });
+};
+
+export const trackIdeologyClick = (ideologyName: string) => {
+  event({
+    action: "view_ideology",
+    category: "encyclopedia",
+    label: ideologyName,
+    value: 1,
+  });
+};
+
+export const quizEvents = {
+  started: () => event({ action: "started", category: "quiz", label: "Started", value: 1 }),
+  completed: () => event({ action: "completed", category: "quiz", label: "Completed", value: 1 }),
+  abandon: (questionIndex: number, totalQuestions: number) => event({ action: "abandon", category: "quiz", label: `Abandoned at ${questionIndex}/${totalQuestions}`, value: 1 }),
+  answer: (questionIndex: number, questionValue: number) => event({ action: "answer", category: "quiz", label: `Q${questionIndex}`, value: questionValue }),
 };
 
 export const shareEvents = {
-  share: (method: string, ideology: string) => trackEvent({
-    action: 'share',
-    category: 'engagement',
-    label: `${method} - ${ideology}`
-  }),
-  download: (format: string) => trackEvent({
-    action: 'download_image',
-    category: 'engagement',
-    label: format
-  })
+  copyLink: () => event({ action: "copy_link", category: "share", label: "Copiar Link Result", value: 1 }),
+  whatsapp: () => event({ action: "share_whatsapp", category: "share", label: "WhatsApp Share", value: 1 }),
+  twitter: () => event({ action: "share_twitter", category: "share", label: "Twitter Share", value: 1 }),
+  share: (platform: string, resultName: string) => event({ action: "share", category: "share", label: `${platform} - ${resultName}`, value: 1 }),
+  download: (resultName: string) => event({ action: "download_result", category: "share", label: resultName, value: 1 })
 };
 
 export const uiEvents = {
-  themeToggle: (theme: string) => trackEvent({
-    action: 'toggle_theme',
-    category: 'ui',
-    label: theme
-  })
+  toggleTheme: (theme: string) => event({ action: "toggle_theme", category: "ui", label: theme, value: 1 })
+};
+
+export const resultEvents = {
+  viewed: (ideology: string) => event({ action: "view_results", category: "results", label: ideology, value: 1 }),
+};
+
+export const trackPageView = (url: string) => {
+  pageview(url);
 };

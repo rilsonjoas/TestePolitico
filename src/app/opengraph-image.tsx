@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const dynamic = "force-static";
 
-export const alt = "Teste Político 8 Valores - Descubra sua ideologia política";
+export const alt = "Teste Político - Descubra sua ideologia política";
 export const size = {
   width: 1200,
   height: 630,
@@ -61,7 +61,7 @@ export default async function Image() {
             marginBottom: 50,
           }}
         >
-          Descubra sua ideologia política em 70 questões
+          Descubra sua ideologia política em 75 questões
         </span>
 
         {/* Values */}

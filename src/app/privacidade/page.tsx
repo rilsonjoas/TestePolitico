@@ -10,11 +10,7 @@ export default function PrivacidadePage() {
   return (
     <main className="min-h-screen w-full flex flex-col items-center px-4 py-8">
       <div className="w-full max-w-3xl bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 md:p-10">
-        <h1 className="text-3xl font-bold mb-6 text-center">Política de Privacidade e Cookies</h1>
-
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-          Última atualização: {new Date().toLocaleDateString("pt-BR")}
-        </p>
+        <h1 className="text-3xl font-bold mb-6 text-center">Política de privacidade e cookies</h1>
 
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-3">1. Introdução</h2>
@@ -26,7 +22,7 @@ export default function PrivacidadePage() {
         </section>
 
         <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">2. Dados que Coletamos</h2>
+          <h2 className="text-xl font-semibold mb-3">2. Dados que coletamos</h2>
           <p className="mb-3">Podemos coletar os seguintes tipos de informações:</p>
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>
@@ -49,7 +45,7 @@ export default function PrivacidadePage() {
         </section>
 
         <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">3. Cookies e Tecnologias Similares</h2>
+          <h2 className="text-xl font-semibold mb-3">3. Cookies e tecnologias similares</h2>
           <p className="mb-3">Utilizamos cookies e tecnologias similares para:</p>
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>
@@ -68,7 +64,7 @@ export default function PrivacidadePage() {
         </section>
 
         <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">4. Google AdSense e Publicidade</h2>
+          <h2 className="text-xl font-semibold mb-3">4. Google AdSense e publicidade</h2>
           <p className="mb-3">
             Este site utiliza o Google AdSense para exibir anúncios. O Google e seus parceiros
             podem usar cookies para exibir anúncios com base em visitas anteriores a este ou
@@ -88,7 +84,7 @@ export default function PrivacidadePage() {
         </section>
 
         <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">5. Seus Direitos (LGPD)</h2>
+          <h2 className="text-xl font-semibold mb-3">5. Seus direitos (LGPD)</h2>
           <p className="mb-3">
             De acordo com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018),
             você tem os seguintes direitos:
@@ -104,7 +100,7 @@ export default function PrivacidadePage() {
         </section>
 
         <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">6. Como Gerenciar Cookies</h2>
+          <h2 className="text-xl font-semibold mb-3">6. Como gerenciar cookies</h2>
           <p className="mb-3">
             Você pode gerenciar ou desativar cookies através das configurações do seu navegador.
             Note que desativar certos cookies pode afetar a funcionalidade do site.

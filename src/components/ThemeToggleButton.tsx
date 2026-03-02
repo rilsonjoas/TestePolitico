@@ -62,9 +62,9 @@ export function ThemeToggleButton() {
     setOpen(false);
     localStorage.setItem("theme", value);
     applyTheme(value);
-    
+
     // Track theme toggle
-    uiEvents.themeToggle(value);
+    uiEvents.toggleTheme(value);
   };
 
   return (
@@ -77,8 +77,8 @@ export function ThemeToggleButton() {
       >
         {mounted ? (
           theme === "dark" ? <Moon size={20} /> :
-          theme === "light" ? <Sun size={20} /> :
-          <Monitor size={20} />
+            theme === "light" ? <Sun size={20} /> :
+              <Monitor size={20} />
         ) : null}
       </button>
       {open && (

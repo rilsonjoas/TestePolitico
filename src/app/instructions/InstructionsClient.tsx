@@ -34,10 +34,10 @@ export function InstructionsClient() {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-10">
           <Link href="/quiz" className="w-full sm:w-auto">
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               className="w-full sm:w-64 h-14 text-lg font-bold bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/20"
-              onClick={() => quizEvents.start()}
+              onClick={() => quizEvents.started()}
             >
               Iniciar o Teste
             </Button>

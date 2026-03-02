@@ -11,6 +11,7 @@ export interface Question {
 export interface Politician {
   name: string;
   link: string;
+  affinity?: number;
   stats?: {
     econ: number;
     dipl: number;
@@ -33,32 +34,43 @@ export interface Ideology {
     scty: number;
   };
   desc: string;
+  content?: {
+    history: string;
+    corePrinciples: string;
+    curiosities: string;
+  };
   roast?: string;
   politicians: Politician[];
   books: Book[];
+  affinity?: number;
 }
 
 export function slugify(text: string) {
   return text
     .toString()
     .toLowerCase()
-    .normalize('NFD') // Remove acentos
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/\s+/g, '-') // Substitui espaços por hifens
-    .replace(/[^\w\-]+/g, '') // Remove caracteres não-alfanuméricos
-    .replace(/\-\-+/g, '-') // Substitui múltiplos hifens por um único
-    .replace(/^-+/, '') // Remove hifens do início
-    .replace(/-+$/, ''); // Remove hifens do fim
+    .normalize("NFD") // Remove acentos
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "-") // Substitui espaços por hifens
+    .replace(/[^\w\-]+/g, "") // Remove caracteres não-alfanuméricos
+    .replace(/\-\-+/g, "-") // Substitui múltiplos hifens por um único
+    .replace(/^-+/, "") // Remove hifens do início
+    .replace(/-+$/, ""); // Remove hifens do fim
 }
 
-export function getClosestPolitician(e: number, d: number, g: number, s: number) {
+export function getClosestPolitician(
+  e: number,
+  d: number,
+  g: number,
+  s: number,
+) {
   let closestPolitician: Politician | null = null;
   let minDistance = Infinity;
 
   // Flatten all politicians from all ideologies
   const allPoliticians: Politician[] = [];
-  ideologies.forEach(ideology => {
-    ideology.politicians.forEach(p => {
+  ideologies.forEach((ideology) => {
+    ideology.politicians.forEach((p) => {
       // Only include politicians with stats
       if (p.stats) {
         allPoliticians.push(p);
@@ -74,12 +86,15 @@ export function getClosestPolitician(e: number, d: number, g: number, s: number)
       Math.pow(politician.stats.econ - e, 2) +
       Math.pow(politician.stats.dipl - d, 2) +
       Math.pow(politician.stats.govt - g, 2) +
-      Math.pow(politician.stats.scty - s, 2)
+      Math.pow(politician.stats.scty - s, 2),
     );
 
     if (distance < minDistance) {
       minDistance = distance;
-      closestPolitician = politician;
+      closestPolitician = {
+        ...politician,
+        affinity: getMatchPercentage(distance)
+      };
     }
   }
 
@@ -100,7 +115,7 @@ export const questions: Question[] = [
   {
     question:
       "Quanto menos o governo interfere na economia, maior a prosperidade e liberdade econômica das pessoas.",
-    effect: { econ: -10, dipl: 0, govt: 0, scty: 0 },
+    effect: { econ: -20, dipl: 0, govt: 0, scty: 0 },
   },
   {
     question:
@@ -124,8 +139,13 @@ export const questions: Question[] = [
   },
   {
     question:
-      "Programas sociais governamentais permanentes fazem mais mal do que bem — a caridade voluntária e a iniciativa privada são formas mais eficazes de ajudar os mais vulneráveis.",
-    effect: { econ: -10, dipl: 0, govt: 0, scty: 0 },
+      "Programas de bem-estar social mantidos pelo Estado acabam criando dependência financeira e fazem mais mal do que bem a longo prazo.",
+    effect: { econ: -5, dipl: 0, govt: 0, scty: 0 },
+  },
+  {
+    question:
+      "É mais eficaz e moralmente superior ajudar os vulneráveis através da caridade voluntária e iniciativa privada do que pela coerção dos impostos do Estado.",
+    effect: { econ: -5, dipl: 0, govt: 0, scty: 0 },
   },
   {
     question:
@@ -139,7 +159,7 @@ export const questions: Question[] = [
   },
   {
     question:
-      "Serviços de infraestrutura essencial — como água, energia elétrica e saneamento — devem ser de propriedade ou controle público, pois não podem ser deixados à lógica do lucro privado.",
+      "Serviços de infraestrutura essencial na sociedade — como água cristalina e energia elétrica — devem obrigatoriamente estar sob o modelo de controle público e propriedade do Estado.",
     effect: { econ: 10, dipl: 0, govt: 0, scty: 0 },
   },
   {
@@ -160,7 +180,7 @@ export const questions: Question[] = [
   {
     question:
       "As fábricas, terras e outras ferramentas de produção deveriam ser de propriedade e controle dos trabalhadores que as operam.",
-    effect: { econ: 10, dipl: 0, govt: 0, scty: 0 },
+    effect: { econ: 20, dipl: 0, govt: 0, scty: 0 },
   },
   {
     question:
@@ -169,8 +189,13 @@ export const questions: Question[] = [
   },
   {
     question:
-      "O uso da força militar é justificável não apenas em legítima defesa, mas também para proteger interesses estratégicos nacionais no exterior.",
-    effect: { econ: 0, dipl: -10, govt: -10, scty: 0 },
+      "O uso da força militar é plenamente justificável em casos de legítima defesa contra ataques estrangeiros.",
+    effect: { econ: 0, dipl: -5, govt: -5, scty: 0 },
+  },
+  {
+    question:
+      "O uso da força militar é justificável para proteger interesses econômicos ou estratégicos do nosso país no exterior, mesmo sem ataque direto.",
+    effect: { econ: 0, dipl: -5, govt: -5, scty: 0 },
   },
   {
     question:
@@ -180,12 +205,12 @@ export const questions: Question[] = [
   {
     question:
       "Preservar a soberania e a independência do nosso país em relação a influências externas é fundamental.",
-    effect: { econ: 0, dipl: -10, govt: -5, scty: 0 },
+    effect: { econ: 0, dipl: -20, govt: -5, scty: 0 },
   },
   {
     question:
       "A criação de um governo mundial unificado seria um passo positivo para a paz e o progresso da humanidade.",
-    effect: { econ: 0, dipl: 10, govt: 0, scty: 0 },
+    effect: { econ: 0, dipl: 20, govt: 0, scty: 0 },
   },
   {
     question:
@@ -208,7 +233,8 @@ export const questions: Question[] = [
     effect: { econ: -5, dipl: -10, govt: 0, scty: 0 },
   },
   {
-    question: "Acredito que minha nação tem uma cultura, história ou valores que a tornam superior à maioria das outras nações.",
+    question:
+      "Acredito que minha nação tem uma cultura, história ou valores que a tornam superior à maioria das outras nações.",
     effect: { econ: 0, dipl: -10, govt: 0, scty: 0 },
   },
   {
@@ -264,7 +290,7 @@ export const questions: Question[] = [
   {
     question:
       "Qualquer forma de Estado organizado representa, inerentemente, uma ameaça à liberdade individual.",
-    effect: { econ: 0, dipl: 0, govt: 10, scty: 0 },
+    effect: { econ: 0, dipl: 0, govt: 20, scty: 0 },
   },
   {
     question:
@@ -279,7 +305,7 @@ export const questions: Question[] = [
   {
     question:
       "Um governo com liderança forte e hierarquia clara é mais eficaz do que um baseado em consenso e participação horizontal.",
-    effect: { econ: 0, dipl: 0, govt: -10, scty: 0 },
+    effect: { econ: 0, dipl: 0, govt: -20, scty: 0 },
   },
   {
     question:
@@ -314,12 +340,12 @@ export const questions: Question[] = [
   {
     question:
       "As tradições só devem ser mantidas se tiverem um propósito claro e benéfico para a sociedade atual; não possuem valor intrínseco.",
-    effect: { econ: 0, dipl: 0, govt: 0, scty: 10 },
+    effect: { econ: 0, dipl: 0, govt: 0, scty: 20 },
   },
   {
     question:
       "As instituições religiosas e seus preceitos deveriam ter influência direta nas leis e nas políticas governamentais.",
-    effect: { econ: 0, dipl: 0, govt: -10, scty: -10 },
+    effect: { econ: 0, dipl: 0, govt: -10, scty: -20 },
   },
   {
     question:
@@ -396,7 +422,8 @@ export const questions: Question[] = [
     effect: { econ: 10, dipl: 0, govt: 0, scty: 0 },
   },
   {
-    question: "O Estado deve criminalizar a prostituição — ela não deve ser tratada como trabalho legítimo nem regulamentada.",
+    question:
+      "O Estado deve criminalizar a prostituição — ela não deve ser tratada como trabalho legítimo nem regulamentada.",
     effect: { econ: 0, dipl: 0, govt: -10, scty: -10 },
   },
   {
@@ -480,8 +507,9 @@ export const ideologies: Ideology[] = [
   {
     name: "Anarco-Comunismo",
     stats: { econ: 100, dipl: 50, govt: 100, scty: 90 },
-    desc: "Acreditamos que a verdadeira liberdade só é possível com igualdade material. Lutamos pela abolição do Estado, do capitalismo e de toda hierarquia opressora, construindo em seu lugar uma sociedade de comunas livres e autogeridas. Cada pessoa contribui voluntariamente segundo suas capacidades e recebe segundo suas necessidades, sem patrões, sem polícia, sem fronteiras. A cooperação livre entre iguais substitui a coerção. Rejeitamos tanto a tirania do capital quanto a do Estado autoritário.",
-    roast: "Para você, qualquer hierarquia é fascismo, menos a do grupo do WhatsApp da comuna que ninguém modera. Você acredita que a humanidade viveria em paz e harmonia se não fosse o Estado, ignorando 5.000 anos de história humana.",
+    desc: "O Anarco-Comunismo (também conhecido como comunismo libertário ou anarquismo comunista) é uma teoria política e econômica que defende a abolição do Estado, do capitalismo, da propriedade privada dos meios de produção e de toda e qualquer forma de hierarquia coercitiva. Diferente do socialismo estatal, acredita que a transição para uma sociedade sem classes deve ser imediata e baseada na organização voluntária de comunas autogeridas.\n\nPropõe um sistema de distribuição baseado na máxima 'de cada qual segundo suas capacidades, a cada qual segundo suas necessidades', eliminando o conceito de salário e mercado. Historicamente, consolidou-se no final do século XIX através das obras de Piotr Kropotkin e Errico Malatesta, enfatizando a ajuda mútua como um fator de evolução biológica e social. Busca uma ordem social onde a liberdade individual absoluta coexiste com a igualdade econômica coletiva plena, sem a necessidade de um governo centralizado ou sistema policial.",
+    roast:
+      "Para você, qualquer hierarquia é fascismo, menos a do grupo do WhatsApp da comuna que ninguém modera. Você acredita que a humanidade viveria em paz e harmonia se não fosse o Estado, ignorando 5.000 anos de história humana.",
     politicians: [
       {
         name: "Piotr Kropotkin",
@@ -506,25 +534,26 @@ export const ideologies: Ideology[] = [
     ],
     books: [
       {
-        title: "A Conquista do Pão - Kropotkin",
+        title: "A Conquista do Pão (Kropotkin)",
         link: "https://amzn.to/4r7aY6Q",
       },
       {
         title:
-          "O indivíduo, a sociedade e o Estado e outros ensaios - Emma Goldman",
+          "O indivíduo, a sociedade e o Estado e outros ensaios (Emma Goldman)",
         link: "https://amzn.to/4sQW9qy",
       },
       {
-        title: "No Café - Diálogos Sobre O Anarquismo - Malatesta",
+        title: "No Café - Diálogos Sobre O Anarquismo (Malatesta)",
         link: "https://amzn.to/4jQ7djI",
       },
     ],
   },
   {
     name: "Comunismo Libertário",
-    stats: { econ: 100, dipl: 70, govt: 80, scty: 80 },
-    desc: "Defendemos uma sociedade sem classes e sem Estado, organizada através de federações de comunas democráticas e assembleias populares. Não basta derrubar o capitalismo se for para erguer uma nova burocracia em seu lugar. O poder deve fluir de baixo para cima, das bases para as coordenações, nunca o contrário. Combinamos a luta por justiça econômica com a defesa intransigente das liberdades individuais. Incorporamos também a luta ecológica, pois não há libertação humana sem harmonia com a natureza. Municipalismo, democracia direta e ecologia social são nossos pilares.",
-    roast: "Você é o anarquista que insiste em ter um plano de 5 anos para a revolução, mas não consegue organizar a vaquinha do churrasco. Sua utopia é um conselho de bairro que debate por 12 horas se a lixeira deve ser de plástico ou metal.",
+    stats: { econ: 100, dipl: 65, govt: 85, scty: 80 },
+    desc: "O Comunismo Libertário é uma vertente do anarquismo que busca o equilíbrio sintético entre o socialismo científico e a liberdade individual radical. Diferente de correntes autoritárias do marxismo, rejeita a 'ditadura do proletariado' através do Estado, propondo em seu lugar federações de comunas democráticas e conselhos de trabalhadores organizados de baixo para cima.\n\nNo século XX, esta visão foi renovada pela Ecologia Social de Murray Bookchin, que argumenta que a dominação da natureza pela humanidade é um subproduto da dominação do homem pelo homem. Assim, a luta contra o capitalismo é indissociável da luta contra o patriarcado, o racismo e a hierarquia urbana. Defende o municipalismo libertário como estratégia para retomar o poder político para as comunidades locais, transformando as cidades em assembleias populares soberanas que cooperam de forma confederada.",
+    roast:
+      "Você é o anarquista que insiste em ter um plano de 5 anos para a revolução, mas não consegue organizar a vaquinha do churrasco. Sua utopia é um conselho de bairro que debate por 12 horas se a lixeira deve ser de plástico ou metal.",
     politicians: [
       {
         name: "Murray Bookchin",
@@ -548,16 +577,26 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "A Ecologia da Liberdade - Murray Bookchin", link: "https://amzn.to/3ZG4mRl" },
-      { title: "O anarquismo: Da doutrina à ação - Daniel Guérin", link: "https://amzn.to/3OykDVT" },
-      { title: "Anarquismo: crítica e autocrítica", link: "https://amzn.to/4qMcDOy" },
+      {
+        title: "A Ecologia da Liberdade (Murray Bookchin)",
+        link: "https://amzn.to/3ZG4mRl",
+      },
+      {
+        title: "O anarquismo: Da doutrina à ação (Daniel Guérin)",
+        link: "https://amzn.to/3OykDVT",
+      },
+      {
+        title: "Anarquismo: crítica e autocrítica",
+        link: "https://amzn.to/4qMcDOy",
+      },
     ],
   },
   {
     name: "Trotskismo",
     stats: { econ: 100, dipl: 100, govt: 60, scty: 80 },
-    desc: "Seguimos a tradição de Trotski, defendendo a revolução permanente e internacional. O socialismo não pode ser construído em um só país; deve ser uma luta global da classe trabalhadora. Opomos-nos à burocracia estalinista que traiu a revolução, defendendo a verdadeira democracia operária e os conselhos de trabalhadores (sovietes). A vanguarda revolucionária é necessária, mas deve permanecer ligada às massas.",
-    roast: "Sua habilidade principal é fundar partidos que se dividem em três facções na primeira reunião. Você vende jornal na porta da faculdade e espera a Revolução Mundial há 80 anos.",
+    desc: "O Trotskismo é a vertente do Marxismo-Leninismo baseada no pensamento do revolucionário russo Leon Trotsky, surgida como uma oposição ferrenha ao estalinismo dentro da União Soviética. Seu pilar fundamental é a Teoria da Revolução Permanente, que sustenta que a revolução socialista em países subdesenvolvidos deve transbordar as fronteiras nacionais e se tornar mundial para sobreviver, rejeitando a tese do 'socialismo em um só país'.\n\nOs trotskistas defendem a ditadura do proletariado baseada na democracia operária genuína (sovietes), criticando a degeneração burocrática dos Estados operários onde uma casta de funcionários (a burocracia) tomou o poder dos trabalhadores. Prioriza a tática da Frente Única e a luta contra o fascismo, mantendo uma organização internacionalista rigorosa (como a Quarta Internacional) para coordenar a luta global contra o capital e a burocracia.",
+    roast:
+      "Sua habilidade principal é fundar partidos que se dividem em três facções na primeira reunião. Você vende jornal na porta da faculdade e espera a Revolução Mundial há 80 anos.",
     politicians: [
       {
         name: "Leon Trotsky",
@@ -586,18 +625,34 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "A Revolução Permanente - Trotsky", link: "https://amzn.to/46Rxk4n" },
-      { title: "História da Revolução Russa - Trotsky", link: "https://amzn.to/4tQ26Vt" },
-      { title: "A Revolução Traída - Trotsky", link: "https://amzn.to/4c2ox3k" },
-      { title: "O Programa de Transição - Trotsky", link: "https://amzn.to/4qJUkJR" },
-      { title: "Capitalismo Tardio - Ernest Mandel", link: "https://amzn.to/46fBXFh" },
+      {
+        title: "A Revolução Permanente (Trotsky)",
+        link: "https://amzn.to/46Rxk4n",
+      },
+      {
+        title: "História da Revolução Russa (Trotsky)",
+        link: "https://amzn.to/4tQ26Vt",
+      },
+      {
+        title: "A Revolução Traída (Trotsky)",
+        link: "https://amzn.to/4c2ox3k",
+      },
+      {
+        title: "O Programa de Transição (Trotsky)",
+        link: "https://amzn.to/4qJUkJR",
+      },
+      {
+        title: "Capitalismo Tardio (Ernest Mandel)",
+        link: "https://amzn.to/46fBXFh",
+      },
     ],
   },
   {
     name: "Marxismo",
     stats: { econ: 100, dipl: 70, govt: 40, scty: 80 },
-    desc: "O Marxismo é a análise científica do capitalismo e a luta pela emancipação do proletariado. Acreditamos que a história é movida pela luta de classes e que o capitalismo, com suas contradições internas, será inevitavelmente superado pelo comunismo. Defendemos a socialização dos meios de produção e a organização da classe trabalhadora para tomar o poder político e construir uma sociedade sem classes.",
-    roast: "Você chama tudo de 'dialético' quando não sabe explicar. Provavelmente acha que ler livros difíceis te torna moralmente superior a quem trabalha num emprego real.",
+    desc: "O Marxismo é o método de análise socioeconômica e a visão de mundo fundamentada nas obras de Karl Marx e Friedrich Engels, que vê a história da humanidade como a história da luta de classes. Seu conceito central é o materialismo histórico, que argumenta que a base econômica da sociedade (modo de produção) determina sua superestrutura política e ideológica.\n\nMarx analisa o capitalismo como um sistema baseado na exploração do trabalho assalariado e na extração de mais-valia pela burguesia, o que inevitavelmente gera crises de superprodução e a pauperização do proletariado. Propõe que o proletariado, ao tomar consciência de classe, deve liderar uma revolução para abolir a propriedade privada dos meios de produção, instaurando uma fase de transição (socialismo) que eventualmente levaria ao comunismo — uma sociedade sem classes e sem Estado.",
+    roast:
+      "Você chama tudo de 'dialético' quando não sabe explicar. Provavelmente acha que ler livros difíceis te torna moralmente superior a quem trabalha num emprego real.",
     politicians: [
       {
         name: "Karl Marx",
@@ -626,19 +681,35 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "O Manifesto Comunista - Marx e Engels", link: "https://amzn.to/4roqkUZ" },
-      { title: "Formação do Brasil Contemporâneo - Caio Prado Jr.", link: "https://amzn.to/4tJEmC4" },
-      { title: "O Cavaleiro da Esperança - Jorge Amado", link: "https://amzn.to/4cGOk0W" },
-      { title: "Cadernos do Cárcere - Gramsci", link: "https://amzn.to/3MNNQvC" },
-      { title: "Dialética do Esclarecimento - Adorno e Horkheimer", link: "https://amzn.to/4aBVYan" },
-      { title: "O Capital - Karl Marx", link: "https://amzn.to/3OmVEoy" },
+      {
+        title: "O Manifesto Comunista (Marx e Engels)",
+        link: "https://amzn.to/4roqkUZ",
+      },
+      {
+        title: "Formação do Brasil Contemporâneo (Caio Prado Jr.)",
+        link: "https://amzn.to/4tJEmC4",
+      },
+      {
+        title: "O Cavaleiro da Esperança (Jorge Amado)",
+        link: "https://amzn.to/4cGOk0W",
+      },
+      {
+        title: "Cadernos do Cárcere (Gramsci)",
+        link: "https://amzn.to/3MNNQvC",
+      },
+      {
+        title: "Dialética do Esclarecimento (Adorno e Horkheimer)",
+        link: "https://amzn.to/4aBVYan",
+      },
+      { title: "O Capital (Karl Marx)", link: "https://amzn.to/3OmVEoy" },
     ],
   },
   {
     name: "Leninismo",
     stats: { econ: 100, dipl: 40, govt: 20, scty: 70 },
-    desc: "A classe trabalhadora, por si só, não desenvolve espontaneamente consciência revolucionária. É necessário um partido de vanguarda, disciplinado e organizado pelo centralismo democrático, para trazer essa consciência de fora e liderar as massas na tomada do poder. O imperialismo é a fase superior do capitalismo, e sua derrota exige uma estratégia revolucionária coordenada. A ditadura do proletariado, através de sovietes e conselhos populares, esmaga a resistência da burguesia e inicia a construção socialista. O Estado eventualmente definha quando as classes desaparecem.",
-    roast: "Você acha que democracia é uma invenção burguesa e que a única liberdade real é obedecer ao Comitê Central. Se alguém discorda de você, é obviamente um agente da CIA ou um 'revisionista'.",
+    desc: "O Leninismo é o desenvolvimento prático e teórico do marxismo aplicado à era do imperialismo, formulado por Vladimir Lenin para a realidade da Revolução Russa. Sua principal inovação é o conceito de Partido de Vanguarda: uma organização centralizada de revolucionários profissionais que deve liderar, educar e organizar a classe trabalhadora, que sozinha só atingiria uma consciência sindicalista.\n\nLenin defendia o centralismo democrático (liberdade de discussão, unidade de ação) e a necessidade de quebrar o aparelho estatal burguês através de uma revolução violenta, substituindo-o pela ditadura do proletariado baseada na aliança operário-camponesa. Sua obra também analisa o imperialismo como a fase superior do capitalismo, onde a exportação de capitais e a dominação financeira levam a guerras globais, tornando a revolução uma necessidade urgente para a sobrevivência da humanidade.",
+    roast:
+      "Você acha que democracia é uma invenção burguesa e que a única liberdade real é obedecer ao Comitê Central. Se alguém discorda de você, é obviamente um agente da CIA ou um 'revisionista'.",
     politicians: [
       {
         name: "Vladimir Lênin",
@@ -662,28 +733,36 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "O Estado e a Revolução - Lênin", link: "https://amzn.to/4c2246o" },
-      { title: "O que fazer?: questões candentes de nosso movimento - Lênin", link: "https://amzn.to/46KdAzG" },
-      { title: "Imperialismo, Fase Superior do Capitalismo - Lênin", link: "https://amzn.to/4rihrwa" },
-      { title: "Teses de Abril - Lênin", link: "https://amzn.to/4kF3zJM" },
-      { title: "Esquerdismo, doença infantil do comunismo - Lênin", link: "https://amzn.to/4qNfiaB" },
+      {
+        title: "O Estado e a Revolução (Lênin)",
+        link: "https://amzn.to/4c2246o",
+      },
+      {
+        title: "O que fazer?: questões candentes de nosso movimento (Lênin)",
+        link: "https://amzn.to/46KdAzG",
+      },
+      {
+        title: "Imperialismo, Fase Superior do Capitalismo (Lênin)",
+        link: "https://amzn.to/4rihrwa",
+      },
+      { title: "Teses de Abril (Lênin)", link: "https://amzn.to/4kF3zJM" },
+      {
+        title: "Esquerdismo, doença infantil do comunismo (Lênin)",
+        link: "https://amzn.to/4qNfiaB",
+      },
     ],
   },
   {
-    name: "Stalinismo/Maoismo",
-    stats: { econ: 100, dipl: 20, govt: 0, scty: 60 },
-    desc: "É possível e necessário construir o socialismo em um só país, cercado por potências hostis. Isso exige industrialização acelerada, coletivização da agricultura e um partido forte que elimine implacavelmente inimigos de classe e sabotadores. O Maoismo adapta esses princípios às condições do Terceiro Mundo, reconhecendo o campesinato como força revolucionária principal e desenvolvendo a estratégia de guerra popular prolongada. A luta de classes continua sob o socialismo, exigindo vigilância constante e revolução cultural para combater a restauração capitalista. A linha de massas garante que o partido nunca se afaste do povo.",
-    roast: "Você tem um pôster de um ditador bigodudo no quarto e acha que Gulags eram apenas 'colônias de férias para reeducação'. Sua solução para qualquer problema econômico é fuzilar os sabotadores.",
+    name: "Stalinismo",
+    stats: { econ: 100, dipl: 10, govt: 0, scty: 15 },
+    desc: "O Stalinismo descreve o sistema político e econômico implementado por Joseph Stalin na União Soviética, caracterizado por uma industrialização pesada acelerada, a coletivização forçada da agricultura e um regime de controle totalitário absoluto. Abandonando o internacionalismo imediato pelo 'Socialismo em um só país', o stalinismo transformou o partido único em um aparato burocrático onipresente sob o comando indiscutível de um líder supremo.\n\nHistoricamente, é associado ao Grande Expurgo, à rede de campos de trabalho forçado (Gulags) e a uma vigilância estatal extrema, onde qualquer dissidência era vista como sabotagem contra-revolucionária. Embora tenha transformado a URSS em uma superpotência militar e industrial, o custo humano foi imenso, resultando em milhões de mortes por fome e repressão, deixando um legado de centralização extrema e culto à personalidade que moldou o bloco soviético por décadas.",
+    roast:
+      "Você tem um pôster de um ditador bigodudo no quarto e acha que Gulags eram 'colônias de férias para reeducação'. Sua solução para qualquer problema econômico é fuzilar os sabotadores.",
     politicians: [
       {
         name: "Josef Stalin",
         link: "https://pt.wikipedia.org/wiki/Josef_Stalin",
-        stats: { econ: 100, dipl: 20, govt: 0, scty: 30 },
-      },
-      {
-        name: "Mao Tsé-Tung",
-        link: "https://pt.wikipedia.org/wiki/Mao_Ts%C3%A9-Tung",
-        stats: { econ: 100, dipl: 10, govt: 10, scty: 40 },
+        stats: { econ: 100, dipl: 10, govt: 0, scty: 15 },
       },
       {
         name: "Enver Hoxha",
@@ -692,17 +771,59 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "Fundamentos do Leninismo - Stalin", link: "https://amzn.to/46V7g8w" },
-      { title: "O Livro Vermelho - Mao Tsé-Tung", link: "https://amzn.to/4s3RcK5" },
-      { title: "Sobre a Prática e a Contradição - Mao", link: "https://amzn.to/46gKvfb" },
-      { title: "Sobre a Guerra Prolongada - Mao", link: "https://amzn.to/4rXE0Gf" },
+      {
+        title: "Fundamentos do Leninismo (Stalin)",
+        link: "https://amzn.to/46V7g8w",
+      },
+      {
+        title: "Problemas Econômicos do Socialismo na URSS (Stalin)",
+        link: "https://amzn.to/4rN2q7y",
+      },
+      {
+        title: "Arquipélago Gulag (Aleksandr Soljenítsin (análise crítica))",
+        link: "https://amzn.to/4kXCGRM",
+      },
+    ],
+  },
+  {
+    name: "Maoismo",
+    stats: { econ: 100, dipl: 20, govt: 5, scty: 65 },
+    desc: "O Maoismo é a adaptação do Marxismo-Leninismo para a realidade de países agrários e coloniais, desenvolvida por Mao Tsé-Tung durante a Revolução Chinesa. Sua principal tese é a transferência do eixo revolucionário do proletariado urbano para o campesinato, através da estratégia da 'Guerra Popular Prolongada' e do cerco das cidades pelo campo.\n\nMao enfatizava a necessidade de revoluções culturais permanentes para evitar o surgimento de uma nova burguesia dentro do partido, além de promover a 'Linha de Massa' (aprender com o povo para liderar o povo). Esta corrente foca na luta contra o revisionismo e o imperialismo, defendendo que a consciência revolucionária deve ser constantemente temperada pela prática e pelo trabalho manual, tendo influenciado diversos movimentos de libertação no Terceiro Mundo.",
+    roast:
+      "Você acha que '1984' era um manual de instruções e que queimar bibliotecas é 'educação popular'. Sua solução para a burocracia é criar uma nova burocracia para vigiá-la.",
+    politicians: [
+      {
+        name: "Mao Tsé-Tung",
+        link: "https://pt.wikipedia.org/wiki/Mao_Ts%C3%A9-Tung",
+        stats: { econ: 100, dipl: 20, govt: 5, scty: 65 },
+      },
+      {
+        name: "Pol Pot (Camboja)",
+        link: "https://pt.wikipedia.org/wiki/Pol_Pot",
+        stats: { econ: 95, dipl: 5, govt: 0, scty: 20 },
+      },
+    ],
+    books: [
+      {
+        title: "O Livro Vermelho (Mao Tsé-Tung)",
+        link: "https://amzn.to/4s3RcK5",
+      },
+      {
+        title: "Sobre a Prática e a Contradição (Mao)",
+        link: "https://amzn.to/46gKvfb",
+      },
+      {
+        title: "Sobre a Guerra Prolongada (Mao)",
+        link: "https://amzn.to/4rXE0Gf",
+      },
     ],
   },
   {
     name: "Socialismo de Estado",
     stats: { econ: 80, dipl: 30, govt: 30, scty: 70 },
-    desc: "O Estado é o instrumento mais eficaz para transformar a sociedade e garantir justiça econômica. Através da propriedade pública dos setores estratégicos, planejamento centralizado e administração técnica, podemos superar a anarquia do mercado e suas crises cíclicas. A industrialização dirigida pelo Estado desenvolve a nação e eleva o padrão de vida do povo trabalhador. A burocracia estatal, quando bem organizada, distribui recursos de forma mais racional que a mão invisível do mercado. O desenvolvimento nacional vem antes das utopias internacionalistas.",
-    roast: "Você ama preencher formulários em triplicata e acha que a fila do cartório é o auge da civilização. Seu sonho é um mundo onde tudo é funcionário público e nada funciona sem um carimbo.",
+    desc: "O Socialismo de Estado é uma teoria econômica e política que defende o controle estatal direto sobre a produção e distribuição como o meio mais eficaz para alcançar a justiça social e o desenvolvimento nacional. Diferente de vertentes que focam na autogestão operária ou no mercado regulado, esta corrente enfatiza o papel técnico e administrativo do Estado como o planejador central da economia.\n\nHistoricamente, foi adotado por regimes de libertação nacional e desenvolvimentistas no Terceiro Mundo (como o Nasserismo no Egito e o Nehrismo na Índia), buscando superar o subdesenvolvimento através da industrialização dirigida e do controle de recursos estratégicos. Acredita que a burocracia estatal, quando racionalizada e comprometida com o povo, pode eliminar o desperdício capitalista e garantir que o progresso material chegue a todas as camadas da população, muitas vezes priorizando a soberania nacional em detrimento de liberdades individuais clássicas.",
+    roast:
+      "Você ama preencher formulários em triplicata e acha que a fila do cartório é o auge da civilização. Seu sonho é um mundo onde tudo é funcionário público e nada funciona sem um carimbo.",
     politicians: [
       {
         name: "Gamal Abdel Nasser",
@@ -726,17 +847,30 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "A terceira teoria universal: O Livro Verde - Muammar Gaddafi", link: "https://amzn.to/4s1Dasn" },
-      { title: "Estratégia do Desenvolvimento Econômico - Albert Hirschman", link: "https://amzn.to/4rrjbDv" },
-      { title: "A Economia Política do Desenvolvimento - Paul Baran", link: "https://amzn.to/4qCWlHD" },
-      { title: "A Economia Mundial e o Imperialismo - Nikolai Bukharin", link: "https://amzn.to/4azS5Tj" },
+      {
+        title: "A terceira teoria universal: O Livro Verde (Muammar Gaddafi)",
+        link: "https://amzn.to/4s1Dasn",
+      },
+      {
+        title: "Estratégia do Desenvolvimento Econômico (Albert Hirschman)",
+        link: "https://amzn.to/4rrjbDv",
+      },
+      {
+        title: "A Economia Política do Desenvolvimento (Paul Baran)",
+        link: "https://amzn.to/4qCWlHD",
+      },
+      {
+        title: "A Economia Mundial e o Imperialismo (Nikolai Bukharin)",
+        link: "https://amzn.to/4azS5Tj",
+      },
     ],
   },
   {
     name: "Socialismo Religioso",
     stats: { econ: 80, dipl: 50, govt: 70, scty: 20 },
-    desc: "A fé verdadeira exige compromisso com os pobres e oprimidos. Os profetas sempre denunciaram a injustiça e a acumulação de riquezas. A Teologia da Libertação nos ensina que pecar não é apenas transgressão individual, mas também estruturas sociais que perpetuam a miséria. Cristo estava entre os pobres, e nós devemos estar também. Defendemos reformas econômicas radicais, redistribuição de terras e riquezas, educação e saúde para todos, dentro de um quadro democrático. A libertação é espiritual e material, pessoal e coletiva.",
-    roast: "Você vai à missa com uma camiseta de Che Guevara e deixa o padre confuso. Acha que Jesus multiplicou os pães e os peixes como uma crítica à cadeia de suprimentos capitalista.",
+    desc: "O Socialismo Religioso é uma vertente que busca fundamentar os ideais de justiça social, igualdade e vida comunitária em preceitos de fé e escrituras sagradas. Diferente do socialismo secular, que muitas vezes rejeita a religião, esta corrente argumenta que a mensagem divina (seja cristã, islâmica ou judaica) exige ativamente a abolição da exploração, a proteção dos pobres e a gestão coletiva dos recursos naturais como uma forma de mordomia espiritual.\n\nNo Brasil, este pensamento manifestou-se fortemente na Teologia da Libertação, que propõe a 'Opção Preferencial pelos Pobres' e vê o pecado não apenas como um ato individual, mas como estruturas sociais opressivas que devem ser derrubadas. Para o socialista religioso, a luta política por dignidade material é uma extensão direta do culto a Deus, buscando construir o 'Reino' na terra através de comunidades eclesiais de base, movimentos agrários e a defesa intransigente dos direitos humanos como sagrados.",
+    roast:
+      "Você vai à missa com uma camiseta de Che Guevara e deixa o padre confuso. Acha que Jesus multiplicou os pães e os peixes como uma crítica à cadeia de suprimentos capitalista.",
     politicians: [
       {
         name: "Frei Betto",
@@ -755,17 +889,30 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "Teologia da Libertação - Gustavo Gutiérrez", link: "https://amzn.to/3OPlVvN" },
-      { title: "Jesus Cristo Libertador - Leonardo Boff", link: "https://amzn.to/3OPlX6T" },
-      { title: "Batismo de Sangue - Frei Betto", link: "https://amzn.to/3Mlf0Kd" },
-      { title: "Igreja: Carisma e Poder - Leonardo Boff", link: "https://amzn.to/4cCc9Hj" },
+      {
+        title: "Teologia da Libertação (Gustavo Gutiérrez)",
+        link: "https://amzn.to/3OPlVvN",
+      },
+      {
+        title: "Jesus Cristo Libertador (Leonardo Boff)",
+        link: "https://amzn.to/3OPlX6T",
+      },
+      {
+        title: "Batismo de Sangue (Frei Betto)",
+        link: "https://amzn.to/3Mlf0Kd",
+      },
+      {
+        title: "Igreja: Carisma e Poder (Leonardo Boff)",
+        link: "https://amzn.to/4cCc9Hj",
+      },
     ],
   },
   {
     name: "Socialismo Democrático",
     stats: { econ: 80, dipl: 50, govt: 50, scty: 80 },
-    desc: "O socialismo deve ser conquistado através da democracia, e a democracia só é plena quando se estende à esfera econômica. Lutamos nas urnas, nos sindicatos e nos movimentos sociais por uma transformação gradual mas profunda da sociedade. Os setores estratégicos da economia devem ser controlados democraticamente pelo povo, não por acionistas ou burocratas. Um Estado de bem-estar robusto garante saúde, educação e moradia como direitos, não mercadorias. Rejeitamos tanto o capitalismo selvagem quanto o autoritarismo que se disfarçou de socialismo no século XX.",
-    roast: "Você é radical demais para os liberais e moderado demais para os comunistas, então ninguém te convida para as festas. Acha que pode derrubar o sistema votando nele a cada 4 anos.",
+    desc: "O Socialismo Democrático é a ideologia que defende a criação de uma economia socialista através de métodos democráticos, constitucionais e parlamentares, rejeitando tanto o autoritarismo de partido único quanto a desigualdade intrínseca ao capitalismo. Seu objetivo é a democratização total da vida social, estendendo o ideal de voto e participação popular da política para os locais de trabalho, através da autogestão ou do controle público de setores estratégicos.\n\nDiferente da social-democracia clássica, o socialismo democrático não busca apenas reformar ou 'humanizar' o capitalismo, mas superá-lo gradualmente em direção a uma economia focada no bem comum e na propriedade coletiva. Valoriza profundamente as liberdades civis, o pluralismo e os direitos individuais, acreditando que a verdadeira liberdade só é possível quando todos possuem segurança econômica e participação real nas decisões que moldam seu futuro.",
+    roast:
+      "Você é radical demais para os liberais e moderado demais para os comunistas, então ninguém te convida para as festas. Acha que pode derrubar o sistema votando nele a cada 4 anos.",
     politicians: [
       {
         name: "Leonel Brizola (BR)",
@@ -784,16 +931,26 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "O Caminho para o Poder - Karl Kautsky", link: "https://amzn.to/4kG2Vfa" },
-      { title: "Por Que Não o Socialismo? - G.A. Cohen", link: "https://amzn.to/3ZFM9mT" },
-      { title: "Socialismo Evolucionário - Eduard Bernstein", link: "https://amzn.to/4qIpLEg" },
+      {
+        title: "O Caminho para o Poder (Karl Kautsky)",
+        link: "https://amzn.to/4kG2Vfa",
+      },
+      {
+        title: "Por Que Não o Socialismo? (G.A. Cohen)",
+        link: "https://amzn.to/3ZFM9mT",
+      },
+      {
+        title: "Socialismo Evolucionário (Eduard Bernstein)",
+        link: "https://amzn.to/4qIpLEg",
+      },
     ],
   },
   {
     name: "Socialismo Revolucionário",
     stats: { econ: 80, dipl: 20, govt: 50, scty: 70 },
-    desc: "O reformismo é uma ilusão! A burguesia nunca entregará seu poder pacificamente. A história mostra que toda conquista dos trabalhadores foi arrancada pela luta, e que toda concessão pode ser retirada. A via parlamentar está bloqueada pelos interesses do capital. Somente a ação revolucionária das massas organizadas pode destruir o Estado burguês e construir uma nova sociedade. Não queremos reformar o capitalismo, queremos superá-lo. A revolução não é um momento, é um processo que exige organização, consciência de classe e disposição para a luta.",
-    roast: "Você usa boina em dias quentes e chama qualquer um que tenha um iPhone de 'pequeno-burguês'. Vive esperando o Grande Dia da Revolução enquanto reclama do preço do latão.",
+    desc: "O Socialismo Revolucionário descreve vertentes que acreditam que as estruturas de poder do capitalismo são tão entranhadas e auto-preservativas que uma mudança gradual ou eleitoral é impossível ou insuficiente para derrubá-las. Esta corrente defende a necessidade de uma ruptura abrupta e profunda com a ordem estabelecida, geralmente através de movimentos de massa, greves gerais insurrecionais ou luta armada, para desmantelar o Estado burguês e suas instituições.\n\nPara o revolucionário, a 'violência revolucionária' é vista como uma autodefesa histórica contra as opressões sistêmicas do capital. Embora compartilhe objetivos finais com outras correntes socialistas, sua característica definidora é a estratégia de confronto direto e a crença de que a nova sociedade deve ser construída sobre os escombros da antiga, sem tentar reformar o que é visto como irremediavelmente injusto.\n\nO Socialismo Revolucionário sustenta que o sistema capitalista é intrinsecamente incapaz de ser reformado para atender aos interesses da maioria e que qualquer tentativa de mudança puramente parlamentar será bloqueada ou sabotada pela classe dominante. Portanto, a única via para a emancipação real é a ruptura revolucionária — a tomada do poder político pelas massas organizadas e a destruição do aparelho estatal burguês. Esta corrente prioriza a luta direta, a greve general e, em casos de repressão, a resistência armada. Inspirada por figuras como Che Guevara e Thomas Sankara, enfatiza a necessidade de uma ética revolucionária, o internacionalismo militante e a construção de um novo homem e mulher, livres da alienação mercantil. Vê a revolução não como um golpe de Estado, mas como uma transformação radical da consciência e das relações de poder na sociedade.",
+    roast:
+      "Você usa boina em dias quentes e chama qualquer um que tenha um iPhone de 'pequeno-burguês'. Vive esperando o Grande Dia da Revolução enquanto reclama do preço do latão.",
     politicians: [
       {
         name: "Che Guevara",
@@ -812,17 +969,31 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "O socialismo humanista - Che Guevara", link: "https://amzn.to/4apCLtH" },
-      { title: "De moto pela América do Sul - Che Guevara", link: "https://amzn.to/4aJG65X" },
-      { title: "Os Condenados da Terra - Frantz Fanon", link: "https://amzn.to/4tNT6jC" },
-      { title: "A Situação da Classe Trabalhadora na Inglaterra - Friedrich Engels", link: "https://amzn.to/4c1l4C3" },
+      {
+        title: "O socialismo humanista (Che Guevara)",
+        link: "https://amzn.to/4apCLtH",
+      },
+      {
+        title: "De moto pela América do Sul (Che Guevara)",
+        link: "https://amzn.to/4aJG65X",
+      },
+      {
+        title: "Os Condenados da Terra (Frantz Fanon)",
+        link: "https://amzn.to/4tNT6jC",
+      },
+      {
+        title:
+          "A Situação da Classe Trabalhadora na Inglaterra (Friedrich Engels)",
+        link: "https://amzn.to/4c1l4C3",
+      },
     ],
   },
   {
     name: "Socialismo Libertário",
-    stats: { econ: 80, dipl: 80, govt: 80, scty: 80 },
-    desc: "O Socialismo Libertário busca uma sociedade igualitária e livre, rejeitando tanto o controle estatal centralizado quanto a exploração capitalista. Acreditamos na autogestão dos trabalhadores, na democracia direta e na propriedade coletiva ou comum dos meios de produção, mas sem a brutalidade de uma vanguarda autoritária. A liberdade individual é inseparável da igualdade social; não pode haver uma sem a outra.",
-    roast: "Você passa 90% do tempo explicando que a URSS não era socialismo de verdade e os outros 10% brigando com outros esquerdistas sobre quem é mais revolucionário.",
+    stats: { econ: 80, dipl: 80, govt: 75, scty: 80 },
+    desc: "O Socialismo Libertário é um guarda-chuva amplo que reúne correntes anticapitalistas comprometidas com a liberdade individual e a crítica radical a toda forma de hierarquia ilegítima — seja do Estado, do capital ou de estruturas culturais opressoras. Diferentemente do Anarco-Comunismo (que prioriza a abolição imediata do Estado) e do Comunismo Libertário (que parte de Bookchin e da ecologia social), o Socialismo Libertário enfatiza a crítica intelectual, o ativismo civil e a construção de alternativas prefigurativas dentro da sociedade existente. Inclui sindicalistas revolucionários, anarquistas individuais e socialistas anticentralistas.",
+    roast:
+      "Você passa 90% do tempo explicando que a URSS não era socialismo de verdade e os outros 10% brigando com outros esquerdistas sobre quem é mais revolucionário.",
     politicians: [
       {
         name: "Noam Chomsky",
@@ -839,24 +1010,32 @@ export const ideologies: Ideology[] = [
         link: "https://pt.wikipedia.org/wiki/David_Graeber",
         stats: { econ: 90, dipl: 80, govt: 95, scty: 90 },
       },
-      {
-        name: "Murray Bookchin (EUA)",
-        link: "https://pt.wikipedia.org/wiki/Murray_Bookchin",
-        stats: { econ: 85, dipl: 75, govt: 95, scty: 85 },
-      },
     ],
     books: [
-      { title: "Quem manda no mundo? - Noam Chomsky", link: "https://amzn.to/46VAvYQ" },
-      { title: "Dívida: Os Primeiros 5000 Anos - David Graeber", link: "https://amzn.to/46ZZudB" },
-      { title: "Textos anarquistas - Mikhail Bakunin", link: "https://amzn.to/4aWrh0S" },
-      { title: "Ecologia social e outros ensaios - Murray Bookchin", link: "https://amzn.to/4qLV4hF" },
+      {
+        title: "Quem manda no mundo? (Noam Chomsky)",
+        link: "https://amzn.to/46VAvYQ",
+      },
+      {
+        title: "Dívida: Os Primeiros 5000 Anos (David Graeber)",
+        link: "https://amzn.to/46ZZudB",
+      },
+      {
+        title: "Textos anarquistas (Mikhail Bakunin)",
+        link: "https://amzn.to/4aWrh0S",
+      },
+      {
+        title: "Ecologia social e outros ensaios (Murray Bookchin)",
+        link: "https://amzn.to/4qLV4hF",
+      },
     ],
   },
   {
     name: "Populismo de Esquerda",
     stats: { econ: 60, dipl: 40, govt: 30, scty: 70 },
-    desc: "O povo contra a oligarquia! Por décadas, uma elite corrupta governou em benefício próprio, privatizando o público, entregando nossas riquezas ao capital estrangeiro e empobrecendo a maioria. Chegou a hora do povo retomar o que é seu. Nacionalização dos recursos estratégicos, redistribuição de renda, serviços públicos de qualidade e soberania nacional. Não somos nem esquerda nem direita tradicionais; representamos os de baixo contra os de cima. A democracia deve servir ao povo, não aos banqueiros. Pátria, povo e dignidade!",
-    roast: "Você acha que a inflação é uma conspiração das elites e que imprimir dinheiro é política social. Seu passatempo favorito é culpar o imperialismo ianque porque seu time perdeu.",
+    desc: "O Populismo de Esquerda é uma estratégia política que busca mobilizar 'o povo' contra uma 'elite' ou oligarquia percebida como opressora e corrupta. Diferente das vertentes marxistas ortodoxas, baseia-se mais na identidade popular e na demanda por justiça social imediata do que exclusivamente na luta industrial de classes. Propõe um Estado forte e interventor que atue como o defensor dos interesses das maiorias despossuídas, muitas vezes através de programas de redistribuição de renda nacionalistas e carismáticos.\n\nTeorizado por pensadores como Ernesto Laclau e Chantal Mouffe, o populismo de esquerda vê a política como a construção de uma 'fronteira antagônica' entre os de baixo e os de cima, buscando radicalizar a democracia para incluir os setores historicamente marginalizados. Critica as instituições liberais como sendo meras ferramentas das elites, preferindo formas de participação direta e lideranças fortes que encarnem a vontade popular contra os interesses financeiros e internacionais.",
+    roast:
+      "Você acha que a inflação é uma conspiração das elites e que imprimir dinheiro é política social. Seu passatempo favorito é culpar o imperialismo ianque porque seu time perdeu.",
     politicians: [
       {
         name: "Lula (Luiz Inácio Lula da Silva)",
@@ -873,24 +1052,63 @@ export const ideologies: Ideology[] = [
         link: "https://pt.wikipedia.org/wiki/Guilherme_Boulos",
         stats: { econ: 70, dipl: 45, govt: 40, scty: 80 },
       },
+    ],
+    books: [
+      { title: "A Verdade Vencerá (Lula)", link: "https://amzn.to/4kSNxMP" },
       {
-        name: "Juan Perón",
+        title: "As Veias Abertas da América Latina (Galeano)",
+        link: "https://amzn.to/3OXp8JK",
+      },
+      {
+        title: "A Razão Populista (Ernesto Laclau)",
+        link: "https://amzn.to/3MoHYZJ",
+      },
+      {
+        title: "O Que é Populismo? (Jan-Werner Müller)",
+        link: "https://amzn.to/4c3huau",
+      },
+    ],
+  },
+  {
+    name: "Justicialismo",
+    stats: { econ: 65, dipl: 30, govt: 25, scty: 55 },
+    desc: "O Justicialismo (ou Peronismo) é o movimento nacionalista e social fundado por Juan Domingo Perón na Argentina, baseado em três pilares fundamentais: a soberania política, a independência econômica e a justiça social (a 'Terceira Posição'). Rejeita tanto o liberalismo capitalista quanto o socialismo marxista, propondo em seu lugar uma organização corporativista onde o Estado atua como um mediador harmonioso entre o capital e o trabalho, buscando o bem-estar da classe operária sem abolir a propriedade privada.\n\nÉ marcado por um forte componente emocional e simbólico, centralizado no culto às figuras de Perón e Evita, e pela mobilização massiva através de sindicatos. O justicialismo defende o desenvolvimento industrial nacional, a proteção aos trabalhadores e uma política externa nacionalista, mantendo-se como uma força política camaleônica que abrange vertentes que vão da extrema-esquerda à direita conservadora, sempre unidas pela mística peronista e pela defesa do interesse nacional argentino.",
+    roast:
+      "Sua política econômica consiste em tabelar preços, imprimir dinheiro e culpar os estrangeiros quando dá errado. Você não sabe se é de esquerda ou de direita, mas sabe que o líder tem sempre razão.",
+    politicians: [
+      {
+        name: "Juan Domingo Perón",
         link: "https://pt.wikipedia.org/wiki/Juan_Per%C3%B3n",
-        stats: { econ: 70, dipl: 30, govt: 25, scty: 55 },
+        stats: { econ: 65, dipl: 30, govt: 25, scty: 55 },
+      },
+      {
+        name: "Eva Perón (Evita)",
+        link: "https://pt.wikipedia.org/wiki/Eva_Per%C3%B3n",
+        stats: { econ: 75, dipl: 30, govt: 35, scty: 65 },
+      },
+      {
+        name: "Cristina Kirchner",
+        link: "https://pt.wikipedia.org/wiki/Cristina_Fern%C3%A1ndez_de_Kirchner",
+        stats: { econ: 65, dipl: 30, govt: 25, scty: 55 },
       },
     ],
     books: [
-      { title: "A Verdade Vencerá - Lula", link: "https://amzn.to/4kSNxMP" },
-      { title: "As Veias Abertas da América Latina - Galeano", link: "https://amzn.to/3OXp8JK" },
-      { title: "A Razão Populista - Ernesto Laclau", link: "https://amzn.to/3MoHYZJ" },
-      { title: "O Que é Populismo? - Jan-Werner Müller", link: "https://amzn.to/4c3huau" },
+      {
+        title: "A Comunidade Organizada (Juan Perón)",
+        link: "https://amzn.to/4l3ajRT",
+      },
+      {
+        title: "A Razão da Minha Vida (Eva Perón)",
+        link: "https://amzn.to/4aUslkH",
+      },
     ],
   },
   {
     name: "Distributismo",
     stats: { econ: 60, dipl: 45, govt: 40, scty: 20 },
-    desc: "Três acres e uma vaca! Nem capitalismo de monopólios nem socialismo de burocratas. A propriedade deve estar amplamente distribuída entre as famílias, baseada nos princípios da justiça e da Doutrina Social da Igreja (como a Rerum Novarum). Defendemos uma sociedade de pequenos proprietários: agricultores em suas terras e artesãos em suas oficinas, organizando a produção via guildas e cooperativas. A família é a unidade básica da sociedade, e a comunidade local é onde a democracia realmente funciona. Grande demais é ruim, seja empresa ou Estado.",
-    roast: "Você quer viver no Condado dos Hobbits pagando dízimo. Acha que o problema do mundo é que não temos vacas suficientes e que o feudalismo foi injustiçado pela história, então sua solução para a internet é criar uma cooperativa católica de fibra ótica.",
+    desc: "O Distributismo é uma filosofia social e econômica baseada nos princípios do pensamento social cristão (especialmente de G.K. Chesterton e Hilaire Belloc). Defende que a melhor forma de garantir a liberdade é assegurar que a propriedade dos meios de produção seja distribuída o mais amplamente possível na sociedade, em vez de ficar concentrada nas mãos do Estado (socialismo) ou de poucos indivíduos e corporações (capitalismo).\n\nPara o distributista, a família é a unidade econômica básica, e a liberdade real só existe quando o homem possui sua própria terra ou ferramentas de trabalho. Promove o cooperativismo, o fortalecimento das comunidades locais e o princípio da subsidiariedade, acreditando que os problemas devem ser resolvidos no nível mais próximo possível do cidadão. É uma visão que valoriza a pequena propriedade, o artesanato e a dignidade do trabalho manual, vendo a concentração de poder econômico como uma ameaça direta à liberdade humana e espiritual.",
+    roast:
+      "Você quer viver no Condado dos Hobbits pagando dízimo. Acha que o problema do mundo é que não temos vacas suficientes e que o feudalismo foi injustiçado pela história, então sua solução para a internet é criar uma cooperativa católica de fibra ótica.",
     politicians: [
       {
         name: "G. K. Chesterton",
@@ -907,70 +1125,37 @@ export const ideologies: Ideology[] = [
         link: "https://pt.wikipedia.org/wiki/Hilaire_Belloc",
         stats: { econ: 55, dipl: 45, govt: 45, scty: 15 },
       },
-      {
-        name: "Dorothy Day",
-        link: "https://pt.wikipedia.org/wiki/Dorothy_Day",
-        stats: { econ: 80, dipl: 70, govt: 70, scty: 50 },
-      },
     ],
     books: [
-      { title: "Rerum Novarum - Papa Leão XIII", link: "https://amzn.to/4s5hz1V" },
-      { title: "Quadragesimo Anno - Papa Pio XI", link: "https://amzn.to/46m4Ek0" },
-      { title: "Centesimus Annus - Papa João Paulo II", link: "https://amzn.to/4ryabwv" },
-      { title: "O Estado Servil - Hilaire Belloc", link: "https://amzn.to/4qTUs9I" },
-      { title: "Um esboço da sanidade - Chesterton", link: "https://amzn.to/4tQCLus" },
+      {
+        title: "Rerum Novarum (Papa Leão XIII)",
+        link: "https://amzn.to/4s5hz1V",
+      },
+      {
+        title: "Quadragesimo Anno (Papa Pio XI)",
+        link: "https://amzn.to/46m4Ek0",
+      },
+      {
+        title: "Centesimus Annus (Papa João Paulo II)",
+        link: "https://amzn.to/4ryabwv",
+      },
+      {
+        title: "O Estado Servil (Hilaire Belloc)",
+        link: "https://amzn.to/4qTUs9I",
+      },
+      {
+        title: "Um esboço da sanidade (Chesterton)",
+        link: "https://amzn.to/4tQCLus",
+      },
     ],
   },
-  {
-    name: "Liberalismo Social",
-    stats: { econ: 60, dipl: 60, govt: 60, scty: 80 },
-    desc: "A verdadeira liberdade não é apenas a ausência de coerção do Estado, mas a capacidade real de viver uma vida plena. De que adianta a liberdade formal para quem não tem educação, saúde ou oportunidades? Defendemos uma economia de mercado regulada, onde o Estado corrige as falhas do mercado, garante igualdade de oportunidades e protege os mais vulneráveis com uma rede de segurança social robusta. Direitos civis, tolerância, pluralismo e justiça social caminham juntos. A liberdade de cada um depende das condições materiais que permitem exercê-la.",
-    roast: "Sua ideologia é 'por que não podemos todos nos dar bem e tributar os ricos um pouquinho?'. Você provavelmente tem uma foto do Obama na estante e acha que twittar é ativismo.",
-    politicians: [
-      {
-        name: "Geraldo Alckmin",
-        link: "https://pt.wikipedia.org/wiki/Geraldo_Alckmin",
-        stats: { econ: 50, dipl: 50, govt: 50, scty: 60 },
-      },
-      {
-        name: "Fernando Henrique Cardoso (BR)",
-        link: "https://pt.wikipedia.org/wiki/Fernando_Henrique_Cardoso",
-        stats: { econ: 55, dipl: 60, govt: 55, scty: 70 },
-      },
-      {
-        name: "Joe Biden (EUA)",
-        link: "https://pt.wikipedia.org/wiki/Joe_Biden",
-        stats: { econ: 50, dipl: 60, govt: 60, scty: 70 },
-      },
-      {
-        name: "Barack Obama",
-        link: "https://pt.wikipedia.org/wiki/Barack_Obama",
-        stats: { econ: 55, dipl: 70, govt: 65, scty: 80 },
-      },
-      {
-        name: "Theodore Roosevelt (EUA)",
-        link: "https://pt.wikipedia.org/wiki/Theodore_Roosevelt",
-        stats: { econ: 55, dipl: 60, govt: 55, scty: 65 },
-      },
-      {
-        name: "Martin Luther King Jr. (EUA)",
-        link: "https://pt.wikipedia.org/wiki/Martin_Luther_King_Jr.",
-        stats: { econ: 60, dipl: 75, govt: 70, scty: 95 },
-      },
-    ],
-    books: [
-      { title: "Uma Teoria da Justiça - John Rawls", link: "https://amzn.to/4ruzSOa" },
-      { title: "Desenvolvimento como Liberdade - Amartya Sen", link: "https://amzn.to/4avdrCF" },
-      { title: "Liberalismo - L. T. Hobhouse", link: "https://amzn.to/4rvQkOh" },
-      { title: "Justiça como Equidade - John Rawls", link: "https://amzn.to/4l9kKDT" },
-      { title: "A dádiva do amor - Martin Luther King Jr.", link: "https://amzn.to/4tRaELs" },
-    ],
-  },
+
   {
     name: "Democracia Cristã",
     stats: { econ: 60, dipl: 60, govt: 50, scty: 30 },
-    desc: "A política deve ser guiada por princípios morais enraizados na tradição cristã: dignidade da pessoa humana, solidariedade, subsidiariedade e bem comum. Defendemos uma economia social de mercado, onde a livre iniciativa é equilibrada pela responsabilidade social e pela proteção dos mais fracos. A família é a célula fundamental da sociedade e merece proteção especial. Somos favoráveis à cooperação internacional e à integração europeia, pois a paz e a prosperidade dependem da colaboração entre nações. Moderação, não extremismo; reforma, não revolução.",
-    roast: "Você é o político padrão da Europa: entediante, burocrático e levemente religioso. Sua maior aventura é aumentar a taxa de juros em 0,25%.",
+    desc: "A Democracia Cristã é uma ideologia política que busca aplicar princípios cristãos (especialmente católicos e protestantes neocalvinistas) à vida pública, operando dentro de um quadro democrático e pluralista. Sua atuação baseia-se na defesa da dignidade da pessoa humana, na justiça social e, crucialmente, no princípio da subsidiariedade — que sustenta que o Estado deve intervir apenas quando as famílias e comunidades locais não puderem resolver seus problemas.\n\nHistoricamente, foi fundamental na reconstrução da Europa após a Segunda Guerra Mundial, sendo uma das arquitetas da União Europeia. Propõe a 'Economia Social de Mercado', que combina a liberdade econômica e o livre mercado com um robusto sistema de bem-estar social para garantir que ninguém seja deixado para trás. Valoriza as instituições tradicionais, a ordem moral e o compromisso cristão com a paz, posicionando-se como uma força centrista que equilibra o conservadorismo social com a responsabilidade econômica e a solidariedade comunitária.",
+    roast:
+      "Você é o político padrão da Europa: entediante, burocrático e levemente religioso. Sua maior aventura é aumentar a taxa de juros em 0,25%.",
     politicians: [
       {
         name: "Konrad Adenauer",
@@ -994,16 +1179,26 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "Rerum Novarum - Papa Leão XIII", link: "https://amzn.to/4s5hz1V" },
-      { title: "Populorum Progressio - Papa Paulo VI", link: "https://amzn.to/4aQOqkj" },
-      { title: "Doutrina Social da Igreja - Compêndio", link: "https://amzn.to/4tOK45T" },
+      {
+        title: "Rerum Novarum (Papa Leão XIII)",
+        link: "https://amzn.to/4s5hz1V",
+      },
+      {
+        title: "Populorum Progressio (Papa Paulo VI)",
+        link: "https://amzn.to/4aQOqkj",
+      },
+      {
+        title: "Doutrina Social da Igreja (Compêndio)",
+        link: "https://amzn.to/4tOK45T",
+      },
     ],
   },
   {
     name: "Social Democracia",
     stats: { econ: 60, dipl: 70, govt: 60, scty: 80 },
-    desc: "O capitalismo pode ser civilizado. Através de sindicatos fortes, negociação coletiva, regulação do mercado e um Estado de bem-estar universal e generoso, podemos garantir que a prosperidade seja compartilhada por todos. Saúde universal, educação pública de qualidade, aposentadoria digna, seguro-desemprego e licenças parentais são direitos, não privilégios. A democracia não termina na urna; ela deve se estender ao local de trabalho e à economia. Buscamos uma sociedade onde todos tenham segurança material para viver com dignidade e liberdade real.",
-    roast: "Você quer a revolução, desde que ela não atrase seu brunch. Acha que votar em partidos de esquerda moderada é um ato radical de rebeldia.",
+    desc: "A Social Democracia é um regime político e econômico que busca conciliar o capitalismo de mercado com a justiça social e a redução das desigualdades através de um Estado de Bem-Estar Social (Welfare State) robusto. Diferente do socialismo democrático, a social-democracia não visa abolir a propriedade privada ou o mercado, mas sim 'civilizá-los' através de impostos progressivos, regulação estatal e serviços públicos universais de alta qualidade (saúde, educação, creches, lazer). Baseia-se no consenso entre capital e trabalho, onde os sindicatos têm um papel central na definição de políticas e os lucros das empresas financiam uma rede de segurança que protege o cidadão 'do berço ao túmulo'. É o modelo clássico dos países escandinavos, onde a alta eficiência econômica coexiste com as menores taxas de pobreza e desigualdade do mundo.",
+    roast:
+      "Você quer a revolução, desde que ela não atrase seu brunch. Acha que votar em partidos de esquerda moderada é um ato radical de rebeldia.",
     politicians: [
       {
         name: "Olof Palme",
@@ -1022,19 +1217,26 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "A Terceira Via - Anthony Giddens", link: "https://amzn.to/4axxf8x" },
       {
-        title: "Nem com Marx, nem contra Marx - Norberto Bobbio",
+        title: "A Terceira Via (Anthony Giddens)",
+        link: "https://amzn.to/4axxf8x",
+      },
+      {
+        title: "Nem com Marx, nem contra Marx (Norberto Bobbio)",
         link: "https://amzn.to/4kVrzJ4",
       },
-      { title: "Capital no Século XXI - Thomas Piketty", link: "https://amzn.to/4kVq3Xq" },
+      {
+        title: "Capital no Século XXI (Thomas Piketty)",
+        link: "https://amzn.to/4kVq3Xq",
+      },
     ],
   },
   {
     name: "Progressismo",
     stats: { econ: 60, dipl: 80, govt: 60, scty: 100 },
-    desc: "O arco da história é longo, mas se curva em direção à justiça. Acreditamos no progresso: na ciência que cura doenças e resolve problemas, na educação que liberta mentes, nos direitos civis que expandem a dignidade a todos. Cada geração pode e deve melhorar a anterior. Lutamos contra todas as formas de discriminação, pela igualdade de gênero, pelos direitos LGBTQ+, pela justiça racial e pela proteção do meio ambiente. O governo é uma ferramenta para o bem comum quando usado corretamente. Não aceitamos que 'sempre foi assim' como desculpa para a injustiça.",
-    roast: "Você cancela pessoas no Twitter por esporte e acha que usar a hashtag certa vai salvar o mundo. Sua principal angústia existencial é decidir qual leite vegetal polui menos.",
+    desc: "O Progressismo é uma filosofia política que defende que o progresso social, científico e econômico é essencial para a melhoria da condição humana. Historicamente ligado ao Iluminismo, acredita que a sociedade pode e deve ser ativamente reformada através de políticas públicas baseadas na ciência, na razão e na justiça social.\n\nO progressista moderno foca na defesa dos direitos civis, na proteção ambiental, na regulação dos mercados para evitar abusos corporativos e na criação de uma rede de segurança social robusta. Diferente das vertentes revolucionárias, busca mudanças dentro do quadro democrático, enfatizando a inclusão de grupos marginalizados e a superação de preconceitos estruturais como o racismo, o sexismo e a homofobia. Vê o Estado não como um fim em si mesmo, mas como o motor necessário para corrigir desigualdades e garantir que o avanço tecnológico beneficie toda a população.",
+    roast:
+      "Você cancela pessoas no Twitter por esporte e acha que usar a hashtag certa vai salvar o mundo. Sua principal angústia existencial é decidir qual leite vegetal polui menos.",
     politicians: [
       {
         name: "Elizabeth Warren",
@@ -1053,17 +1255,30 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "A Promessa da Vida Americana - Herbert Croly", link: "https://amzn.to/4qPLrhO" },
-      { title: "Democracia e Educação - John Dewey", link: "https://amzn.to/4cHICMo" },
-      { title: "Pequeno Manual Antirracista - Djamila Ribeiro", link: "https://amzn.to/4tQyiI4" },
-      { title: "O Capital no Século XXI - Thomas Piketty", link: "https://amzn.to/4kVq3Xq" },
+      {
+        title: "A Promessa da Vida Americana (Herbert Croly)",
+        link: "https://amzn.to/4qPLrhO",
+      },
+      {
+        title: "Democracia e Educação (John Dewey)",
+        link: "https://amzn.to/4cHICMo",
+      },
+      {
+        title: "Pequeno Manual Antirracista (Djamila Ribeiro)",
+        link: "https://amzn.to/4tQyiI4",
+      },
+      {
+        title: "O Capital no Século XXI (Thomas Piketty)",
+        link: "https://amzn.to/4kVq3Xq",
+      },
     ],
   },
   {
     name: "Anarco-Mutualismo",
     stats: { econ: 60, dipl: 50, govt: 100, scty: 70 },
-    desc: "O Anarco-Mutualismo é uma forma de anarquismo de mercado associada a Pierre-Joseph Proudhon. Defende uma sociedade sem Estado onde os indivíduos ou coletivos possuem seus meios de produção e trocam bens e serviços em um mercado livre. A propriedade é legitimada pelo 'uso e ocupação', não pelo título legal, o que se opõe à propriedade ausente e à exploração através de aluguel e juros. Propõe a criação de 'bancos do povo' que forneceriam crédito sem juros para permitir que os trabalhadores adquirissem seu próprio capital.",
-    roast: "Você gosta de mercado livre mas odeia patrões, então criou uma teoria que ninguém além de você entende para justificar isso. Acha que 'banco do povo' não vai virar um agiota glorificado.",
+    desc: "O Anarco-Mutualismo é uma teoria anarquista baseada no pensamento de Pierre-Joseph Proudhon, que propõe uma sociedade organizada em torno da troca recíproca e do livre contrato, sem a necessidade de um Estado ou de hierarquias corporativas. Diferente do anarco-comunismo, o mutualismo aceita o mercado e a propriedade pessoal, mas defende que a posse de capital e terra só é legítima através do 'uso e ocupação'.\n\nSeu objetivo central é a criação de um 'Banco do Povo' ou cooperativas de crédito que forneçam empréstimos a juro zero, eliminando o lucro parasitário e garantindo que o trabalhador receba o valor integral do seu produto. É um sistema que busca a liberdade individual absoluta combinada com a solidariedade econômica mútua, onde a competição serve para reduzir preços e a cooperação serve para garantir segurança social.",
+    roast:
+      "Você gosta de mercado livre mas odeia patrões, então criou uma hipótese econômica elegante do século XIX para provar que juros desapareceriam magicamente. Acha que 'banco do povo' não vai virar um agiota glorificado.",
     politicians: [
       {
         name: "Pierre-Joseph Proudhon (Filósofo)",
@@ -1071,42 +1286,38 @@ export const ideologies: Ideology[] = [
         stats: { econ: 60, dipl: 50, govt: 100, scty: 70 },
       },
       {
-        name: "Lysander Spooner (EUA)",
-        link: "https://pt.wikipedia.org/wiki/Lysander_Spooner",
-        stats: { econ: 55, dipl: 55, govt: 95, scty: 75 },
-      },
-      {
         name: "Benjamin Tucker (EUA)",
         link: "https://pt.wikipedia.org/wiki/Benjamin_Tucker",
         stats: { econ: 50, dipl: 50, govt: 100, scty: 65 },
       },
+      {
+        name: "Josiah Warren (EUA)",
+        link: "https://pt.wikipedia.org/wiki/Josiah_Warren",
+        stats: { econ: 60, dipl: 50, govt: 100, scty: 70 },
+      },
     ],
     books: [
-      { title: "O Que é a Propriedade? - Pierre-Joseph Proudhon", link: "" },
-      { title: "Sistema das Contradições Econômicas - Pierre-Joseph Proudhon", link: "" },
-      { title: "Sem Traidor, Sem Mestre - Benjamin Tucker", link: "" },
+      {
+        title: "O Que é a Propriedade? (Pierre-Joseph Proudhon)",
+        link: "https://amzn.to/4s52qxA",
+      },
+      {
+        title: "A propriedade é um roubo (Pierre-Joseph Proudhon)",
+        link: "https://amzn.to/4aPdlos",
+      },
     ],
   },
   {
-    name: "Totalitarismo Nacional",
-    stats: { econ: 50, dipl: 20, govt: 0, scty: 50 },
-    desc: "O Totalitarismo Nacional descreve um regime onde o Estado, geralmente sob o controle de um partido único e um líder supremo, busca regular e controlar todos os aspectos da vida pública e privada. É caracterizado pela supressão total da oposição, uso de propaganda massiva, vigilância constante e mobilização da população em torno de uma ideologia nacionalista. A economia é subserviente aos objetivos do Estado, seja através do controle direto ou do corporativismo.",
-    roast: "Você acha que '1984' era um manual de instruções, não um aviso. Sua ideia de fim de semana divertido é marchar em linha reta e denunciar seus vizinhos.",
+    name: "Comunismo Totalitário",
+    stats: { econ: 100, dipl: 0, govt: 0, scty: 5 },
+    desc: "O Comunismo Totalitário refere-se a regimes de matriz marxista-leninista que exercem um controle absoluto e incondicional sobre todos os aspectos da vida pública e privada. Caracteriza-se pela fusão total entre o partido único, o Estado e a ideologia oficial, sob o comando de um líder supremo cujo culto à personalidade beira o religioso.\n\nExemplos extremos incluem o Camboja sob o Khmer Vermelho (Ano Zero) e a Coreia do Norte (ideologia Juche). Nestes sistemas, a dissidência é punida com a morte ou campos de concentração, a economia é totalmente planificada e militarizada, e a vigilância mútua é institucionalizada. O objetivo é a aniquilação completa da 'velha sociedade' e a criação forçada de um novo tipo de cidadão totalmente subordinado à vontade coletiva encarnada pelo líder.",
+    roast:
+      "Você acha que '1984' era um manual de instruções, não um aviso. Sua ideia de fim de semana divertido é marchar em linha reta, denunciar seus vizinhos e agradecer ao Grande Líder pela colheita.",
     politicians: [
       {
         name: "Kim Il-sung (Juche - Coreia do Norte)",
         link: "https://pt.wikipedia.org/wiki/Kim_Il-sung",
         stats: { econ: 100, dipl: 0, govt: 0, scty: 5 },
-      },
-      {
-        name: "Saddam Hussein (Iraque)",
-        link: "https://pt.wikipedia.org/wiki/Saddam_Hussein",
-        stats: { econ: 55, dipl: 15, govt: 5, scty: 40 },
-      },
-      {
-        name: "Getúlio Vargas (Estado Novo - BR)",
-        link: "https://pt.wikipedia.org/wiki/Get%C3%BAlio_Vargas",
-        stats: { econ: 80, dipl: 30, govt: 30, scty: 70 },
       },
       {
         name: "Pol Pot (Camboja)",
@@ -1115,38 +1326,28 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "As Origens do Totalitarismo (Hannah Arendt)", link: "" },
-      { title: "1984 (George Orwell)", link: "" },
-    ],
-  },
-  {
-    name: "Totalitarismo Global",
-    stats: { econ: 50, dipl: 80, govt: 0, scty: 50 },
-    desc: "O Totalitarismo Global é um conceito, geralmente explorado na ficção distópica, de um regime mundial unificado que exerce controle absoluto sobre todos os indivíduos e nações. Elimina a soberania nacional e impõe uma ideologia única em escala planetária, utilizando tecnologia avançada para vigilância e controle social. Representa a extensão máxima do poder autoritário, onde não há escapatória ou refúgio da autoridade central.",
-    roast: "Seu vilão favorito é o Império Galáctico. Você acha que a única coisa errada com ditaduras é que elas não controlam o mundo inteiro ainda.",
-    politicians: [
       {
-        name: "H. G. Wells (Escritor/Teórico)",
-        link: "https://pt.wikipedia.org/wiki/H._G._Wells",
-        stats: { econ: 60, dipl: 80, govt: 20, scty: 60 },
+        title: "As Origens do Totalitarismo (Hannah Arendt)",
+        link: "https://amzn.to/476uYia",
+      },
+      { title: "1984 (George Orwell)", link: "https://amzn.to/3MMmgPp" },
+      {
+        title: "Arquipélago Gulag (Aleksandr Soljenítsin)",
+        link: "https://amzn.to/4kXCGRM",
       },
       {
-        name: "Zbigniew Brzezinski (Teórico)",
-        link: "https://pt.wikipedia.org/wiki/Zbigniew_Brzezinski",
-        stats: { econ: 40, dipl: 70, govt: 30, scty: 50 },
+        title: "O Livro Negro do Comunismo (S. Courtois)",
+        link: "https://amzn.to/4rCuaKr",
       },
     ],
-    books: [
-      { title: "Admirável Mundo Novo - Aldous Huxley", link: "" },
-      { title: "1984 - George Orwell", link: "" },
-      { title: "O Estado Mundial - H. G. Wells", link: "" },
-    ],
   },
+
   {
     name: "Tecnocracia",
     stats: { econ: 60, dipl: 60, govt: 20, scty: 70 },
-    desc: "A Tecnocracia é um sistema de governo onde os tomadores de decisão são selecionados com base em sua especialização técnica e conhecimento científico, em vez de filiação partidária ou popularidade eleitoral. As políticas são formuladas com base em dados, métodos científicos e eficiência, buscando soluções racionais para os problemas sociais e econômicos. É uma forma de governança elitista, onde o poder reside nos 'especialistas', com o objetivo de otimizar a gestão da sociedade.",
-    roast: "Você acha que política é uma equação de matemática e que as pessoas são apenas variáveis ineficientes. Se pudesse, substituiria o Congresso por uma planilha de Excel.",
+    desc: "A Tecnocracia é um modelo de governança onde o poder de decisão reside em especialistas técnicos (cientistas, engenheiros, economistas) em vez de políticos eleitos ou representantes baseados em ideologia partidária. O princípio fundamental é a 'administração das coisas' de forma eficiente, lógica e fundamentada em dados empíricos, buscando resolver problemas sociais como se fossem desafios de engenharia.\n\nOs tecnocratas argumentam que o partidarismo político é ineficiente e emocional, e que a sociedade prosperaria mais se a política fosse substituída pela gestão racional de recursos. Embora prometa eficácia administrativa, a tecnocracia é frequentemente criticada pelo seu déficit democrático e por tratar cidadãos como meros números em uma planilha de otimização.",
+    roast:
+      "Você acha que política é uma equação de matemática e que as pessoas são apenas variáveis ineficientes. Se pudesse, substituiria o Congresso por uma planilha de Excel.",
     politicians: [
       {
         name: "Mario Monti (Itália)",
@@ -1165,16 +1366,27 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "The Technocrats: Prophets of Automation - Elsner", link: "" },
-      { title: "A Terceira Onda - Alvin Toffler", link: "" },
-      { title: "O Fim da História e o Último Homem - Francis Fukuyama", link: "" },
+      {
+        title: "The Technocrats: Prophets of Automation (Elsner)",
+        link: "https://amzn.to/4aMXOW9",
+      },
+      {
+        title: "Economia e Sociedade (Max Weber)",
+        link: "https://amzn.to/3MrVgER",
+      },
+      { title: "Tecnopólio (Neil Postman)", link: "https://amzn.to/4tXerao" },
+      {
+        title: "The Technological Society (Jacques Ellul)",
+        link: "https://amzn.to/3MoVfl2",
+      },
     ],
   },
   {
     name: "Centrista",
     stats: { econ: 50, dipl: 50, govt: 50, scty: 50 },
-    desc: "O Centrismo é uma posição política que busca um equilíbrio pragmático, rejeitando os extremos do espectro político de esquerda e direita. Os centristas tendem a adotar uma abordagem moderada, combinando políticas de diferentes ideologias conforme a situação. Favorecem a reforma gradual em vez de mudanças radicais, valorizam o consenso e a estabilidade. Podem apoiar uma economia de mercado com uma rede de segurança social, liberdades individuais com responsabilidade cívica, e uma política externa que equilibra interesses nacionais e cooperação internacional.",
-    roast: "Sua opinião mais forte é que não se deve ter opiniões fortes. Você é o equivalente político de pão com água e acha que a virtude está sempre no meio, mesmo que o meio seja uma catástrofe.",
+    desc: "O Centrismo é uma posição política que busca o equilíbrio através do pragmatismo, da moderação e da conciliação entre visões opostas. Rejeitando as soluções radicais da esquerda e da direita, os centristas defendem que a política mais eficaz é aquela que utiliza evidências e resultados imediatos, misturando livre mercado com responsabilidade social de forma incremental.\n\nNão se trata de uma falta de convicção, mas de uma preferência pela estabilidade institucional e pelo consenso democrático. Governos centristas focam na gestão eficiente da máquina pública e na manutenção de uma 'Terceira Via' que evite polarizações profundas, buscando integrar o melhor dos dois mundos para garantir a paz social e o crescimento econômico estável.",
+    roast:
+      "Sua opinião mais forte é que não se deve ter opiniões fortes. Você é o equivalente político de pão com água e acha que a virtude está sempre no meio, mesmo que o meio seja uma catástrofe.",
     politicians: [
       {
         name: "Emmanuel Macron (França)",
@@ -1188,16 +1400,43 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "O Caminho do Meio (Aristóteles)", link: "" },
-      { title: "A Terceira Via (Anthony Giddens)", link: "" },
+      {
+        title: "A Terceira Via (Anthony Giddens)",
+        link: "https://amzn.to/40EcpOM",
+      },
+      {
+        title: "The Radical Center (Ted Halstead e Michael Lind)",
+        link: "https://amzn.to/4lbsaq8",
+      },
+      {
+        title:
+          "Por Que as Nações Fracassam (Daron Acemoglu e James A. Robinson)",
+        link: "https://amzn.to/4aXSm2u",
+      },
     ],
   },
   {
     name: "Liberalismo de Esquerda",
     stats: { econ: 50, dipl: 60, govt: 60, scty: 60 },
-    desc: "No contexto contemporâneo, especialmente nos Estados Unidos, o Liberalismo refere-se a uma posição de centro-esquerda. Apoia uma economia de mercado regulada para proteger os consumidores e o meio ambiente, juntamente com uma rede de segurança social financiada por impostos progressivos. Defende fortemente as liberdades civis, os direitos das minorias, a separação entre Igreja e Estado e uma política externa baseada na diplomacia e em alianças internacionais.",
-    roast: "Você é tão mente aberta que seu cérebro caiu. Apoia todas as causas atuais até que elas afetem levemente o valor do seu imóvel.",
+    desc: "O Liberalismo de Esquerda (ou Liberalismo Social) é uma vertente que concilia as liberdades individuais e civis do liberalismo clássico com a necessidade de intervenção estatal para garantir justiça social e igualdade de oportunidades. Acredita que a liberdade real é impossível para quem vive na miséria ou sem acesso a serviços fundamentais.\n\nPortanto, defende um mercado regulado, impostos progressivos para financiar o bem-estar social e uma proteção ativa dos direitos das minorias. É a base do pensamento de filósofos como John Rawls, que argumentam que o sucesso individual deve ser equilibrado com a cooperação social. No cenário global, é a ideologia que sustenta a defesa das instituições democráticas, do multilateralismo e das liberdades individuais contra tanto o socialismo autoritário quanto o conservadorismo nacionalista.",
+    roast:
+      "Você é tão mente aberta que seu cérebro caiu. Apoia todas as causas atuais até que elas afetem levemente o valor do seu imóvel.",
     politicians: [
+      {
+        name: "Geraldo Alckmin",
+        link: "https://pt.wikipedia.org/wiki/Geraldo_Alckmin",
+        stats: { econ: 50, dipl: 50, govt: 50, scty: 60 },
+      },
+      {
+        name: "Theodore Roosevelt (EUA)",
+        link: "https://pt.wikipedia.org/wiki/Theodore_Roosevelt",
+        stats: { econ: 55, dipl: 60, govt: 55, scty: 65 },
+      },
+      {
+        name: "Martin Luther King Jr. (EUA)",
+        link: "https://pt.wikipedia.org/wiki/Martin_Luther_King_Jr.",
+        stats: { econ: 60, dipl: 75, govt: 70, scty: 95 },
+      },
       {
         name: "Barack Obama (EUA)",
         link: "https://pt.wikipedia.org/wiki/Barack_Obama",
@@ -1215,16 +1454,38 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "Liberalism and its Discontents - Francis Fukuyama", link: "" },
-      { title: "A Audácia da Esperança - Barack Obama", link: "" },
-      { title: "Uma Teoria da Justiça - John Rawls", link: "" },
+      {
+        title: "Uma Teoria da Justiça (John Rawls)",
+        link: "https://amzn.to/4ruzSOa",
+      },
+      {
+        title: "Desenvolvimento como Liberdade (Amartya Sen)",
+        link: "https://amzn.to/4avdrCF",
+      },
+      {
+        title: "Justiça como Equidade (John Rawls)",
+        link: "https://amzn.to/4l9kKDT",
+      },
+      {
+        title: "A dádiva do amor (Martin Luther King Jr.)",
+        link: "https://amzn.to/4tRaELs",
+      },
+      {
+        title: "Liberalismo e seus descontentes (Francis Fukuyama)",
+        link: "https://amzn.to/4l2CnFb",
+      },
+      {
+        title: "A Audácia da Esperança (Barack Obama)",
+        link: "https://amzn.to/4cmfM4c",
+      },
     ],
   },
   {
     name: "Anarquismo Religioso",
     stats: { econ: 50, dipl: 50, govt: 100, scty: 20 },
-    desc: "O Anarquismo Religioso, como o anarquismo cristão de Tolstói, rejeita o Estado e outras formas de autoridade coercitiva com base em princípios religiosos. Argumenta que a única autoridade legítima é a de Deus e que o Estado, com sua violência e coerção, usurpa essa autoridade e contradiz os ensinamentos de paz e amor ao próximo. Defende a não-violência, a resistência passiva e a formação de comunidades voluntárias baseadas na fé e na ajuda mútua, sendo socialmente tradicional.",
-    roast: "Você é pacifista demais para o mundo real e religioso demais para os anarquistas. Acha que pode derrotar um tanque de guerra rezando e oferecendo a outra face.",
+    desc: "O Anarquismo Religioso (especialmente o Cristão) é a crença de que a única autoridade legítima sobre o ser humano é divina, e que, portanto, todas as formas de governo terreno, leis humanas e instituições estatais são usurpações ilegais de poder. Inspirados pelos ensinamentos de Jesus no Sermão da Montanha e popularizados por León Tolstói, os anarquistas religiosos defendem o pacifismo absoluto e a 'resistência passiva' contra o Estado.\n\nAcreditam que a verdadeira ordem social surge naturalmente quando os indivíduos vivem em conformidade com o amor ao próximo e a ajuda mútua, sem tribunais, prisões ou exércitos. Rejeitam a violência revolucionária, acreditando que a mudança deve vir de uma transformação íntima e espiritual que torne o governo exterior irrelevante.",
+    roast:
+      "Você é pacifista demais para o mundo real e religioso demais para os anarquistas. Acha que pode derrotar um tanque de guerra rezando e oferecendo a outra face.",
     politicians: [
       {
         name: "León Tolstói (Escritor/Filósofo)",
@@ -1238,15 +1499,22 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "O Reino de Deus Está em Vós", link: "" },
-      { title: "Loaves and Fishes", link: "" },
+      {
+        title: "O Reino de Deus Está em Vós (León Tolstói)",
+        link: "https://amzn.to/4r2E7PW",
+      },
+      {
+        title: "A longa solidão (Dorothy Day)",
+        link: "https://amzn.to/4r8bgKr",
+      },
     ],
   },
   {
     name: "Populismo de Direita",
     stats: { econ: 40, dipl: 30, govt: 30, scty: 30 },
-    desc: "O Populismo de Direita combina um forte nacionalismo, políticas anti-imigração e um apelo ao 'povo' contra 'elites' cosmopolitas e progressistas. Defende a soberania nacional, a ordem pública e valores sociais tradicionais. Economicamente, pode ser pró-mercado, mas frequentemente adota medidas protecionistas para proteger a indústria e os trabalhadores nacionais. Está associado a líderes carismáticos e autoritários que afirmam ser a 'voz do povo silencioso'.",
-    roast: "Você compartilha fake news no grupo da família e acha que a terra é plana porque 'a mídia mente'. Para você, qualquer um à esquerda de Gengis Khan é comunista.",
+    desc: "O Populismo de Direita é uma ideologia que combina o nacionalismo conservador com a retórica do 'povo comum' contra uma 'elite cosmopolita e globalista'. Caracteriza-se pela defesa da soberania nacional rigorosa, controle de fronteiras (anti-imigração), proteção de valores culturais tradicionais e uma postura de 'lei e ordem'.\n\nDiferente do conservadorismo tradicional, o populismo de direita utiliza uma comunicação direta e frequentemente agressiva, confrontando as instituições estabelecidas (mídia, academia, tribunais) como sendo parciais ou inimigas da nação. Economicamente, mescla a defesa da livre iniciativa com tendências protecionistas, buscando restaurar a prosperidade através de um patriotismo econômico que prioriza os cidadãos nacionais sobre acordos internacionais.",
+    roast:
+      "Você compartilha fake news no grupo da família e acha que a terra é plana porque 'a mídia mente'. Para você, qualquer um à esquerda de Gengis Khan é comunista.",
     politicians: [
       {
         name: "Jair Bolsonaro (BR)",
@@ -1258,11 +1526,7 @@ export const ideologies: Ideology[] = [
         link: "https://pt.wikipedia.org/wiki/Donald_Trump",
         stats: { econ: 30, dipl: 20, govt: 40, scty: 30 },
       },
-      {
-        name: "Javier Milei (Argentina)",
-        link: "https://pt.wikipedia.org/wiki/Javier_Milei",
-        stats: { econ: 5, dipl: 20, govt: 20, scty: 50 },
-      },
+
       {
         name: "Nikolas Ferreira (BR)",
         link: "https://pt.wikipedia.org/wiki/Nikolas_Ferreira",
@@ -1280,65 +1544,76 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "O Que É Populismo? (Jan-Werner Müller)", link: "" },
-      { title: "(Manifestos e discursos de cada movimento)", link: "" },
-    ],
-  },
-  {
-    name: "Conservadorismo Moderado",
-    stats: { econ: 40, dipl: 40, govt: 50, scty: 30 },
-    desc: "O Conservadorismo Moderado busca preservar as instituições e valores tradicionais através de mudanças graduais e prudentes, em vez de uma resistência reacionária. Apoia a economia de mercado com responsabilidade fiscal, um governo limitado mas eficaz na manutenção da ordem e da segurança, e uma nação forte que se engaja diplomaticamente. Aceita algumas reformas sociais, desde que não ameacem a estabilidade da sociedade. É uma abordagem pragmática que valoriza a experiência histórica sobre teorias abstratas.",
-    roast: "Você tem medo de mudanças bruscas, tipo trocar a marca do chá. Sua maior ambição é manter tudo exatamente como está, só que um pouquinho 'mais eficiente'.",
-    politicians: [
       {
-        name: "David Cameron (Reino Unido)",
-        link: "https://pt.wikipedia.org/wiki/David_Cameron",
-        stats: { econ: 40, dipl: 40, govt: 50, scty: 30 },
+        title:
+          "O Mínimo que Você Precisa Saber para Não Ser um Idiota (Olavo de Carvalho)",
+        link: "https://amzn.to/4aIC6nh",
       },
       {
-        name: "Mitt Romney (EUA)",
-        link: "https://pt.wikipedia.org/wiki/Mitt_Romney",
-        stats: { econ: 35, dipl: 45, govt: 55, scty: 35 },
+        title: "O Cristão e a Política (Nikolas Ferreira)",
+        link: "https://amzn.to/4aKaC0K",
+      },
+      {
+        title:
+          "América debilitada: como tornar a América grande novamente (Donald Trump)",
+        link: "https://amzn.to/4l4sabo",
       },
     ],
-    books: [{ title: "O Conservadorismo (Michael Oakeshott)", link: "" }],
   },
+
   {
     name: "Reacionário",
     stats: { econ: 40, dipl: 40, govt: 40, scty: 10 },
-    desc: "O Reacionarismo é uma postura política que se opõe radicalmente às mudanças sociais, políticas e econômicas da modernidade (como a Revolução Francesa ou o Iluminismo) e busca restaurar uma ordem social anterior, considerada superior. Idealiza o passado, defendendo estruturas hierárquicas, monarquia, aristocracia e a autoridade da religião. Rejeita conceitos como democracia, igualdade e liberalismo, vendo-os como fontes de decadência e desordem.",
-    roast: "Você quer voltar para 1600, mas provavelmente morreria de disenteria na primeira semana. Acha que a civilização acabou quando permitiram que as pessoas votassem.",
+    desc: "O Reacionarismo é uma postura política que deseja não apenas conservar o presente, mas retornar a uma ordem social do passado que foi perdida ou destruída pelas transformações da modernidade (como o Iluminismo, o Liberalismo ou o Socialismo). O reacionário vê as mudanças sociais dos últimos séculos como uma história de decadência e desordem, e prega a restauração de hierarquias tradicionais, da autoridade religiosa e de estruturas monárquicas ou aristocráticas de poder.\n\nDiferente do conservador, que aceita mudanças lentas e orgânicas, o reacionário busca ativamente reverter a história, acreditando que a base da civilização reside na estabilidade de valores imutáveis, na tradição sagrada e na obediência a uma autoridade transcendental.",
+    roast:
+      "Você quer voltar para 1600, mas provavelmente morreria de disenteria na primeira semana. Acha que a civilização acabou quando permitiram que as pessoas votassem.",
     politicians: [
       {
         name: "Joseph de Maistre (Filósofo)",
         link: "https://pt.wikipedia.org/wiki/Joseph_de_Maistre",
         stats: { econ: 40, dipl: 40, govt: 40, scty: 10 },
       },
-    ],
-    books: [
-      { title: "Considerações sobre a França", link: "" },
-      { title: "(Literatura que idealiza eras passadas)", link: "" },
-    ],
-  },
-  {
-    name: "Libertarianismo Social",
-    stats: { econ: 60, dipl: 70, govt: 80, scty: 70 },
-    desc: "O Libertarianismo Social, por vezes chamado de Geolibertarianismo, combina um forte compromisso com a liberdade individual e o ceticismo em relação ao Estado com uma preocupação com a justiça social. Defende que a terra e os recursos naturais são propriedade comum da humanidade e que, embora os indivíduos possam ter o uso exclusivo, devem compensar a sociedade por isso através de um 'imposto único sobre o valor da terra'. A receita desse imposto poderia financiar serviços públicos ou uma renda básica, eliminando outros impostos.",
-    roast: "Você ama o livre mercado mas odeia quem tem terreno. Sua solução mágica para a economia é taxar a terra e esperar que o resto se resolva sozinho.",
-    politicians: [
       {
-        name: "Henry George (Economista)",
-        link: "https://pt.wikipedia.org/wiki/Henry_George",
-        stats: { econ: 60, dipl: 65, govt: 80, scty: 75 },
+        name: "Nicolás Gómez Dávila (Filósofo)",
+        link: "https://pt.wikipedia.org/wiki/Nicol%C3%A1s_G%C3%B3mez_D%C3%A1vila",
+        stats: { econ: 45, dipl: 40, govt: 40, scty: 5 },
+      },
+      {
+        name: "Julius Evola (Filósofo/Tradicionalista)",
+        link: "https://pt.wikipedia.org/wiki/Julius_Evola",
+        stats: { econ: 35, dipl: 30, govt: 20, scty: 5 },
+      },
+      {
+        name: "René Guénon (Escola Tradicionalista)",
+        link: "https://pt.wikipedia.org/wiki/Ren%C3%A9_Gu%C3%A9non",
+        stats: { econ: 40, dipl: 40, govt: 30, scty: 5 },
       },
     ],
-    books: [{ title: "Progresso e Pobreza", link: "" }],
+    books: [
+      {
+        title: "Considerações sobre a França (Joseph de Maistre)",
+        link: "https://amzn.to/3Nc0h4z",
+      },
+      {
+        title: "Escolios a um Texto Implícito (Nicolás Gómez Dávila)",
+        link: "https://amzn.to/4u3sJ9i",
+      },
+      {
+        title: "Revolta Contra o Mundo Moderno (Julius Evola)",
+        link: "https://amzn.to/4u1P9I3",
+      },
+      {
+        title: "A Crise do Mundo Moderno (René Guénon)",
+        link: "https://amzn.to/46vHjfU",
+      },
+    ],
   },
   {
     name: "Libertarianismo",
     stats: { econ: 40, dipl: 60, govt: 80, scty: 60 },
-    desc: "O Libertarianismo é uma filosofia política que prioriza a liberdade individual como seu valor fundamental. Defende a maximização da autonomia e da liberdade de escolha, enfatizando a soberania do indivíduo. Advoga por um governo mínimo ('Estado mínimo'), cuja única função legítima é proteger os direitos individuais contra a força e a fraude. Apoia o livre mercado, a propriedade privada e as liberdades civis, e geralmente promove uma política externa não-intervencionista.",
-    roast: "Para você, leis de trânsito são tirania e impostos são literalmente estupro. Você provavelmente explicou o padrão ouro para uma mulher numa festa e ela fingiu desmaiar para fugir.",
+    desc: "O Libertarianismo é uma filosofia política que coloca a liberdade individual e a soberania do indivíduo (auto-propriedade) como os valores morais e práticos supremos. Defende que a única função legítima de um governo (se é que ele deve existir) é o 'Estado Mínimo' — limitado exclusivamente à proteção dos cidadãos contra a agressão, o roubo e a fraude.\n\nOs libertários advogam pelo livre mercado absoluto (capitalismo de laissez-faire), pela propriedade privada irrestrita e pela abolição de quase todas as formas de regulação estatal, imposto e intervenção social. Acreditam que a cooperação voluntária e o sistema de preços são mais eficazes e éticos para organizar a sociedade do que o planejamento centralizado ou a coerção estatal, promovendo frequentemente uma política externa estritamente não-intervencionista.",
+    roast:
+      "Para você, leis de trânsito são tirania e impostos são literalmente estupro. Você provavelmente explicou o padrão ouro para uma mulher numa festa e ela fingiu desmaiar para fugir.",
     politicians: [
       {
         name: "Ron Paul (EUA)",
@@ -1346,36 +1621,68 @@ export const ideologies: Ideology[] = [
         stats: { econ: 35, dipl: 65, govt: 85, scty: 65 },
       },
       {
-        name: "Jo Jorgensen (EUA)",
-        link: "https://pt.wikipedia.org/wiki/Jo_Jorgensen",
-        stats: { econ: 35, dipl: 65, govt: 85, scty: 70 },
+        name: "Ayn Rand (Filósofa do Objetivismo)",
+        link: "https://pt.wikipedia.org/wiki/Ayn_Rand",
+        stats: { econ: 5, dipl: 55, govt: 95, scty: 35 },
+      },
+      {
+        name: "Javier Milei (Argentina)",
+        link: "https://pt.wikipedia.org/wiki/Javier_Milei",
+        stats: { econ: 5, dipl: 20, govt: 20, scty: 50 },
       },
     ],
     books: [
-      { title: "Anarquia, Estado e Utopia (Robert Nozick)", link: "" },
-      { title: "A Ética da Liberdade (Murray Rothbard)", link: "" },
-      { title: "Economia Numa Única Lição (Henry Hazlitt)", link: "" },
+      {
+        title: "A Revolta de Atlas (Ayn Rand)",
+        link: "https://amzn.to/4l1ATeh",
+      },
+      {
+        title: "Anarquia, Estado e Utopia (Robert Nozick)",
+        link: "https://amzn.to/4l8BYBg",
+      },
+      {
+        title: "O manifesto libertário (Murray Rothbard)",
+        link: "https://amzn.to/4lmf35D",
+      },
+      {
+        title: "Economia Numa Única Lição (Henry Hazlitt)",
+        link: "https://amzn.to/3OKFSE8",
+      },
     ],
   },
   {
     name: "Nazismo",
-    stats: { econ: 40, dipl: 0, govt: 0, scty: 5 },
-    desc: "O Nazismo (Nacional-Socialismo) foi a ideologia totalitária do regime de Adolf Hitler na Alemanha. Baseava-se em um ultranacionalismo racial extremo, a crença na superioridade da 'raça ariana', um antissemitismo virulento que culminou no Holocausto, e um forte expansionismo militar (Lebensraum). Rejeitava a democracia, o liberalismo e o comunismo, promovendo o culto ao líder (Führerprinzip), a eugenia e um estado de partido único com controle absoluto sobre a sociedade. A economia era corporativista, subserviente aos objetivos de guerra do Estado.",
-    roast: "Seu lugar não é na política, é numa cela ou num hospício. Você consegue estar errado em todas as dimensões morais possíveis simultaneamente.",
+    stats: { econ: 70, dipl: 0, govt: 0, scty: 5 },
+    desc: "O Nazismo (Nacional-Socialismo) foi a ideologia totalitária do regime de Adolf Hitler na Alemanha. Baseava-se em um ultranacionalismo racial extremo, a crença na superioridade da 'raça ariana', um antissemitismo virulento que culminou no Holocausto, e um forte expansionismo militar (Lebensraum).\n\nRejeitava a democracia, o liberalismo e o comunismo, promovendo o culto ao líder (Führerprinzip), a eugenia e um estado de partido único com controle absoluto sobre a sociedade. A economia era corporativista, subserviente aos objetivos de guerra do Estado.",
+    roast:
+      "Seu lugar não é na política, é numa cela ou num hospício. Você consegue estar errado em todas as dimensões morais possíveis simultaneamente.",
     politicians: [
       {
         name: "Adolf Hitler (Alemanha)",
         link: "https://pt.wikipedia.org/wiki/Adolf_Hitler",
-        stats: { econ: 40, dipl: 0, govt: 0, scty: 5 },
+        stats: { econ: 70, dipl: 0, govt: 0, scty: 5 },
+      },
+      {
+        name: "Joseph Goebbels (Alemanha)",
+        link: "https://pt.wikipedia.org/wiki/Joseph_Goebbels",
+        stats: { econ: 70, dipl: 0, govt: 0, scty: 5 },
       },
     ],
     books: [
-      { title: "Minha Luta (Adolf Hitler)", link: "https://archive.org/details/meinkampf_minha_luta" },
-      { title: "Os diários de Alfred Rosenberg", link: "https://amzn.to/4az5kDS" },
-      { title: "Hitler (Joachim Fest)", link: "https://www.amazon.com.br/Box-Hitler-Joachim-Fest-ebook/dp/B072863DP1?_encoding=UTF8&dib_tag=se&dib=eyJ2IjoiMSJ9.oE9QqywuLP_ENk0c5YZDiH1WNFQlkg_7x7XWfbMM_vBd92UJxkdG77XtEbr1yxQmWhyolm6OUgeCIHetPFjLtRlPg2C_9RVP1tLNwEHxQJyEm9L9z73maWJggooEbC40c9AbXu23u2Q-W-URA5rnOE3z7LyVd4I6unxkkz9uXrrAePkK9ZtbqemYQzvO7Fs7SK30M15jWZzbT2nPy4ZrjI0VeWPiTcn5IvCXgpdCZ1MK8_vY6PrJU6isjhWipHOaM60f2jxppLE-K7AKOsax2Qw0q20uKD6SHXnvs8l528k.DY_mxTCdvFduqY9v0Ug8zJyR_BNieixEniRspB9Cf4A&qid=1771446526&sr=8-7" },
       {
-        title:
-          "Ascensão e Queda do Terceiro Reich (Walter Shirer)",
+        title: "Minha Luta (Adolf Hitler)",
+        link: "https://archive.org/details/meinkampf_minha_luta",
+      },
+      {
+        title: "Os diários de Alfred Rosenberg",
+        link: "https://amzn.to/4az5kDS",
+      },
+      {
+        title: "Hitler (Joachim Fest)",
+        link: "https://www.amazon.com.br/Box-Hitler-Joachim-Fest-ebook/dp/B072863DP1?_encoding=UTF8&dib_tag=se&dib=eyJ2IjoiMSJ9.oE9QqywuLP_ENk0c5YZDiH1WNFQlkg_7x7XWfbMM_vBd92UJxkdG77XtEbr1yxQmWhyolm6OUgeCIHetPFjLtRlPg2C_9RVP1tLNwEHxQJyEm9L9z73maWJggooEbC40c9AbXu23u2Q-W-URA5rnOE3z7LyVd4I6unxkkz9uXrrAePkK9ZtbqemYQzvO7Fs7SK30M15jWZzbT2nPy4ZrjI0VeWPiTcn5IvCXgpdCZ1MK8_vY6PrJU6isjhWipHO0M60f2jxppLE-K7AKOsax2Qw0q20uKD6SHXnvs8l528k.DY_mxTCdvFduqY9v0Ug8zJyR_BNieixEniRspB9Cf4A&qid=1771446526&sr=8-7",
+      },
+      {
+        title: "Ascensão e Queda do Terceiro Reich (Walter Shirer)",
         link: "https://amzn.to/46gNvIq",
       },
     ],
@@ -1383,8 +1690,9 @@ export const ideologies: Ideology[] = [
   {
     name: "Autocracia",
     stats: { econ: 50, dipl: 20, govt: 20, scty: 50 },
-    desc: "A Autocracia é um sistema de governo onde o poder supremo está concentrado nas mãos de uma única pessoa, cujas decisões não estão sujeitas a restrições legais externas nem a mecanismos de controle popular. O autocrata governa sem o consentimento dos governados. A orientação econômica, social e diplomática pode variar enormemente dependendo dos caprichos e objetivos do líder, mas a característica definidora é a ausência de freios e contrapesos e a supressão da dissidência política.",
-    roast: "Você só quer um rei para chamar de seu. Tem fetiche por coroas e tronos e acha que 'direitos humanos' atrapalham a estética do palácio.",
+    desc: "A Autocracia é um sistema de governo onde todo o poder político e autoridade suprema estão concentrados de forma incontestável nas mãos de uma única pessoa, cujas decisões não são limitadas por leis externas ou mecanismos de controle popular.\n\nDiferente da democracia, onde o poder é delegado temporariamente, na autocracia a legitimidade muitas vezes deriva da tradição, do comando militar ou de uma suposta superioridade natural do líder. Historicamente manifestou-se no absolutismo monárquico e em ditaduras personalistas contemporâneas. O autocrata exerce controle total sobre o aparelho estatal, a justiça e muitas vezes a economia, suprimindo qualquer dissidência para manter a estabilidade do regime sob sua vontade absoluta.",
+    roast:
+      "Você só quer um rei para chamar de seu. Tem fetiche por coroas e tronos e acha que 'direitos humanos' atrapalham a estética do palácio.",
     politicians: [
       {
         name: "Rei Luís XIV (França - Absolutismo)",
@@ -1393,8 +1701,13 @@ export const ideologies: Ideology[] = [
       },
       {
         name: "Mohammed bin Salman (Arábia Saudita)",
-        link: "https://pt.wikipedia.org/wiki/Mohammed_bin_Salman",
-        stats: { econ: 25, dipl: 15, govt: 5, scty: 10 },
+        link: "https://pt.wikipedia.org/wiki/Mohammad_bin_Salman",
+        stats: { econ: 40, dipl: 40, govt: 10, scty: 20 },
+      },
+      {
+        name: "Saddam Hussein (Iraque)",
+        link: "https://pt.wikipedia.org/wiki/Saddam_Hussein",
+        stats: { econ: 55, dipl: 15, govt: 5, scty: 40 },
       },
       {
         name: "Alexandre, o Grande (Macedônia)",
@@ -1403,20 +1716,21 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "O Príncipe - Maquiavel", link: "" },
-      { title: "O Leviatã - Thomas Hobbes", link: "" },
+      { title: "O Príncipe (Maquiavel)", link: "https://amzn.to/4sjcIun" },
+      { title: "O Leviatã (Thomas Hobbes)", link: "https://amzn.to/4siE0Rl" },
     ],
   },
   {
-    name: "Fascismo",
-    stats: { econ: 40, dipl: 20, govt: 20, scty: 20 },
-    desc: "O Fascismo é uma ideologia política de extrema-direita, autoritária e ultranacionalista, caracterizada por um poder ditatorial, supressão da oposição e forte controle da sociedade e da economia. Exalta a nação ou a raça como uma comunidade orgânica que transcende todos os outros interesses, e promove o militarismo, a violência e o culto ao líder. Economicamente, adota o corporativismo, onde o Estado media as relações entre capital e trabalho para servir aos interesses nacionais.",
-    roast: "Você precisa de um abraço ou de terapia, mas escolheu odiar minorias. Sua masculinidade é tão frágil que precisa de um ditador para protegê-la. Ah, e pare de tentar justificar uniformes militares.",
+    name: "Nacional-Autoritarismo",
+    stats: { econ: 60, dipl: 30, govt: 20, scty: 30 },
+    desc: "O Nacional-Autoritarismo (frequentemente associado ao Corporativismo de Estado) descreve regimes que utilizam a autoridade centralizada e o nacionalismo romântico para despolitizar a sociedade e manter a ordem social. Diferente do fascismo puramente revolucionário, esta vertente é muitas vezes conservadora ou reacionária em sua essência, buscando proteger tradições, instituições religiosas e hierarquias estabelecidas contra o liberalismo e o socialismo.\n\nRegimes como o de Salazar em Portugal (Estado Novo) e Franco na Espanha exemplificam este modelo, onde o Estado age como um mediador absoluto entre o capital e o trabalho através de corporações oficiais, restringindo liberdades políticas e civis em nome da 'unidade nacional' e da estabilidade interna do país.",
+    roast:
+      "Você não quer dominar o mundo, só quer que todo mundo fique quieto em casa, produza e não reclame. Acha que a democracia é muito barulhenta e prefere um general ou um ditador paternalista cuidando de 'tudo'.",
     politicians: [
       {
-        name: "Benito Mussolini (Itália)",
-        link: "https://pt.wikipedia.org/wiki/Benito_Mussolini",
-        stats: { econ: 40, dipl: 20, govt: 20, scty: 20 },
+        name: "Getúlio Vargas (Estado Novo - BR)",
+        link: "https://pt.wikipedia.org/wiki/Get%C3%BAlio_Vargas",
+        stats: { econ: 80, dipl: 30, govt: 30, scty: 70 },
       },
       {
         name: "António de Oliveira Salazar (Estado Novo - PT)",
@@ -1430,16 +1744,64 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "A Doutrina do Fascismo - Benito Mussolini", link: "" },
-      { title: "As Origens do Totalitarismo - Hannah Arendt", link: "" },
-      { title: "Anatomia do Fascismo - Robert Paxton", link: "" },
+      {
+        title: "O Estado Nacional (Francisco Campos)",
+        link: "https://amzn.to/4sagFkM",
+      },
+      {
+        title: "Como se levanta um Estado (António de Oliveira Salazar)",
+        link: "https://amzn.to/4cirooR",
+      },
+      {
+        title: "O Conceito do Político (Carl Schmitt)",
+        link: "https://amzn.to/4s34kQ5",
+      },
+      {
+        title: "Instituições Políticas Brasileiras (Oliveira Vianna)",
+        link: "https://amzn.to/4qXHyaF",
+      },
+    ],
+  },
+  {
+    name: "Fascismo",
+    stats: { econ: 40, dipl: 20, govt: 20, scty: 20 },
+    desc: "O Fascismo é uma ideologia política de extrema-direita, totalitária e ultranacionalista, originária da Itália. Exalta a nação (e frequentemente a raça) como uma comunidade orgânica que transcende o indivíduo, exigindo mobilização permanente das massas e fanatismo revolucionário.\n\nPromove o militarismo, a violência purificadora e o culto absoluto ao líder. Diferente do nacional-autoritarismo conservador de Franco ou Salazar, o Fascismo busca construir o 'Novo Homem' através da fusão total entre Estado, corporações e sociedade.",
+    roast:
+      "Você precisa de um abraço ou de terapia, mas escolheu marchar com tochas. Sua masculinidade é tão frágil que precisa de um ditador carismático para protegê-la. Ah, e pare de tentar justificar uniformes militares.",
+    politicians: [
+      {
+        name: "Benito Mussolini (Itália)",
+        link: "https://pt.wikipedia.org/wiki/Benito_Mussolini",
+        stats: { econ: 40, dipl: 20, govt: 20, scty: 20 },
+      },
+      {
+        name: "Oswald Mosley (Reino Unido)",
+        link: "https://pt.wikipedia.org/wiki/Oswald_Mosley",
+        stats: { econ: 45, dipl: 25, govt: 20, scty: 25 },
+      },
+    ],
+    books: [
+      {
+        title: "A Doutrina do Fascismo (Benito Mussolini)",
+        link: "https://www.amazon.com.br/Doutrina-do-Fascismo-Benito-Mussolini-ebook/dp/B0844JN2RJ?__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=19I4VP2ELNN9S&dib=eyJ2IjoiMSJ9.ANYkeAfT97oQwZmATq08jmf4q_A2H6azu3je294v-kI609rBUjXxg7HJug3GTzjeJrqNueSeMkmDdBoHRhyVdwZU7UTz56oEOi152fqO9FFPIYKWPjv01TJrDm8PpCN0ONT9a4DPL2Y28IWXGGAZKBZ4hfOd4q5qjOBg1AbWdZ43tAM9T-b1PN01rpjydZXPE7FATMzURA05tvz3aSCHT8ZtuvdHA9tujzVYMo67jybyNtHJjajXQ8mgv1mrksfeH54q5G6TxfR-3JCzrbxTY1DNnQdjJSL9OldX-0GXvG0.jML8R9zYJ5MHdyKUoEkpoRHlTEXgcrC1owcrQ34jQ-Y&dib_tag=se&keywords=A+Doutrina+do+Fascismo+-+Benito+Mussolini&qid=1772392320&sprefix=a+doutrina+do+fascismo+-+benito+mussolini%2Caps%2C252&sr=8-1",
+      },
+
+      {
+        title: "As Origens do Totalitarismo (Hannah Arendt)",
+        link: "https://amzn.to/4r8nD8Z",
+      },
+      {
+        title: "O que é Fascismo e Outros Ensaios (George Orwell)",
+        link: "https://amzn.to/46A2Vrl",
+      },
     ],
   },
   {
     name: "Conservadorismo",
     stats: { econ: 30, dipl: 40, govt: 40, scty: 20 },
-    desc: "O Conservadorismo é uma filosofia política que prioriza a preservação das instituições e tradições sociais estabelecidas, acreditando que elas representam a sabedoria acumulada de gerações. Apoia a mudança gradual e orgânica em vez de reformas radicais. Valoriza a ordem, a autoridade, a propriedade privada, a religião e a família como pilares da estabilidade social. Economicamente, favorece o livre mercado com prudência fiscal, e politicamente, defende um governo forte mas limitado.",
-    roast: "O mundo moderno te assusta, então você se apega a tradições que nem seus avós seguiam. Acha que 'bons costumes' é sinônimo de proibir o que você não gosta e chama tudo de 'engenharia social'.",
+    desc: "O Conservadorismo Clássico é uma filosofia política baseada na preservação das instituições sociais, tradições e costumes que foram desenvolvidos organicamente ao longo de séculos. Enraizado no pensamento de Edmund Burke, ele desconfia profundamente de modelos abstratos de progresso ou de revoluções bruscas, preferindo a mudança gradual e temperada pela experiência acumulada.\n\nPara o conservador, a sociedade é um contrato entre os mortos, os vivos e os que ainda vão nascer, onde a autoridade legítima, a religião e a ordem moral são fundamentais para conter os impulsos humanos e garantir a liberdade real. Valoriza as 'pequenas patotas' (famílias, comunidades locais e associações voluntárias) como os verdadeiros pilares de uma civilização estável e florescente.",
+    roast:
+      "O mundo moderno te assusta, então você se apega a tradições que nem seus avós seguiam. Acha que 'bons costumes' é sinônimo de proibir o que você não gosta e chama tudo de 'engenharia social'.",
     politicians: [
       {
         name: "Edmund Burke (Filósofo)",
@@ -1459,65 +1821,57 @@ export const ideologies: Ideology[] = [
       {
         name: "Roger Scruton",
         link: "https://pt.wikipedia.org/wiki/Roger_Scruton",
-        stats: { econ: 25, dipl: 35, govt: 45, scty: 15 },
+        stats: { econ: 35, dipl: 40, govt: 45, scty: 20 },
       },
       {
         name: "Winston Churchill",
         link: "https://pt.wikipedia.org/wiki/Winston_Churchill",
-        stats: { econ: 35, dipl: 20, govt: 40, scty: 35 },
+        stats: { econ: 50, dipl: 60, govt: 50, scty: 35 },
       },
       {
         name: "G. K. Chesterton",
         link: "https://pt.wikipedia.org/wiki/G._K._Chesterton",
-        stats: { econ: 55, dipl: 45, govt: 50, scty: 20 },
+        stats: { econ: 45, dipl: 45, govt: 40, scty: 20 },
+      },
+      {
+        name: "João Pereira Coutinho (PT)",
+        link: "https://pt.wikipedia.org/wiki/Jo%C3%A3o_Pereira_Coutinho",
+        stats: { econ: 35, dipl: 50, govt: 45, scty: 30 },
       },
     ],
     books: [
-      { title: "Reflexões sobre a Revolução em França - Edmund Burke", link: "" },
-      { title: "A Mente Conservadora - Russell Kirk", link: "" },
-      { title: "Como Ser um Conservador - Roger Scruton", link: "" },
-      { title: "Beleza - Roger Scruton", link: "" },
-      { title: "O Mínimo que Você Precisa Saber - Olavo de Carvalho", link: "" },
-    ],
-  },
-  {
-    name: "Neoliberalismo",
-    stats: { econ: 30, dipl: 30, govt: 50, scty: 60 },
-    desc: "O Neoliberalismo é uma filosofia política e econômica que ressurgiu no final do século XX, enfatizando o livre mercado como o principal mecanismo para o progresso econômico. Suas políticas características incluem privatização de empresas estatais, desregulamentação da economia, liberalização do comércio e do capital, e redução dos gastos públicos e dos impostos. Acredita que a redução da intervenção estatal libera as forças do mercado, gerando maior eficiência e prosperidade.",
-    roast: "Você acredita que o mercado resolve tudo, até seu divórcio. Para você, pessoas pobres são apenas 'externalidades negativas' e o aquecimento global se resolve vendendo créditos de carbono.",
-    politicians: [
       {
-        name: "Roberto Campos (BR)",
-        link: "https://pt.wikipedia.org/wiki/Roberto_Campos",
-        stats: { econ: 20, dipl: 60, govt: 70, scty: 60 },
+        title: "Reflexões sobre a Revolução na França (Edmund Burke)",
+        link: "https://amzn.to/4aXNudX",
       },
       {
-        name: "Paulo Guedes (BR)",
-        link: "https://pt.wikipedia.org/wiki/Paulo_Guedes",
-        stats: { econ: 20, dipl: 55, govt: 70, scty: 65 },
+        title: "Como Ser um Conservador (Roger Scruton)",
+        link: "https://amzn.to/407wrRF",
       },
       {
-        name: "Margaret Thatcher (Reino Unido)",
-        link: "https://pt.wikipedia.org/wiki/Margaret_Thatcher",
-        stats: { econ: 30, dipl: 40, govt: 50, scty: 40 },
+        title: "O que é Conservadorismo (Roger Scruton)",
+        link: "https://amzn.to/4rKGFDO",
       },
       {
-        name: "Ronald Reagan (EUA)",
-        link: "https://pt.wikipedia.org/wiki/Ronald_Reagan",
-        stats: { econ: 25, dipl: 45, govt: 55, scty: 35 },
+        title: "A Política da Prudência (Russell Kirk)",
+        link: "https://amzn.to/47gg88U",
       },
-    ],
-    books: [
-      { title: "A Lanterna na Popa - Roberto Campos", link: "" },
-      { title: "Capitalismo e Liberdade - Milton Friedman", link: "" },
-      { title: "O Caminho da Servidão - Hayek", link: "" },
+      {
+        title: "As Ideias Conservadoras (João Pereira Coutinho)",
+        link: "https://amzn.to/4siEh72",
+      },
+      {
+        title: "O Conservadorismo (Michael Oakeshott)",
+        link: "https://amzn.to/4cmA25Q",
+      },
     ],
   },
   {
     name: "Liberalismo Clássico",
     stats: { econ: 30, dipl: 60, govt: 60, scty: 80 },
-    desc: "O Liberalismo Clássico é a ideologia que floresceu nos séculos XVIII e XIX, baseada nas ideias de filósofos como John Locke e economistas como Adam Smith. Enfatiza a liberdade individual, os direitos naturais (vida, liberdade e propriedade), o governo limitado e constitucional (Estado de Direito), e o livre mercado (laissez-faire). Acredita que a sociedade prospera quando os indivíduos são livres para perseguir seus próprios interesses com mínima interferência do Estado.",
-    roast: "Você acredita que o mercado livre resolve tudo e que o governo é o problema, mas vive em uma cidade com calçadas públicas. Cita Adam Smith em festas e acha que o século XIX foi o auge da civilização.",
+    desc: "O Liberalismo Clássico é a filosofia política e econômica que fundamentou a modernidade ocidental, enfatizando a liberdade individual como o direito natural supremo. Baseado nos ideais do Iluminismo, defende que os seres humanos possuem direitos à vida, liberdade e propriedade que o Estado deve proteger, mas nunca violar.\n\nPropõe um governo limitado e constitucional, o império da lei e o livre mercado (laissez-faire) como os melhores meios para organizar a sociedade e gerar prosperidade. Para o liberal clássico, o progresso nasce da inovação individual e da livre troca sob um quadro institucional estável, vendo a livre concorrência não apenas como um motor econômico, mas como um bastião contra a tirania política e o privilégio corporativista.",
+    roast:
+      "Você acredita que o mercado livre resolve tudo e que o governo é o problema, mas vive em uma cidade com calçadas públicas. Cita Adam Smith em festas e acha que o século XIX foi o auge da civilização.",
     politicians: [
       {
         name: "Rui Barbosa (BR)",
@@ -1546,20 +1900,37 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "O Abolicionismo - Joaquim Nabuco", link: "" },
-      { title: "A Riqueza das Nações - Adam Smith", link: "" },
-      { title: "Cartas de Inglaterra - Rui Barbosa", link: "" },
-      { title: "Sobre a Liberdade - John Stuart Mill", link: "" },
-      { title: "Os Anjos Bons da Nossa Natureza - Steven Pinker", link: "https://amzn.to/4s3SlBd" },
+      {
+        title: "O Abolicionismo (Joaquim Nabuco)",
+        link: "https://amzn.to/4aJyUrz",
+      },
+      {
+        title: "A Riqueza das Nações (Adam Smith)",
+        link: "https://amzn.to/4saU4Vs",
+      },
+      {
+        title: "A questão social e política do Brasil (Rui Barbosa)",
+        link: "https://amzn.to/4l5l9qD",
+      },
+      {
+        title: "Sobre a Liberdade (John Stuart Mill)",
+        link: "https://amzn.to/4bmzzhV",
+      },
+      {
+        title: "Os Anjos Bons da Nossa Natureza (Steven Pinker)",
+        link: "https://amzn.to/46vflkj",
+      },
     ],
   },
   {
     name: "Capitalismo Autoritário",
     stats: { econ: 20, dipl: 30, govt: 20, scty: 40 },
-    desc: "O Capitalismo Autoritário, também conhecido como capitalismo de Estado autoritário, é um sistema político que combina uma economia de mercado com um regime político autoritário. Nesse modelo, o Estado restringe severamente as liberdades civis e políticas, suprime a dissidência e mantém o poder sem legitimidade democrática, ao mesmo tempo em que permite a propriedade privada e a operação de mercados para gerar crescimento econômico. Exemplos contemporâneos incluem Cingapura e a China moderna.",
+    desc: "O Capitalismo Autoritário (frequentemente associado às ditaduras desenvolvimentistas) é um modelo que combina uma economia de mercado altamente competitiva e industrializada com um regime político não democrático. A premissa central é que o crescimento econômico acelerado e a estabilidade social exigem um comando político firme e inabalável que 'proteja' os mercados do suposto caos das democracias eleitorais.\n\nEste modelo foi adotado por regimes de direita na América Latina e no Sudeste Asiático, utilizando o Estado para facilitar o investimento estrangeiro e reprimir movimentos trabalhistas, acreditando que o desenvolvimento material deve preceder as liberdades políticas formais. É a fusão da eficiência capitalista globalizada com um aparelho estatal repressivo e centralizado.",
+    roast:
+      "Para você, crescimento de 5% de PIB justifica jogar a oposição de um helicóptero ou censurar a internet. Você adora um bom ditador, desde que ele vista terno, corte impostos, estude em Chicago ou em Singapura e tire os seus direitos trabalhistas do caminho.",
     politicians: [
       {
-        name: "Lee Kuan Yew (Singapura)",
+        name: "Lee Kuan Yew (Cingapura)",
         link: "https://pt.wikipedia.org/wiki/Lee_Kuan_Yew",
         stats: { econ: 15, dipl: 35, govt: 15, scty: 35 },
       },
@@ -1571,16 +1942,21 @@ export const ideologies: Ideology[] = [
     ],
     books: [
       {
-        title: "(Estudos sobre Cingapura, Chile sob Pinochet, China moderna)",
-        link: "",
+        title: "Do Terceiro Mundo para o Primeiro (Lee Kuan Yew)",
+        link: "hhttps://amzn.to/4uaHZl1",
       },
-      { title: "O Fim da História e o Último Homem (Fukuyama)", link: "" },
+      {
+        title: "A Doutrina do Choque (Naomi Klein)",
+        link: "https://amzn.to/47cY6Ev",
+      },
     ],
   },
   {
     name: "Capitalismo de Estado",
     stats: { econ: 20, dipl: 50, govt: 30, scty: 50 },
-    desc: "O Capitalismo de Estado é um sistema econômico onde o Estado exerce um controle comercial e administrativo dominante sobre a economia. Embora a propriedade privada e os mercados existam, o Estado é o principal ator econômico, possuindo e operando grandes empresas ('campeões nacionais'), dirigindo investimentos para setores estratégicos e utilizando a economia para alcançar objetivos políticos nacionais. Difere do socialismo de Estado pois o objetivo final não é a abolição do capital, mas sim seu controle pelo Estado.",
+    desc: "O Capitalismo de Estado descreve um sistema onde o governo atua como o principal agente comercial e administrativo da economia nacional, utilizando o aparelho estatal e empresas públicas ('campeões nacionais') para competir globalmente e dirigir o investimento doméstico.\n\nDiferente do socialismo soviético, o Capitalismo de Estado utiliza as ferramentas do mercado, do lucro e do sistema financeiro para ampliar o poder nacional e político, em vez de buscar a igualdade social absoluta. É o modelo predominante em potências emergentes, onde o Estado define as direções estratégicas da economia, apoia seus oligarcas ou burocratas leais e intervém massivamente para garantir que a economia sirva aos interesses da segurança nacional e da manutenção do regime.",
+    roast:
+      "Você adora o livre mercado, desde que o governo seja o verdadeiro CEO do país e possa prender qualquer bilionário que discordar. Acha lindo um 'projeto nacional de desenvolvimento de 50 anos' que atropela os indivíduos para construir ferrovias e indústrias.",
     politicians: [
       {
         name: "Deng Xiaoping (China)",
@@ -1594,17 +1970,38 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "O Capitalismo de Estado Chinês - Nicholas Lardy", link: "" },
-      { title: "Como a China Escapa da Armadilha - Yuen Yuen Ang", link: "" },
-      { title: "O Milagre Asiático - Joe Studwell", link: "" },
+      {
+        title: "Capitalismo sem rivais (Branko Milanović)",
+        link: "https://amzn.to/4aKJXkp",
+      },
+      {
+        title:
+          "O Modelo Chinês: A meritocracia política e os limites da democracia (Daniel A. Bell)",
+        link: "https://amzn.to/4r4Kkew",
+      },
+      {
+        title: "Como a China Escapa da Armadilha da pobreza (Yuen Yuen Ang)",
+        link: "https://amzn.to/3N6SJA5",
+      },
     ],
   },
   {
     name: "Neoconservadorismo",
     stats: { econ: 20, dipl: 20, govt: 40, scty: 20 },
-    desc: "O Neoconservadorismo é uma vertente do conservadorismo que se distingue por uma política externa assertiva, intervencionista e moralista. Defende a promoção da democracia e dos interesses nacionais no exterior, se necessário através do uso da força militar ('paz pela força'). Acreditam que os Estados Unidos, como única superpotência, têm a responsabilidade de liderar o mundo e confrontar regimes hostís. Domesticamente, são geralmente conservadores em questões econômicas e sociais.",
-    roast: "Você acha que a solução para todo problema internacional é bombardear e depois perguntar. Chama qualquer país que não tem McDonald's de 'ameaça à democracia'.",
+    desc: "O Neoconservadorismo é uma vertente política que combina o conservadorismo social e econômico com uma política externa altamente intervencionista e assertiva. Surgida de intelectuais ex-esquerdistas americanos desiludidos, defende que os Estados Unidos e as potências democráticas têm o dever moral de usar sua força militar para ativamente derrubar tiranias e 'plantar a semente' da democracia em regiões estratégicas.\n\nValorizam a virtude cívica, o patriotismo incondicional e a crença de que a liberdade não se mantém apenas por processos de mercado, mas exige uma autoridade moral forte e, se necessário, o uso preventivo da força para garantir a 'paz pela musculatura'. Internamente, criticam o relativismo moral e buscam fortalecer as instituições tradicionais da vida ocidental.",
+    roast:
+      "Você queria salvar os pobres, percebeu que era difícil demais e decidiu que é muito mais fácil impor a democracia no Oriente Médio usando drones. Seu filósofo favorito morreu na década de 70, mas você jura que ele ordenaria a invasão do Iraque.",
     politicians: [
+      {
+        name: "Irving Kristol",
+        link: "https://pt.wikipedia.org/wiki/Irving_Kristol",
+        stats: { econ: 25, dipl: 20, govt: 45, scty: 25 },
+      },
+      {
+        name: "Leo Strauss (Filósofo)",
+        link: "https://pt.wikipedia.org/wiki/Leo_Strauss",
+        stats: { econ: 30, dipl: 30, govt: 50, scty: 20 },
+      },
       {
         name: "George W. Bush (EUA)",
         link: "https://pt.wikipedia.org/wiki/George_W._Bush",
@@ -1615,29 +2012,28 @@ export const ideologies: Ideology[] = [
         link: "https://pt.wikipedia.org/wiki/Dick_Cheney",
         stats: { econ: 15, dipl: 15, govt: 35, scty: 15 },
       },
-      {
-        name: "Paul Wolfowitz (EUA)",
-        link: "https://pt.wikipedia.org/wiki/Paul_Wolfowitz",
-        stats: { econ: 25, dipl: 25, govt: 45, scty: 25 },
-      },
-      {
-        name: "Irving Kristol (Teórico)",
-        link: "https://pt.wikipedia.org/wiki/Irving_Kristol",
-        stats: { econ: 25, dipl: 20, govt: 45, scty: 25 },
-      },
     ],
     books: [
-      { title: "O Fim da História e o Último Homem - Francis Fukuyama", link: "" },
-      { title: "O Caso para a Democracia - Natan Sharansky", link: "" },
-      { title: "Of Paradise and Power - Robert Kagan", link: "" },
-      { title: "Reflexos de uma Era de Ouro - Charles Krauthammer", link: "" },
+      {
+        title: "A persuasão neoconservadora (Irving Kristol)",
+        link: "https://amzn.to/4ulvIub",
+      },
+      {
+        title: "Direito Natural e História (Leo Strauss)",
+        link: "https://amzn.to/4l3pDxV",
+      },
+      {
+        title: "O Fim da História e o Último Homem (Francis Fukuyama)",
+        link: "https://amzn.to/4aOGLCQ",
+      },
     ],
   },
   {
     name: "Fundamentalismo",
     stats: { econ: 20, dipl: 30, govt: 30, scty: 5 },
-    desc: "O Fundamentalismo é uma postura que defende a adesão estrita e literal a um conjunto de crenças e princípios, geralmente de natureza religiosa. Rejeita interpretações modernas ou seculares e busca impor seus preceitos na sociedade, muitas vezes através da lei e do poder do Estado (teocracia). É caracterizado pela intolerância a visões de mundo diferentes e por uma visão reacionária da sociedade, buscando restaurar uma pureza original percebida na fé e nos costumes.",
-    roast: "Você acha que o maior problema do mundo é que as pessoas não estão seguindo o livro certo da maneira certa. Sua solução para tudo é mais fé e menos perguntas.",
+    desc: "O Fundamentalismo é uma postura que defende a adesão estrita, literal e inquestionável a um conjunto de dogmas religiosos ou ideológicos, considerados como a verdade absoluta e imutável. Surge frequentemente como uma reação à modernidade, ao secularismo e ao pluralismo, buscando restaurar uma suposta pureza original da fe através da aplicação rigorosa de leis religiosas na esfera pública (Teocracia).\n\nO fundamentalista rejeita interpretações críticas ou históricas de seus textos sagrados, vendo qualquer desvio como apostasia ou traição moral. Esta ideologia busca subordinar todas as instituições sociais, políticas e educacionais à autoridade religiosa, muitas vezes utilizando o poder do Estado para impor normas de conduta estritas e suprimir visões de mundo divergentes em nome da obediência divina.",
+    roast:
+      "Você acha que o maior problema do mundo é que as pessoas não estão seguindo o livro certo da maneira certa. Sua solução para tudo é mais fé e menos perguntas.",
     politicians: [
       {
         name: "Ruhollah Khomeini (Irã)",
@@ -1656,120 +2052,62 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "As Batalhas de Deus - Gilles Kepel (análise)", link: "" },
-      { title: "O Choque de Civilizações - Samuel Huntington", link: "" },
-    ],
-  },
-  {
-    name: "Capitalismo Libertário",
-    stats: { econ: 20, dipl: 50, govt: 80, scty: 60 },
-    desc: "O Capitalismo Libertário (ou Minarquismo) é uma filosofia que defende a máxima liberdade econômica e individual. Advoga por um Estado mínimo, frequentemente chamado de 'guarda noturno', cuja única função legítima seria proteger os indivíduos da agressão, roubo e fraude, e garantir o cumprimento de contratos. Todas as outras funções, como educação, saúde e infraestrutura, deveriam ser providas pelo livre mercado.",
-    politicians: [
       {
-        name: "Robert Nozick (Filósofo)",
-        link: "https://pt.wikipedia.org/wiki/Robert_Nozick",
-        stats: { econ: 15, dipl: 55, govt: 85, scty: 65 },
-      },
-    ],
-    books: [
-      { title: "Anarquia, Estado e Utopia", link: "" },
-      { title: "Capitalismo e Liberdade (Milton Friedman)", link: "" },
-    ],
-  },
-  {
-    name: "Anarquismo de Mercado",
-    stats: { econ: 20, dipl: 50, govt: 100, scty: 50 },
-    desc: "O Anarquismo de Mercado é uma forma de anarquismo individualista que defende uma sociedade sem Estado com uma economia totalmente baseada no livre mercado, propriedade privada e contratos voluntários. Acredita que a ausência do Estado levaria a um mercado mais justo e livre de privilégios corporativos. Difere do Anarco-Capitalismo em algumas visões sobre a natureza da propriedade ou em suas raízes históricas, muitas vezes se alinhando mais com o anarquismo de esquerda anti-capitalista do século XIX.",
-    politicians: [
-      {
-        name: "Samuel Edward Konkin III (Agorismo)",
-        link: "https://en.wikipedia.org/wiki/Samuel_Edward_Konkin_III",
-        stats: { econ: 15, dipl: 55, govt: 100, scty: 55 },
+        title: "A revanche de Deus (Gilles Kepel)",
+        link: "https://amzn.to/46y352s",
       },
       {
-        name: "Kevin Carson (Mutualista)",
-        link: "https://en.wikipedia.org/wiki/Kevin_Carson",
-        stats: { econ: 30, dipl: 60, govt: 90, scty: 60 },
+        title: "O Choque de Civilizações (Samuel Huntington)",
+        link: "https://amzn.to/46zffbq",
       },
-    ],
-    books: [
-      { title: "New Libertarian Manifesto", link: "" },
-      { title: "Studies in Mutualist Political Economy", link: "" },
-    ],
-  },
-  {
-    name: "Objetivismo",
-    stats: { econ: 10, dipl: 50, govt: 90, scty: 40 },
-    desc: "O Objetivismo é a filosofia fundada por Ayn Rand. Defende a realidade objetiva, a razão como único guia para o conhecimento, o egoísmo racional como código moral e o capitalismo laissez-faire como sistema político ideal. Rejeita o altruísmo, o coletivismo e a religião como moralmente destrutivos. Advoga por um Estado mínimo para proteger os direitos individuais, mas com uma forte ênfase na liberdade pessoal e econômica, vendo o indivíduo heróico como o motor do progresso humano.",
-    politicians: [
-      {
-        name: "Ayn Rand (Filósofa/Escritora)",
-        link: "https://pt.wikipedia.org/wiki/Ayn_Rand",
-        stats: { econ: 5, dipl: 55, govt: 95, scty: 35 },
-      },
-    ],
-    books: [
-      { title: "A Revolta de Atlas", link: "" },
-      { title: "A Nascente", link: "" },
-      { title: "A Virtude do Egoísmo", link: "" },
-    ],
-  },
-  {
-    name: "Capitalismo Totalitário",
-    stats: { econ: 0, dipl: 30, govt: 0, scty: 50 },
-    desc: "O Capitalismo Totalitário é um sistema hipotético que une um controle estatal totalitário sobre a vida dos indivíduos com uma economia de livre mercado desregulada. Nesse cenário distópico, o Estado usa seu poder absoluto não para controlar a economia, mas para suprimir qualquer resistência ao capital, garantindo uma ordem social onde as corporações têm liberdade máxima e os cidadãos, mínima. É a fusão do autoritarismo político extremo com o liberalismo econômico extremo.",
-    roast: "Você quer um Estado que bata nos trabalhadores e desregule as empresas ao mesmo tempo. Seu herói é um CEO com um exército particular.",
-    politicians: [
-      {
-        name: "Jorge Rafael Videla (Argentina)",
-        link: "https://pt.wikipedia.org/wiki/Jorge_Rafael_Videla",
-        stats: { econ: 10, dipl: 10, govt: 0, scty: 30 },
-      },
-      {
-        name: "Efraín Ríos Montt (Guatemala)",
-        link: "https://pt.wikipedia.org/wiki/Efra%C3%ADn_R%C3%ADos_Montt",
-        stats: { econ: 15, dipl: 15, govt: 5, scty: 25 },
-      },
-    ],
-    books: [
-      { title: "A Doutrina do Choque - Naomi Klein", link: "" },
-      { title: "Capitalismo e Liberdade - Milton Friedman (crítica)", link: "" },
     ],
   },
 
   {
     name: "Anarco-Capitalismo",
-    stats: { econ: 0, dipl: 50, govt: 100, scty: 50 },
-    desc: "O Anarco-Capitalismo é uma filosofia política que defende a eliminação completa do Estado e a organização da sociedade inteiramente através do livre mercado. Acredita que todas as funções atualmente desempenhadas pelo Estado, incluindo a segurança, a justiça e a defesa, poderiam ser fornecidas de forma mais eficiente e ética por agências privadas em concorrência. Baseia-se no princípio de não-agressão, que proíbe o início de força contra pessoas ou sua propriedade.",
-    roast: "Você pagaria para andar na calçada e acha que vender órgãos infantis é 'livre mercado'. Sua utopia é um condomínio fechado armado até os dentes onde a lei é ditada pelo dono da rua.",
+    stats: { econ: 0, dipl: 15, govt: 100, scty: 50 },
+    desc: "O Anarco-Capitalismo é uma filosofia política e econômica que defende a abolição total do Estado em favor da soberania individual e do livre mercado absoluto. Baseia-se no 'Princípio de Não-Agressão' (PNA), que sustenta que qualquer iniciação de força física contra a pessoa ou propriedade de outrem é ilegítima.\n\nOs anarco-capitalistas argumentam que todas as funções tradicionalmente estatais — incluindo justiça, segurança, policiamento e infraestrutura — podem e devem ser fornecidas por agências privadas e tribunais arbitrais em um mercado competitivo. Para esta corrente, o Estado é visto como uma organização criminosa que sobrevive através do roubo institucionalizado (impostos). A ordem social surgiria espontaneamente através de contratos voluntários, da proteção da propriedade privada e da livre iniciativa, sem a necessidade de um monopólio central da força.",
+    roast:
+      "Você pagaria para andar na calçada e acha que vender órgãos infantis é 'livre mercado'. Sua utopia é um condomínio fechado armado até os dentes onde a lei é ditada pelo dono da rua.",
     politicians: [
       {
         name: "Murray Rothbard (Teórico)",
         link: "https://pt.wikipedia.org/wiki/Murray_Rothbard",
-        stats: { econ: 0, dipl: 50, govt: 100, scty: 50 },
+        stats: { econ: 0, dipl: 15, govt: 100, scty: 50 },
       },
       {
         name: "David Friedman (Teórico)",
         link: "https://pt.wikipedia.org/wiki/David_D._Friedman",
-        stats: { econ: 5, dipl: 55, govt: 95, scty: 55 },
+        stats: { econ: 5, dipl: 20, govt: 95, scty: 55 },
       },
       {
         name: "Hans-Hermann Hoppe (Teórico)",
         link: "https://pt.wikipedia.org/wiki/Hans-Hermann_Hoppe",
-        stats: { econ: 0, dipl: 30, govt: 100, scty: 40 },
+        stats: { econ: 0, dipl: 10, govt: 100, scty: 40 },
       },
     ],
     books: [
-      { title: "Por Uma Nova Liberdade: O Manifesto Libertário", link: "" },
-      { title: "A Maquinaria da Liberdade", link: "" },
-      { title: "Democracia: O deus que falhou", link: "" },
+      {
+        title:
+          "Por Uma Nova Liberdade: O Manifesto Libertário (Murray Rothbard)",
+        link: "https://amzn.to/3MRiLY4",
+      },
+      {
+        title: "Anatomia do Estado (Murray Rothbard)",
+        link: "https://amzn.to/4tYDJoF",
+      },
+      {
+        title: "Democracia: O deus que falhou (Hans-Hermann Hoppe)",
+        link: "https://amzn.to/4soyM6V",
+      },
     ],
   },
   {
     name: "Neocalvinismo",
     stats: { econ: 50, dipl: 50, govt: 70, scty: 20 },
-    desc: "O Neocalvinismo, fundamentado no pensamento de Abraham Kuyper, defende a 'Soberania das Esferas', onde cada área da vida (estado, igreja, família, arte, ciência) possui sua própria autoridade dada por Deus, impedindo que o Estado ou qualquer outra instituição se torne totalitária. Promove uma visão de pluralismo social e compromisso cristão com a cultura e a justiça social, equilibrando um profundo conservadorismo moral com a defesa fervorosa da liberdade religiosa e institucional. Rejeita tanto a secularização totalitária quanto o domínio direto da igreja sobre o estado.",
-    roast: "Você acredita piamente que existe um 'palmo quadrado' de autoridade divina até na escolha da marca do café. Sua solução para tudo é criar uma instituição paralela christian-only e depois reclamar que a sociedade está fragmentada.",
+    desc: "O Neocalvinismo, fundamentado no pensamento de Abraham Kuyper, defende a 'Soberania das Esferas', onde cada área da vida (estado, igreja, família, arte, ciência) possui sua própria autoridade dada por Deus, impedindo que o Estado ou qualquer outra instituição se torne totalitária.\n\nPromove uma visão de pluralismo social e compromisso cristão com a cultura e a justiça social, equilibrando um profundo conservadorismo moral com a defesa fervorosa da liberdade religiosa e institucional. Rejeita tanto a secularização totalitária quanto o domínio direto da igreja sobre o estado.",
+    roast:
+      "Você acredita piamente que existe um 'palmo quadrado' de autoridade divina até na escolha da marca do café. Sua solução para tudo é criar uma instituição paralela christian-only e depois reclamar que a sociedade está fragmentada.",
     politicians: [
       {
         name: "Abraham Kuyper",
@@ -1793,51 +2131,70 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "Palestras sobre o Calvinismo - Abraham Kuyper", link: "" },
-      { title: "Raiz da Cultura - Herman Dooyeweerd", link: "" },
-      { title: "O Pensamento Econômico e Social de Calvino - André Biéler", link: "" },
-      { title: "No Ritmo do Reino - James K. A. Smith", link: "" },
+      { title: "Calvinismo (Abraham Kuyper)", link: "https://amzn.to/46UbE87" },
+      {
+        title: "Raiz da Cultura Ocidental (Herman Dooyeweerd)",
+        link: "https://amzn.to/4kZAngS",
+      },
+      {
+        title: "O Pensamento Econômico e Social de Calvino (André Biéler)",
+        link: "https://amzn.to/3MRj2KA",
+      },
     ],
   },
   {
     name: "Liberalismo de Direita",
     stats: { econ: 20, dipl: 40, govt: 70, scty: 70 },
-    desc: "O Liberalismo de Direita (ou Liberalismo Econômico Moderno) foca na redução drástica do Estado, privatizações, desregulamentação e responsabilidade fiscal. No contexto brasileiro, é associado à defesa das reformas estruturantes e da liberdade individual como motor do progresso. Acredita que o livre mercado é o mecanismo mais eficiente para gerar riqueza e que o papel do governo deve se limitar a garantir a segurança, a justiça e o cumprimento de contratos, evitando intervenções na economia.",
-    roast: "Você cita o Roberto Campos em jantares de família e acha que o 'imposto é roubo' é a única frase que precisa para explicar toda a sociologia moderna. Provavelmente tem um adesivo do MBL no carro e acredita que a mão invisível do mercado vai consertar até o seu Wi-Fi ruim.",
+    desc: "O Liberalismo de Direita (ou Liberalismo Econômico Moderno) foca na redução drástica do Estado, privatizações, desregulamentação e responsabilidade fiscal. No contexto brasileiro, é associado à defesa das reformas estruturantes e da liberdade individual como motor do progresso.\n\nAcredita que o livre mercado é o mecanismo mais eficiente para gerar riqueza e que o papel do governo deve se limitar a garantir a segurança, a justiça e o cumprimento de contratos, evitando intervenções na economia.",
+    roast:
+      "Você cita o Roberto Campos em jantares de família e acha que o 'imposto é roubo' é a única frase que precisa para explicar toda a sociologia moderna. Provavelmente tem um adesivo de think tank no carro e acredita que a mão invisível do mercado vai consertar até o seu Wi-Fi ruim.",
     politicians: [
       {
-        name: "Roberto Campos",
+        name: "Roberto Campos (BR)",
         link: "https://pt.wikipedia.org/wiki/Roberto_Campos",
         stats: { econ: 20, dipl: 60, govt: 70, scty: 70 },
       },
       {
-        name: "Paulo Guedes",
+        name: "Margaret Thatcher (Reino Unido)",
+        link: "https://pt.wikipedia.org/wiki/Margaret_Thatcher",
+        stats: { econ: 30, dipl: 40, govt: 50, scty: 40 },
+      },
+      {
+        name: "Ronald Reagan (EUA)",
+        link: "https://pt.wikipedia.org/wiki/Ronald_Reagan",
+        stats: { econ: 25, dipl: 45, govt: 55, scty: 35 },
+      },
+      {
+        name: "Paulo Guedes (BR)",
         link: "https://pt.wikipedia.org/wiki/Paulo_Guedes",
         stats: { econ: 20, dipl: 55, govt: 70, scty: 70 },
       },
-      {
-        name: "Kim Kataguiri (MBL)",
-        link: "https://pt.wikipedia.org/wiki/Kim_Kataguiri",
-        stats: { econ: 25, dipl: 50, govt: 75, scty: 75 },
-      },
-      {
-        name: "Friedrich Hayek",
-        link: "https://pt.wikipedia.org/wiki/Friedrich_Hayek",
-        stats: { econ: 15, dipl: 60, govt: 80, scty: 80 },
-      },
     ],
     books: [
-      { title: "A Lanterna na Popa - Roberto Campos", link: "" },
-      { title: "O Caminho da Servidão - Friedrich Hayek", link: "" },
-      { title: "As Seis Lições - Ludwig von Mises", link: "" },
-      { title: "Livre para Escolher - Milton Friedman", link: "" },
+      {
+        title: "A Lanterna na Popa (Roberto Campos)",
+        link: "https://amzn.to/4aLhDqK",
+      },
+      {
+        title: "O Caminho da Servidão (Friedrich Hayek)",
+        link: "https://amzn.to/4ulkkyr",
+      },
+      {
+        title: "As Seis Lições (Ludwig von Mises)",
+        link: "https://amzn.to/46vqzVZ",
+      },
+      {
+        title: "Capitalismo e Liberdade (Milton Friedman)",
+        link: "https://amzn.to/4skCPB7",
+      },
     ],
   },
   {
     name: "Integralismo Brasileiro",
     stats: { econ: 50, dipl: 10, govt: 10, scty: 5 },
-    desc: "O Integralismo foi o principal movimento fascista brasileiro, fundado por Plínio Salgado na década de 1930. Diferente do fascismo europeu, incorporou forte ênfase no catolicismo, no espiritualismo e na identidade nacional brasileira, com o lema 'Deus, Pátria e Família'. Defendia um Estado corporativista e autoritário, anticomunista e antiliberal, que unisse as classes sociais sob a liderança nacional. Adotava a camisa verde e o sigma (Σ) como símbolo, e chegou a ter centenas de milhares de membros antes de ser proibido por Vargas em 1937.",
-    roast: "Você usa camisa verde e acha que o Brasil seria perfeito se fosse governado por um intelectual católico de mão de ferro. Sua solução para a luta de classes é fazer todo mundo rezar junto e obedecer ao líder.",
+    desc: "O Integralismo foi o principal movimento fascista brasileiro, fundado por Plínio Salgado na década de 1930. Diferente do fascismo europeu, incorporou forte ênfase no catolicismo, no espiritualismo e na identidade nacional brasileira, com o lema 'Deus, Pátria e Família'.\n\nDefendia um Estado corporativista e autoritário, anticomunista e antiliberal, que unisse as classes sociais sob a liderança nacional. Adotava a camisa verde e o sigma (Σ) como símbolo, e chegou a ter centenas de milhares de membros antes de ser proibido por Vargas em 1937.",
+    roast:
+      "Você usa camisa verde e acha que o Brasil seria perfeito se fosse governado por um intelectual católico de mão de ferro. Sua solução para a luta de classes é fazer todo mundo rezar junto e obedecer ao líder.",
     politicians: [
       {
         name: "Plínio Salgado (BR)",
@@ -1849,23 +2206,19 @@ export const ideologies: Ideology[] = [
         link: "https://pt.wikipedia.org/wiki/Gustavo_Barroso",
         stats: { econ: 45, dipl: 5, govt: 10, scty: 5 },
       },
-      {
-        name: "Miguel Reale (BR - fase integralista)",
-        link: "https://pt.wikipedia.org/wiki/Miguel_Reale",
-        stats: { econ: 55, dipl: 15, govt: 15, scty: 10 },
-      },
     ],
     books: [
-      { title: "O que é o Integralismo - Plínio Salgado", link: "" },
-      { title: "A Doutrina do Sigma - Plínio Salgado", link: "" },
-      { title: "Brasil, Colônia de Banqueiros - Gustavo Barroso", link: "" },
+      { title: "O que é o Integralismo (Plínio Salgado)", link: "https://amzn.to/4b0PmCK" },
+      { title: "A Doutrina do Sigma (Plínio Salgado)", link: "https://amzn.to/4b0PphU" },
+      { title: "O que o integralista deve saber (Gustavo Barroso)", link: "https://amzn.to/4qXUiy1" },
     ],
   },
   {
     name: "Conservadorismo Liberal",
     stats: { econ: 20, dipl: 50, govt: 65, scty: 35 },
-    desc: "O Conservadorismo Liberal, ou Liberalconservadorismo, combina o compromisso com a liberdade econômica e o livre mercado com a valorização das instituições, tradições e valores morais estabelecidos. Defende privatizações, responsabilidade fiscal e desregulamentação, mas dentro de um quadro de respeito à ordem constitucional, à família e à cultura nacional. No Brasil, representa correntes como o Partido Novo e setores do MBL, que rejeitam tanto o estatismo da esquerda quanto o autoritarismo da direita radical.",
-    roast: "Você quer um Estado mínimo, mas só para a economia. Para os costumes, quer um Estado bem presente na sua cama. Acha que liberdade é poder demitir funcionários sem aviso, mas não poder casar com quem quiser.",
+    desc: "O Conservadorismo Liberal, ou Liberalconservadorismo, combina o compromisso com a liberdade econômica e o livre mercado com a valorização das instituições, tradições e valores morais estabelecidos.\n\nDefende privatizações, responsabilidade fiscal e desregulamentação, mas dentro de um quadro de respeito à ordem constitucional, à família e à cultura nacional. No Brasil, representa correntes como o Partido Novo e setores do MBL, que rejeitam tanto o estatismo da esquerda quanto o autoritarismo da direita radical.",
+    roast:
+      "Você quer um Estado mínimo, mas só para a economia. Para os costumes, quer um Estado bem presente na sua cama. Acha que liberdade é poder demitir funcionários sem aviso, mas não poder casar com quem quiser.",
     politicians: [
       {
         name: "João Amoêdo (BR)",
@@ -1884,50 +2237,18 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "O Caminho da Servidão - Friedrich Hayek", link: "" },
-      { title: "Capitalismo e Liberdade - Milton Friedman", link: "" },
-      { title: "A Mente Conservadora - Russell Kirk", link: "" },
+      { title: "O Caminho da Servidão (Friedrich Hayek)", link: "https://amzn.to/4ulkkyr" },
+      { title: "Capitalismo e Liberdade (Milton Friedman)", link: "https://amzn.to/4skCPB7" },
+      { title: "A política da prudência (Russell Kirk)", link: "https://amzn.to/47gg88U" },
     ],
   },
-  {
-    name: "Ecossocialismo",
-    stats: { econ: 80, dipl: 70, govt: 50, scty: 80 },
-    desc: "O Ecossocialismo parte da crítica marxista ao capitalismo e a aprofunda: a destruição ambiental não é um acidente do sistema, é sua lógica central. A acumulação infinita de capital é incompatível com um planeta finito. Defendemos a socialização dos meios de produção e a planificação democrática da economia orientada para as necessidades humanas e os limites ecológicos, não para o lucro. A transição energética, a agroecologia e a soberania alimentar são bandeiras centrais. Não há socialismo em um planeta morto.",
-    roast: "Você quer fazer a revolução, mas só se for carbono neutro. Sua maior angústia é decidir se o coletivo de bicicletas é suficientemente anticapitalista ou apenas uma startup de mobilidade urbana.",
-    politicians: [
-      {
-        name: "Chico Mendes (BR)",
-        link: "https://pt.wikipedia.org/wiki/Chico_Mendes",
-        stats: { econ: 85, dipl: 60, govt: 55, scty: 75 },
-      },
-      {
-        name: "Joel Kovel (EUA)",
-        link: "https://pt.wikipedia.org/wiki/Joel_Kovel",
-        stats: { econ: 80, dipl: 70, govt: 50, scty: 80 },
-      },
-      {
-        name: "Michael Löwy (BR/França)",
-        link: "https://pt.wikipedia.org/wiki/Michael_L%C3%B6wy",
-        stats: { econ: 85, dipl: 75, govt: 55, scty: 85 },
-      },
-      {
-        name: "Vandana Shiva (Índia)",
-        link: "https://pt.wikipedia.org/wiki/Vandana_Shiva",
-        stats: { econ: 75, dipl: 80, govt: 60, scty: 90 },
-      },
-    ],
-    books: [
-      { title: "Ecossocialismo - Michael Löwy", link: "" },
-      { title: "O Capitalismo e a Destruição do Mundo - Joel Kovel", link: "" },
-      { title: "Monocultures of the Mind - Vandana Shiva", link: "" },
-      { title: "Chico Mendes: Crime e Castigo - Zuenir Ventura", link: "" },
-    ],
-  },
+
   {
     name: "Feminismo",
     stats: { econ: 50, dipl: 75, govt: 70, scty: 100 },
-    desc: "O Feminismo busca a libertação da mulher e a desconstrução das hierarquias de gênero. Luta pela igualdade de direitos, pelo fim da discriminação, pela autonomia sobre o próprio corpo e, em suas vertentes mais radicais, pelo fim das estruturas patriarcais e da opressão sistêmica. Diferentes correntes feministas podem questionar estruturas como o capitalismo, a linguagem ou até mesmo o conceito de gênero, mas todas compartilham o objetivo de emancipar não apenas as mulheres, mas toda a sociedade dos papéis de gênero opressivos.",
-    roast: "Sua citação preferida é 'lugar de mulher é onde ela quiser', exceto se for pra discordar de você no Twitter. Você cancelaria o Papai Noel por não ser uma entidade agênero.",
+    desc: "O Feminismo é um movimento social, político e filosófico que luta pela emancipação das mulheres e pela superação das desigualdades históricas baseadas no gênero. Seu objetivo central é a desconstrução das estruturas patriarcais que subordinam o feminino ao masculino, buscando garantir a igualdade de direitos, a autonomia reprodutiva, a paridade econômica e o fim de todas as formas de violência contra a mulher.\n\nO feminismo bifurca-se em diversas correntes: o Liberal (focado em igualdade jurídica e institucional), o Marxista (que vê a opressão de gênero ligada à de classe), o Radical (que foca na raiz cultural do patriarcado) e o Interseccional (que analisa como gênero, raça e classe se cruzam). Mais do que uma luta setorial, o feminismo propõe uma reavaliação profunda de todos os papéis sociais para construir uma sociedade onde o gênero não seja um fator de opressão ou limitação da liberdade humana.",
+    roast:
+      "Sua citação preferida é 'lugar de mulher é onde ela quiser', exceto se for pra discordar de você no Twitter. Você cancelaria o Papai Noel por não ser uma entidade agênero.",
     politicians: [
       {
         name: "Mary Wollstonecraft (Reino Unido)",
@@ -1956,33 +2277,50 @@ export const ideologies: Ideology[] = [
       },
     ],
     books: [
-      { title: "A Vindication of the Rights of Woman - Mary Wollstonecraft", link: "" },
-      { title: "A Mística Feminina - Betty Friedan", link: "" },
-      { title: "O Segundo Sexo - Simone de Beauvoir", link: "" },
-      { title: "Problemas de Gênero - Judith Butler", link: "" },
+      {
+        title: "Reivindicação dos Direitos da Mulher (Mary Wollstonecraft)",
+        link: "https://amzn.to/40BLVxl",
+      },
+      { title: "O Segundo Sexo (Simone de Beauvoir)", link: "https://amzn.to/4cTVE9B" },
+      { title: "Problemas de Gênero (Judith Butler)", link: "https://amzn.to/400GAj5" },
     ],
   },
 ];
 
-export function getMatchedIdeology(e: number, d: number, g: number, s: number): Ideology | null {
+export function getMatchPercentage(distance: number): number {
+  const maxDistance = 200;
+  return Math.max(0, 100 * (1 - distance / maxDistance));
+}
+
+export function getMatchedIdeology(
+  e: number,
+  d: number,
+  g: number,
+  s: number,
+): Ideology | null {
   const top = getTopMatchedIdeologies(e, d, g, s, 1);
   return top.length > 0 ? top[0] : null;
 }
 
-export function getTopMatchedIdeologies(e: number, d: number, g: number, s: number, count: number = 3): Ideology[] {
-  const results = ideologies.map(ideology => {
+export function getTopMatchedIdeologies(
+  e: number,
+  d: number,
+  g: number,
+  s: number,
+  count: number = 3,
+): Ideology[] {
+  const results = ideologies.map((ideology) => {
     const distance = Math.sqrt(
       Math.pow(ideology.stats.econ - e, 2) +
       Math.pow(ideology.stats.dipl - d, 2) +
       Math.pow(ideology.stats.govt - g, 2) +
-      Math.pow(ideology.stats.scty - s, 2)
+      Math.pow(ideology.stats.scty - s, 2),
     );
-    return { ideology, distance };
+    const affinity = getMatchPercentage(distance);
+    return { ideology: { ...ideology, affinity }, distance };
   });
 
   results.sort((a, b) => a.distance - b.distance);
 
-  return results.slice(0, count).map(r => r.ideology);
+  return results.slice(0, count).map((r) => r.ideology);
 }
-
-

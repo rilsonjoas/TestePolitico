@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { CheckCircle2, XCircle, Info } from 'lucide-react';
 
 interface ToastProps {
   message: string;
@@ -28,19 +29,18 @@ export function Toast({ message, type = 'success', duration = 3000, onClose }: T
   }[type];
 
   const icon = {
-    success: '✅',
-    error: '❌',
-    info: 'ℹ️'
+    success: <CheckCircle2 size={24} />,
+    error: <XCircle size={24} />,
+    info: <Info size={24} />
   }[type];
 
   return (
-    <div 
-      className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg text-white max-w-sm transition-all duration-300 ${bgColor} ${
-        isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
-      }`}
+    <div
+      className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg text-white max-w-sm transition-all duration-300 ${bgColor} ${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
+        }`}
     >
       <div className="flex items-center gap-3">
-        <span className="text-xl">{icon}</span>
+        <span className="flex-shrink-0">{icon}</span>
         <p className="font-medium">{message}</p>
       </div>
     </div>
@@ -59,10 +59,10 @@ export function useToast() {
   };
 
   const ToastComponent = toast ? (
-    <Toast 
-      message={toast.message} 
-      type={toast.type} 
-      onClose={hideToast} 
+    <Toast
+      message={toast.message}
+      type={toast.type}
+      onClose={hideToast}
     />
   ) : null;
 

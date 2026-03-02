@@ -11,13 +11,13 @@ import { Header } from "@/components/Header";
 const siteUrl = "https://testepolitico.com.br";
 const siteName = "Teste Político 8 Valores";
 const siteDescription = "Descubra sua ideologia política em 5 minutos! Você é de esquerda ou direita? Liberal ou conservador? Faça o teste mais completo do Brasil!";
-const shareTitle = "Descobri Minha Ideologia Política! E Você? 🤔";
-const shareDescription = "Fiz o Teste Político 8 Valores e descobri meu posicionamento! Será que pensamos parecido? Faça o teste e compare! 🎯";
+const shareTitle = "Descobri minha ideologia política! E a sua? 🤔";
+const shareDescription = "Fiz o Teste Político e descobri meu posicionamento! Será que pensamos parecido? Faça o teste e compare! 🎯";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Descubra Sua Ideologia Política! 🎯 | Teste 8 Valores",
+    default: "Descubra sua ideologia política! | Teste Político",
     template: `%s | ${siteName}`,
   },
   description: siteDescription,
@@ -81,42 +81,42 @@ export default function RootLayout({
   };
 
   return (
-        <html lang="pt-br" suppressHydrationWarning>
-          <head>
-            {/* Google Analytics 4 */}
-            {process.env.NEXT_PUBLIC_GA_ID && (
-              <>
-                <Script
-                  async
-                  src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
-                  strategy="afterInteractive"
-                />
-                <Script id="ga-script" strategy="afterInteractive">
-                  {gaScript}
-                </Script>
-              </>
-            )}
-            {/* Blocking script to prevent theme flicker */}
-            <Script id="theme-script" strategy="beforeInteractive">
-              {themeScript}
+    <html lang="pt-br" suppressHydrationWarning>
+      <head>
+        {/* Google Analytics 4 */}
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <>
+            <Script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga-script" strategy="afterInteractive">
+              {gaScript}
             </Script>
-            {/* AdSense Publisher ID configurado */}
-            <AdSense pId="ca-pub-5482566824255473" />
-          </head>
-          <body className="min-h-screen w-full bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
-            <script
-              type="application/ld+json"
-              suppressHydrationWarning
-            >
-              {JSON.stringify(jsonLd)}
-            </script>
-            <RouteTracker />
-            <RouteTracker />
-            <Header />
-            {children}
-            <Footer />
-            <CookieConsent />
-          </body>
-        </html>
+          </>
+        )}
+        {/* Blocking script to prevent theme flicker */}
+        <Script id="theme-script" strategy="beforeInteractive">
+          {themeScript}
+        </Script>
+        {/* AdSense Publisher ID configurado */}
+        <AdSense pId="ca-pub-5482566824255473" />
+      </head>
+      <body className="min-h-screen w-full bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+        <script
+          type="application/ld+json"
+          suppressHydrationWarning
+        >
+          {JSON.stringify(jsonLd)}
+        </script>
+        <RouteTracker />
+        <RouteTracker />
+        <Header />
+        {children}
+        <Footer />
+        <CookieConsent />
+      </body>
+    </html>
   );
 }
