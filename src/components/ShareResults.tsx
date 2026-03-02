@@ -158,181 +158,301 @@ export function ShareResults({ targetId, scores, matchedIdeology, enableComparis
     ctx.fillStyle = bgGradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // --- CARREGAR LOGO ---
-    const loadImage = (src: string): Promise<HTMLImageElement> => {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        img.onload = () => resolve(img);
-        img.onerror = reject;
-        img.src = src;
-      });
-    };
-
-    try {
-      const logoImg = await loadImage("/logo.svg");
-      const logoSize = format === 'twitter' ? 50 : 80;
-      const logoX = (canvas.width - logoSize) / 2;
-      const logoY = format === 'twitter' ? 30 : 50;
-
-      // Sombra suave no logo
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
-      ctx.shadowBlur = 15;
-      ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
-      ctx.shadowBlur = 0;
-    } catch (e) {
-      console.warn("Logo failed to load for canvas:", e);
-    }
-
-    // Padding base
-    const padding = Math.max(50, canvas.width * 0.05);
-
-    // --- CABEÇALHO ---
-    // Logo centralizado e minimalista
-    const titleY = format === 'twitter' ? 120 : 180;
-
-    // Título do Site
-    ctx.textAlign = 'center';
-    const titleSize = format === 'twitter' ? 32 : 40;
-    ctx.font = `900 ${titleSize}px Arial`;
-
-    // Título unificado para Twitter e Square se houver espaço
-    if (format === 'twitter' || format === 'square') {
-      ctx.fillStyle = textPrimary;
-      ctx.fillText('TESTE POLÍTICO 8 VALORES', canvas.width / 2, titleY);
-    } else {
-      ctx.fillStyle = textPrimary;
-      ctx.fillText('TESTE POLÍTICO', canvas.width / 2, titleY);
-      ctx.fillStyle = '#3b82f6'; // Azul destaque
-      ctx.fillText('8 VALORES', canvas.width / 2, titleY + 50);
-    }
-
-    // --- CONTEÚDO PRINCIPAL (IDEOLOGIA) ---
-    const centerY = canvas.height * (format === 'twitter' ? 0.35 : 0.28);
-
-    if (matchedIdeology) {
-      // Label "Minha ideologia é"
-      ctx.fillStyle = textSecondary;
-      ctx.font = '24px Arial';
-      ctx.fillText('Minha ideologia é', canvas.width / 2, centerY - 20);
-
-      // Nome da Ideologia (Hero Text)
-      ctx.fillStyle = textPrimary;
-      // Ajuste dinâmico de tamanho de fonte baseado no tamanho do nome
-      const nameLength = matchedIdeology.name.length;
-      let ideologyFontSize = format === 'twitter' ? 48 : 72;
-      if (nameLength > 20) ideologyFontSize *= 0.8;
-
-      ctx.font = `800 ${ideologyFontSize}px Arial`;
-
-      // Efeito de brilho no texto (Shadow)
-      ctx.shadowColor = 'rgba(59, 130, 246, 0.5)';
-      ctx.shadowBlur = 20;
-      ctx.fillText(matchedIdeology.name, canvas.width / 2, centerY + (format === 'twitter' ? 40 : 60));
-      ctx.shadowBlur = 0; // Reset shadow
-    }
-
-    // --- BARRAS DE EIXOS ---
     if (!scores) return canvas;
 
     const axes = [
-      { name: 'Econômico', value1: scores.e, value2: 100 - scores.e, label1: 'Igualdade', label2: 'Mercado', color1: '#ef4444', color2: '#22c55e' }, // Cores mais vibrantes
-      { name: 'Diplomático', value1: scores.d, value2: 100 - scores.d, label1: 'Nação', label2: 'Global', color1: '#f97316', color2: '#06b6d4' },
-      { name: 'Civil', value1: scores.g, value2: 100 - scores.g, label1: 'Liberdade', label2: 'Autoridade', color1: '#eab308', color2: '#3b82f6' },
-      { name: 'Social', value1: scores.s, value2: 100 - scores.s, label1: 'Tradição', label2: 'Progresso', color1: '#a855f7', color2: '#ec4899' },
+      { value1: scores.e, value2: 100 - scores.e, label1: 'Igualdade', label2: 'Mercado', color1: '#ef4444', color2: '#22c55e' },
+      { value1: scores.d, value2: 100 - scores.d, label1: 'Nação', label2: 'Global', color1: '#f97316', color2: '#06b6d4' },
+      { value1: scores.g, value2: 100 - scores.g, label1: 'Liberdade', label2: 'Autoridade', color1: '#eab308', color2: '#3b82f6' },
+      { value1: scores.s, value2: 100 - scores.s, label1: 'Tradição', label2: 'Progresso', color1: '#a855f7', color2: '#ec4899' },
     ];
 
-    // Layout das barras muda drasticamente baseado no formato
-    const isTwitter = format === 'twitter';
-    const startBarsY = isTwitter
-      ? canvas.height * 0.55
-      : canvas.height * 0.45;
-
-    const barSpacing = isTwitter ? 45 : 70;
-    const barHeight = isTwitter ? 25 : 40;
-    const maxBarWidth = Math.min(800, canvas.width - (padding * 2));
-    const barStartX = (canvas.width - maxBarWidth) / 2;
-
-    const fontSize = {
-      label: isTwitter ? 14 : 20,
-      percent: isTwitter ? 14 : 20
+    // ─────────────────────────────────────────────────────────────────
+    // PER-FORMAT LAYOUT CONSTANTS
+    // All Y coordinates are absolute pixels from the top of the canvas.
+    // ─────────────────────────────────────────────────────────────────
+    type LayoutConfig = {
+      logoSize: number; logoY: number;
+      titleFontSize: number; titleY: number;
+      titleLine2?: string; titleLine2Y?: number;    // instagram only
+      ideologyLabelFontSize: number; ideologyLabelY: number;
+      ideologyNameFontSize: number; ideologyNameY: number;
+      // Bars
+      barStartX: number; maxBarWidth: number;
+      barStartY: number; barSpacing: number; barHeight: number;
+      barFontSize: number;
+      // Compass
+      compassX: number; compassY: number; compassSize: number;
+      compassLblSize: number;
+      footerY: number;
     };
 
-    axes.forEach((axis, i) => {
-      const y = startBarsY + (i * barSpacing);
+    let L: LayoutConfig;
 
-      // Fundo da barra (track)
-      const trackY = y - (barHeight / 2);
+    if (format === 'twitter') {
+      // ── TWITTER 1200 × 675 ─────────────────────────────────────────
+      // Compact header above two columns: bars left | compass right.
+      // Heights: 675px total. Logo(18)+header(~130)+bars(~280)+gap+footer = use ~530px.
+      const bsX = 60, bsW = 530, bH = 28, bSp = 88;
+      const bsY = 260;                              // bar-centre y of 1st bar
+      const barTop  = bsY - bH / 2 - 14;           // topmost label pixel ≈ 232
+      const barBot  = bsY + 3 * bSp + bH / 2;      // last bar bottom      ≈ 538
+      const barMidY = (barTop + barBot) / 2;        // vertical centre      ≈ 385
+      const cs = 270;
+      const compassAreaX = 620, compassAreaW = 545;
+      const cxT = compassAreaX + (compassAreaW - cs) / 2; // ≈ 757
+      const cyT = barMidY - cs / 2;                       // ≈ 250, bottom ≈ 520
+      L = {
+        logoSize: 40, logoY: 18,
+        titleFontSize: 26, titleY: 72,
+        ideologyLabelFontSize: 16, ideologyLabelY: 104,
+        ideologyNameFontSize: 38, ideologyNameY: 144,
+        barStartX: bsX, maxBarWidth: bsW,
+        barStartY: bsY, barSpacing: bSp, barHeight: bH, barFontSize: 14,
+        compassX: cxT, compassY: cyT, compassSize: cs, compassLblSize: 12,
+        footerY: 652,
+      };
+    } else if (format === 'square') {
+      // ── SQUARE 1080 × 1080 ─────────────────────────────────────────
+      // Stacked: header → ideology → bars → compass → footer.
+      const bH = 38, bSp = 72, bsW = 920;
+      const bsX = (1080 - bsW) / 2;
+      const bsY = 390;
+      const barBot = bsY + 3 * bSp + bH / 2; // ≈ 625
+      const cs = 260;
+      const cx = (1080 - cs) / 2;
+      const cy = barBot + 60;                  // ≈ 685
+      // Libertário label sits at cy+cs+lblSize+6 = 685+260+14+6 = 965
+      // footer divider at 1040-50 = 990 → 25 px gap ✓
+      L = {
+        logoSize: 78, logoY: 48,
+        titleFontSize: 38, titleY: 178,
+        ideologyLabelFontSize: 22, ideologyLabelY: 252,
+        ideologyNameFontSize: 66, ideologyNameY: 318,
+        barStartX: bsX, maxBarWidth: bsW,
+        barStartY: bsY, barSpacing: bSp, barHeight: bH, barFontSize: 20,
+        compassX: cx, compassY: cy, compassSize: cs, compassLblSize: 14,
+        footerY: 1040,
+      };
+    } else {
+      // ── INSTAGRAM 1080 × 1920 ──────────────────────────────────────
+      // Stacked: header (2-line) → ideology → bars → large compass → footer.
+      const bH = 48, bSp = 98, bsW = 920;
+      const bsX = (1080 - bsW) / 2;
+      const bsY = 530;
+      const barBot = bsY + 3 * bSp + bH / 2; // ≈ 848
+      const cs = 660;
+      const cx = (1080 - cs) / 2;
+      const cy = barBot + 100;                 // ≈ 948: more breathing room between bars and compass
+      // compass bottom: 948+660=1608, "Libertário" label ≈1630
+      // footer divider at 1840 → ~210px breathing room ✓
+      L = {
+        logoSize: 80, logoY: 55,
+        titleFontSize: 40, titleY: 185,
+        titleLine2: '8 VALORES', titleLine2Y: 238,
+        ideologyLabelFontSize: 24, ideologyLabelY: 345,
+        ideologyNameFontSize: 72, ideologyNameY: 425,
+        barStartX: bsX, maxBarWidth: bsW,
+        barStartY: bsY, barSpacing: bSp, barHeight: bH, barFontSize: 22,
+        compassX: cx, compassY: cy, compassSize: cs, compassLblSize: 16,
+        footerY: 1875,
+      };
+    }
 
-      // Labels acima da barra
+    // ─────────────────────────────────────────────────────────────────
+    // DRAW LOGO
+    // ─────────────────────────────────────────────────────────────────
+    try {
+      const loadImage = (src: string): Promise<HTMLImageElement> =>
+        new Promise((resolve, reject) => {
+          const img = new Image(); img.crossOrigin = 'anonymous';
+          img.onload = () => resolve(img); img.onerror = reject; img.src = src;
+        });
+      const logoImg = await loadImage('/logo.svg');
+      ctx.shadowColor = 'rgba(0,0,0,0.3)';
+      ctx.shadowBlur = 15;
+      ctx.drawImage(logoImg, (canvas.width - L.logoSize) / 2, L.logoY, L.logoSize, L.logoSize);
+      ctx.shadowBlur = 0;
+    } catch { /* logo optional */ }
+
+    // ─────────────────────────────────────────────────────────────────
+    // DRAW TITLE
+    // ─────────────────────────────────────────────────────────────────
+    ctx.textAlign = 'center';
+    ctx.fillStyle = textPrimary;
+    ctx.font = `900 ${L.titleFontSize}px Arial`;
+    if (L.titleLine2) {
+      // instagram: two-line title
+      ctx.fillText('TESTE POLÍTICO', canvas.width / 2, L.titleY);
+      ctx.fillStyle = '#3b82f6';
+      ctx.fillText(L.titleLine2, canvas.width / 2, L.titleLine2Y!);
+    } else {
+      ctx.fillText('TESTE POLÍTICO 8 VALORES', canvas.width / 2, L.titleY);
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    // DRAW IDEOLOGY
+    // ─────────────────────────────────────────────────────────────────
+    if (matchedIdeology) {
+      ctx.textAlign = 'center';
       ctx.fillStyle = textSecondary;
-      ctx.font = `600 ${fontSize.label}px Arial`;
+      ctx.font = `${L.ideologyLabelFontSize}px Arial`;
+      ctx.fillText('Minha ideologia é', canvas.width / 2, L.ideologyLabelY);
+
+      let fontSize = L.ideologyNameFontSize;
+      if (matchedIdeology.name.length > 20) fontSize = Math.round(fontSize * 0.78);
+
+      ctx.fillStyle = textPrimary;
+      ctx.font = `800 ${fontSize}px Arial`;
+      ctx.shadowColor = 'rgba(59,130,246,0.45)';
+      ctx.shadowBlur = 18;
+      ctx.fillText(matchedIdeology.name, canvas.width / 2, L.ideologyNameY);
+      ctx.shadowBlur = 0;
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    // DRAW AXIS BARS
+    // ─────────────────────────────────────────────────────────────────
+    const { barStartX, maxBarWidth, barStartY, barSpacing, barHeight, barFontSize } = L;
+
+    axes.forEach((axis, i) => {
+      const centreY = barStartY + i * barSpacing;
+      const trackY  = centreY - barHeight / 2;
+
+      // labels
+      ctx.font = `600 ${barFontSize}px Arial`;
       ctx.textAlign = 'left';
       ctx.fillStyle = axis.color1;
       ctx.fillText(axis.label1, barStartX, trackY - 10);
-
       ctx.textAlign = 'right';
       ctx.fillStyle = axis.color2;
       ctx.fillText(axis.label2, barStartX + maxBarWidth, trackY - 10);
 
-      // Barra Container (arredondada)
+      // track background
       ctx.beginPath();
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       ctx.roundRect(barStartX, trackY, maxBarWidth, barHeight, barHeight / 2);
-      ctx.fillStyle = '#334155'; // Slate 700
+      ctx.fillStyle = '#334155';
       ctx.fill();
 
-      // Parte Esquerda (Color 1)
-      const width1 = (maxBarWidth * axis.value1) / 100;
-      if (width1 > 0) {
+      // left fill
+      const w1 = (maxBarWidth * axis.value1) / 100;
+      if (w1 > 0) {
         ctx.beginPath();
-        // Arredondar canto esquerdo sempre, direito apenas se for 100%
-        // [top-left, top-right, bottom-right, bottom-left]
-        const radii = width1 === maxBarWidth
-          ? [barHeight / 2]
-          : [barHeight / 2, 0, 0, barHeight / 2];
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        ctx.roundRect(barStartX, trackY, width1, barHeight, radii);
-        ctx.fillStyle = axis.color1;
-        ctx.fill();
+        ctx.roundRect(barStartX, trackY, w1, barHeight, w1 === maxBarWidth ? [barHeight / 2] : [barHeight / 2, 0, 0, barHeight / 2]);
+        ctx.fillStyle = axis.color1; ctx.fill();
       }
 
-      // Parte Direita (Color 2)
-      const width2 = maxBarWidth - width1;
-      if (width2 > 0) {
+      // right fill
+      const w2 = maxBarWidth - w1;
+      if (w2 > 0) {
         ctx.beginPath();
-        // Arredondar canto direito sempre, esquerdo apenas se for 100%
-        const radii = width2 === maxBarWidth
-          ? [barHeight / 2]
-          : [0, barHeight / 2, barHeight / 2, 0];
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        ctx.roundRect(barStartX + width1, trackY, width2, barHeight, radii);
-        ctx.fillStyle = axis.color2;
-        ctx.fill();
+        ctx.roundRect(barStartX + w1, trackY, w2, barHeight, w2 === maxBarWidth ? [barHeight / 2] : [0, barHeight / 2, barHeight / 2, 0]);
+        ctx.fillStyle = axis.color2; ctx.fill();
       }
 
-      // Porcentagens dentro da barra (se houver espaço) ou ao lado
-      ctx.font = `bold ${fontSize.percent}px Arial`;
+      // percentage labels inside bars
+      ctx.font = `bold ${barFontSize}px Arial`;
       ctx.fillStyle = '#ffffff';
-
-      // Texto da esquerda
-      if (width1 > 50) {
+      if (w1 > 50) {
         ctx.textAlign = 'left';
-        ctx.fillText(`${axis.value1.toFixed(1)}%`, barStartX + 12, trackY + barHeight / 2 + fontSize.percent / 3);
+        ctx.fillText(`${axis.value1.toFixed(1)}%`, barStartX + 12, centreY + barFontSize / 3);
       }
-
-      // Texto da direita
-      if (width2 > 50) {
+      if (w2 > 50) {
         ctx.textAlign = 'right';
-        ctx.fillText(`${axis.value2.toFixed(1)}%`, barStartX + maxBarWidth - 12, trackY + barHeight / 2 + fontSize.percent / 3);
+        ctx.fillText(`${axis.value2.toFixed(1)}%`, barStartX + maxBarWidth - 12, centreY + barFontSize / 3);
       }
     });
 
-    // --- RODAPÉ ---
-    const footerY = canvas.height - (padding);
+    // ─────────────────────────────────────────────────────────────────
+    // DRAW POLITICAL COMPASS
+    // ─────────────────────────────────────────────────────────────────
+    {
+      const dotNormX = (100 - scores.e) / 100; // left=0 right=1
+      const dotNormY = scores.g / 100;          // top=0(auth) bottom=1(lib)
+
+      const { compassX: cx, compassY: cy, compassSize: cs, compassLblSize: lblSize } = L;
+
+      // Clip all compass drawing to its box (prevents dot glow bleeding outside)
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(cx, cy, cs, cs);
+      ctx.clip();
+
+      // quadrant fills
+      for (const [dx, dy, col] of [[0, 0, '#ef4444'], [cs/2, 0, '#3b82f6'], [0, cs/2, '#22c55e'], [cs/2, cs/2, '#eab308']] as [number,number,string][]) {
+        ctx.fillStyle = col + '40';
+        ctx.fillRect(cx + dx, cy + dy, cs / 2, cs / 2);
+      }
+
+      // subtle grid
+      ctx.strokeStyle = 'rgba(255,255,255,0.07)';
+      ctx.lineWidth = 1;
+      for (let p = 0.1; p < 1; p += 0.1) {
+        if (Math.abs(p - 0.5) < 0.01) continue;
+        ctx.beginPath(); ctx.moveTo(cx + p * cs, cy); ctx.lineTo(cx + p * cs, cy + cs); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(cx, cy + p * cs); ctx.lineTo(cx + cs, cy + p * cs); ctx.stroke();
+      }
+
+      // border
+      ctx.strokeStyle = '#475569'; ctx.lineWidth = 2;
+      ctx.strokeRect(cx, cy, cs, cs);
+
+      // centre axes
+      ctx.strokeStyle = 'rgba(226,232,240,0.7)'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(cx + cs / 2, cy); ctx.lineTo(cx + cs / 2, cy + cs); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx, cy + cs / 2); ctx.lineTo(cx + cs, cy + cs / 2); ctx.stroke();
+
+      // user dot (still inside clip so glow is masked by border)
+      const dotX = cx + dotNormX * cs;
+      const dotY = cy + dotNormY * cs;
+      const dotR = Math.max(8, cs * 0.04);
+
+      const glow = ctx.createRadialGradient(dotX, dotY, 0, dotX, dotY, dotR * 3.5);
+      glow.addColorStop(0, 'rgba(59,130,246,0.6)');
+      glow.addColorStop(1, 'rgba(59,130,246,0)');
+      ctx.fillStyle = glow;
+      ctx.beginPath(); ctx.arc(dotX, dotY, dotR * 3.5, 0, Math.PI * 2); ctx.fill();
+
+      ctx.fillStyle = '#3b82f6';
+      ctx.beginPath(); ctx.arc(dotX, dotY, dotR, 0, Math.PI * 2); ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath(); ctx.arc(dotX, dotY, dotR * 0.45, 0, Math.PI * 2); ctx.fill();
+
+      // Restore clip — everything below is OUTSIDE the compass box
+      ctx.restore();
+
+      // axis labels (outside compass, clip is lifted)
+      ctx.font = `bold ${lblSize}px Arial`;
+      ctx.fillStyle = '#94a3b8';
+      ctx.textAlign = 'center';
+      ctx.fillText('Autoritário', cx + cs / 2, cy - 8);
+      ctx.fillText('Libertário',  cx + cs / 2, cy + cs + lblSize + 6);
+
+      ctx.save(); ctx.translate(cx - 8, cy + cs / 2); ctx.rotate(-Math.PI / 2);
+      ctx.textAlign = 'center'; ctx.fillText('Esquerda', 0, 0); ctx.restore();
+
+      ctx.save(); ctx.translate(cx + cs + 8, cy + cs / 2); ctx.rotate(Math.PI / 2);
+      ctx.textAlign = 'center'; ctx.fillText('Direita', 0, 0); ctx.restore();
+
+      const youLblY = dotNormY > 0.85 ? dotY - dotR - 6 : dotY + dotR + lblSize + 4;
+      ctx.fillStyle = '#60a5fa';
+      ctx.font = `900 ${lblSize}px Arial`;
+      ctx.textAlign = 'center';
+      ctx.fillText('VOCÊ', dotX, youLblY);
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    // FOOTER
+    // ─────────────────────────────────────────────────────────────────
+    const footerY = L.footerY;
+    const isTwitter = format === 'twitter';
 
     // Linha divisória sutil
     ctx.strokeStyle = '#334155';

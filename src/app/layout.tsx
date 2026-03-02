@@ -11,8 +11,8 @@ import { Header } from "@/components/Header";
 const siteUrl = "https://testepolitico.com.br";
 const siteName = "Teste Político 8 Valores";
 const siteDescription = "Descubra sua ideologia política em 5 minutos! Você é de esquerda ou direita? Liberal ou conservador? Faça o teste mais completo do Brasil!";
-const shareTitle = "Descobri minha ideologia política! E a sua? 🤔";
-const shareDescription = "Fiz o Teste Político e descobri meu posicionamento! Será que pensamos parecido? Faça o teste e compare! 🎯";
+const shareTitle = "Descobri minha ideologia política! E a sua?";
+const shareDescription = "Fiz o Teste Político e descobri meu posicionamento! Será que pensamos parecido? Faça o teste e compare!";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
