@@ -199,7 +199,7 @@ export const questions: Question[] = [
     question:
       "Programas do governo que pagam uma renda mensal a pessoas de baixa renda criam dependência financeira e desincentivam o trabalho a longo prazo.",
     example:
-      "uma pessoa que recebe o benefício indefinidamente pode perder a motivação de buscar emprego, pois arrisca perder o auxílio ao começar a trabalhar.",
+      "quem recebe o benefício indefinidamente perde a motivação de buscar emprego — afinal, trabalhar significa arriscar perder o auxílio por um salário que pode não valer a pena.",
     context: "estado",
     effect: { econ: -10, dipl: 0, govt: 0, scty: 0 },
   },
@@ -263,7 +263,7 @@ export const questions: Question[] = [
     question:
       "Organizações internacionais como a ONU, a União Europeia e o Mercosul têm poder excessivo e deveriam ser enfraquecidas ou extintas, pois interferem nas decisões internas de cada país.",
     example:
-      "aceitar que um tribunal internacional decida sobre leis de imigração ou direitos humanos de um país, mesmo contra a vontade do seu governo eleito.",
+      "um país que votar pela sua própria lei de imigração não pode aceitar que burocratas não eleitos em Bruxelas ou Nova York a derrubem — soberania popular não se delega a tribunal nenhum.",
     context: "internacional",
     effect: { econ: 0, dipl: -10, govt: 0, scty: 0 },
   },
@@ -273,7 +273,7 @@ export const questions: Question[] = [
     example:
       "se tropas estrangeiras invadirem o território nacional, o governo tem plena legitimidade para reagir militarmente para expulsá-las.",
     context: "internacional",
-    effect: { econ: 0, dipl: -5, govt: -5, scty: 0 },
+    effect: { econ: 0, dipl: -5, govt: 0, scty: 0 },
   },
   {
     question:
@@ -289,7 +289,7 @@ export const questions: Question[] = [
     example:
       "desenvolver tecnologia e indústria própria em áreas estratégicas — como energia e defesa — mesmo que seja mais caro do que simplesmente importar.",
     context: "internacional",
-    effect: { econ: 0, dipl: -25, govt: -10, scty: 0 },
+    effect: { econ: 0, dipl: -25, govt: 0, scty: 0 },
   },
   {
     question:
@@ -313,7 +313,7 @@ export const questions: Question[] = [
     example:
       "se o governo considerar que uma ameaça justifica uma intervenção militar, ele não deveria precisar aguardar o consenso internacional para agir.",
     context: "internacional",
-    effect: { econ: 0, dipl: -10, govt: -10, scty: 0 },
+    effect: { econ: 0, dipl: -10, govt: 0, scty: 0 },
   },
   {
     question:
@@ -321,7 +321,7 @@ export const questions: Question[] = [
     example:
       "um país que gasta 5% do seu orçamento com o exército poderia usar esse dinheiro para construir hospitais e universidades.",
     context: "estado",
-    effect: { econ: 0, dipl: 10, govt: 10, scty: 0 },
+    effect: { econ: 0, dipl: 10, govt: 0, scty: 0 },
   },
   {
     question:
@@ -335,7 +335,7 @@ export const questions: Question[] = [
     question:
       "Alguns sistemas de valores e formas de organizar a sociedade são objetivamente melhores do que outros.",
     example:
-      "uma sociedade democrática que respeita direitos humanos é superior a uma que pratica execuções por apostasia ou que proibe mulheres de dirigir.",
+      "julgar que uma cultura que pratica casamentos forçados de crianças ou persegue minorias religiosas é 'inferior' não é etnocentrismo — é um julgamento moral universal. O relativismo cultural, levado ao extremo, impede condenar qualquer prática, por mais que viole a dignidade humana.",
     context: "internacional",
     effect: { econ: 0, dipl: -10, govt: 0, scty: 0 },
   },
@@ -343,7 +343,7 @@ export const questions: Question[] = [
     question:
       "A colaboração científica entre países traz mais benefícios para toda a humanidade do que cada país investir apenas em pesquisa própria e isolada.",
     example:
-      "a vacina da COVID-19 foi desenvolvida em tempo recorde graças ao compartilhamento de dados científicos entre dezenas de países. Mas é possível que pesquisas militares possam ser algo de espionagem de inimigos.",
+      "a vacina da COVID-19 foi desenvolvida em tempo recorde graças ao compartilhamento de dados científicos entre dezenas de países. Pesquisadores de diferentes nações, compartilhando dados e resultados em tempo real, chegaram a soluções em meses que teriam levado anos de forma isolada.",
     context: "internacional",
     effect: { econ: 0, dipl: 10, govt: 0, scty: 10 },
   },
@@ -367,17 +367,17 @@ export const questions: Question[] = [
     question:
       "As leis e políticas públicas de um país devem ser baseadas em princípios religiosos, já que os valores morais da religião são um guia ético legítimo para a sociedade.",
     example:
-      "Estado laico não é estado ateu. E a religião da maioria pode ser a base moral das leis, como no caso da formação da família.",
+      "quando uma sociedade tem valores morais enraizados na fé, criar leis que ignoram completamente essa base é impor uma visão de mundo secular e artificial que desconecta o direito da ética que o próprio povo já vive no dia a dia.",
     context: "costumes",
-    effect: { econ: 0, dipl: -5, govt: -10, scty: -10 },
+    effect: { econ: 0, dipl: 0, govt: -10, scty: -10 },
   },
   {
     question:
       "Em situações de ameaça grave à segurança pública, o Estado deve ter autoridade para restringir liberdades individuais, como prender suspeitos sem processo ou monitorar comunicações sem autorização judicial.",
     example:
-      "para combater o terrorismo ou o crime organizado, o governo deveria poder agir com rapidez mesmo que algumas protções legais sejam temporariamente afastadas.",
+      "quando uma organização terrorista está planejando um ataque, não existe tempo para longas tramitações judiciais — a segurança da maioria justifica plenamente ações imediatas do Estado.",
     context: "estado",
-    effect: { econ: 0, dipl: -5, govt: -10, scty: -5 },
+    effect: { econ: 0, dipl: 0, govt: -10, scty: -5 },
   },
   {
     question:
@@ -399,7 +399,7 @@ export const questions: Question[] = [
     question:
       "Em situações de ameaça à segurança nacional, o governo deve poder monitorar comunicações e prender suspeitos sem ordem judicial prévia.",
     example:
-      "investigar mensagens privadas de suspeitos de terrorismo sem precisar esperar a autorização de um juiz, mesmo que isso implique monitorar inocentes por engano.",
+      "quando há uma ameaça real de ataque terrorista, cada minuto de atraso esperando um juiz pode custar vidas — a segurança da população não pode ser refém de burocracias pensadas para tempos normais.",
     context: "estado",
     effect: { econ: 0, dipl: 0, govt: -10, scty: 0 },
   },
@@ -421,7 +421,7 @@ export const questions: Question[] = [
   },
   {
     question:
-      "A liberdade de criticar, satirizar e questionar qualquer pessoa ou instituição com poder é uma garantia essencial contra a oppressão, e nada e ninguém deveria estar acima dessa crítica.",
+      "A liberdade de criticar, satirizar e questionar qualquer pessoa ou instituição com poder é uma garantia essencial contra a opressão, e nada e ninguém deveria estar acima dessa crítica.",
     example:
       "jornalistas e cidadãos devem poder fazer piadas ou críticas duras sobre presidentes, juízes e até líderes religiosos sem medo de prisão ou processo.",
     context: "individual",
@@ -431,9 +431,9 @@ export const questions: Question[] = [
     question:
       "Em uma democracia, quando a maioria da população aprova uma mudança, o governo deve implementá-la, mesmo que essa decisão restrinja direitos de grupos minoritários ou contrarie tratados internacionais.",
     example:
-      "se a maioria votar por proibir o uso de determinados símbolos religiosos em espaços públicos, o Estado deve respeitar esse resultado.",
+      "se a maioria votar para proibir o uso de símbolos religiosos de uma minoria em espaços públicos, ou para restringir direitos civis de um grupo específico, o Estado deve implementar essa decisão sem precisar se justificar perante cortes constitucionais ou organismos internacionais.",
     context: "estado",
-    effect: { econ: 0, dipl: 0, govt: 10, scty: 0 },
+    effect: { econ: 0, dipl: 0, govt: -10, scty: 0 },
   },
   {
     question:
@@ -441,7 +441,7 @@ export const questions: Question[] = [
     example:
       "em uma crise econômica ou de segurança pública, um líder forte que age com rapidez pode salvar mais vidas do que um que depende de longas deliberações parlamentares.",
     context: "estado",
-    effect: { econ: 0, dipl: -10, govt: -10, scty: 0 },
+    effect: { econ: 0, dipl: 0, govt: -10, scty: 0 },
   },
   {
     question:
@@ -503,7 +503,7 @@ export const questions: Question[] = [
     question:
       "As gerações anteriores tinham valores mais sólidos e uma vida social mais saudável do que a atual. O mundo moderno, com o excesso de tecnologia e a quebra de tradições, está prejudicando a saúde mental e o caráter dos jovens.",
     example:
-      "a exposição constante às redes sociais está associada a aumento de ansiedade, depressão e isolamento.",
+      "jovens de gerações anteriores cresceram com famílias presentes, comunidades coesas e valores claros — hoje crescem olhando para uma tela, comparando sua vida com versões editadas da vida alheia e sem saber quem são.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: 0, scty: -10 },
   },
@@ -511,7 +511,7 @@ export const questions: Question[] = [
     question:
       "O uso de drogas deve ser tratado como um problema de saúde pública, e não como um crime. Quem usa drogas deve receber acompanhamento médico, não prisão.",
     example:
-      "Portugal descriminalizou o uso de todas as drogas em 2001 e registrou queda nas overdoses, no HIV e na reincidência. Em contrapartida é um país de tradição católica, o que pode ser um fator de proteção contra o uso de drogas.",
+      "Portugal descriminalizou o uso de todas as drogas em 2001 e registrou queda nas overdoses, no HIV e na reincidência — provando que tratar o vício como problema de saúde salva vidas enquanto a criminalização apenas enche cadeias e afasta quem precisa de ajuda.",
     context: "individual",
     effect: { econ: 0, dipl: 0, govt: 10, scty: 2 },
   },
@@ -535,17 +535,17 @@ export const questions: Question[] = [
     question:
       "A normalização do sexo casual e a promoção de modelos de relacionamento fora dos padrões tradicionais enfraquecem a família e prejudicam a estabilidade social.",
     example:
-      "a crescente aceitação pública de relações poligamícas ou de conteúdo sexual explícito como entretenimento normalizado torna mais difícil para crianças formarem valores sãos.",
+      "a crescente aceitação pública de relações poligâmicas ou de conteúdo sexual explícito como entretenimento normalizado torna mais difícil para crianças formarem valores sãos.",
     context: "costumes",
-    effect: { econ: 0, dipl: 0, govt: -5, scty: -10 },
+    effect: { econ: 0, dipl: 0, govt: 0, scty: -10 },
   },
   {
     question:
-      "Imigrantes que vêm morar em um país devem adotar a língua e os costumes locais e não criar comunidades separadas que mantenhum valores próprios em contradição com os do país que os recebeu.",
+      "Imigrantes que vêm morar em um país devem adotar a língua e os costumes locais e não criar comunidades separadas que mantenham valores próprios em contradição com os do país que os recebeu.",
     example:
       "um imigrante não deveria reivindicar o direito de aplicar leis de sua cultura de origem dentro do território nacional.",
     context: "costumes",
-    effect: { econ: 0, dipl: 0, govt: -5, scty: -10 },
+    effect: { econ: 0, dipl: -5, govt: 0, scty: -10 },
   },
   {
     question:
@@ -561,7 +561,7 @@ export const questions: Question[] = [
     example:
       "países com rígido controle de armas, como Japão e Nova Zelândia, registram taxas de homicídio por arma de fogo muito menores do que países com pouco controle.",
     context: "estado",
-    effect: { econ: 0, dipl: 0, govt: 5, scty: 0 },
+    effect: { econ: 0, dipl: 0, govt: -5, scty: 0 },
   },
   {
     question:
@@ -583,7 +583,7 @@ export const questions: Question[] = [
     question:
       "A velocidade com que a sociedade adota novas tecnologias e abandona valores tradicionais está acontecendo rápido demais e coloca em risco aspectos essenciais da experiência humana.",
     example:
-      "a substituição de relações humanas por interações digitais e de trabalho artesanal por automação pode empobrecer a vida das pessoas mesmo que traga eficiência.",
+      "a substituição de relações humanas por interações digitais e de trabalho artesanal por automação empobrece a vida das pessoas — nenhum ganho de eficiência compensa perder aquilo que nos torna humanos.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: 0, scty: -10 },
   },
@@ -591,7 +591,7 @@ export const questions: Question[] = [
     question:
       "A manipulação genética de embriões humanos e o uso da biotecnologia para ampliar capacidades além do tratamento de doenças ultrapassam limites éticos que a ciência não deve ignorar em nome do progresso.",
     example:
-      "criar bebês geneticamente modificados para serem mais inteligentes ou fisicamente superiores levanta questões profundas sobre igualdade, identidade e o que significa ser humano — que não podem ser respondidas somente pela ciência.",
+      "projetar crianças como se fossem produtos de catálogo — mais inteligentes, mais bonitas, mais produtivas — é tratar a vida humana como mercadoria e abrir a porta para uma eugenia que a história já mostrou aonde leva.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: 0, scty: -10 },
   },
@@ -657,7 +657,7 @@ export const questions: Question[] = [
     example:
       "exigir que ao menos 30% dos cargos de direção em grandes empresas e no parlamento sejam ocupados por mulheres.",
     context: "estado",
-    effect: { econ: 5, dipl: 0, govt: 5, scty: 10 },
+    effect: { econ: 5, dipl: 0, govt: -5, scty: 10 },
   },
   {
     question:
@@ -665,7 +665,7 @@ export const questions: Question[] = [
     example:
       "um latifundiário que tem 10 mil hectares improdutivos que apenas aluga deveria perder o direito de propriedade para quem vai de fato produzir.",
     context: "mercado",
-    effect: { econ: 10, dipl: 0, govt: 5, scty: 5 },
+    effect: { econ: 10, dipl: 0, govt: -5, scty: 5 },
   },
   {
     question:
@@ -673,7 +673,7 @@ export const questions: Question[] = [
     example:
       "assim como o álcool e o cigarro são legais, apesar de causarem danos, a maconha e outras drogas também deveriam poder ser vendidas livremente para adultos.",
     context: "individual",
-    effect: { econ: -10, dipl: 0, govt: 15, scty: 5 },
+    effect: { econ: 0, dipl: 0, govt: 15, scty: 5 },
   },
   {
     question:
@@ -693,9 +693,9 @@ export const questions: Question[] = [
   },
   {
     question:
-      "Alterar radicalmente o corpo humano por meios tecnológicos — como chips cerebrais, edição genética ou mudança de sexo — vai além do tratamento de doenças e representa uma ruptura perigosa com a natureza humana e com valores fundamentais.",
+      "Alterar radicalmente o corpo humano por meios tecnológicos — como chips cerebrais ou edição genética — vai além do tratamento de doenças e representa uma ruptura perigosa com a natureza humana e com valores fundamentais.",
     example:
-      "projetar crianças geneticamente para terem características desejadas pelo mercado ou implantar dispositivos no cérebro para aumentar a produtividade levanta dúvidas sérias sobre dignidade humana e igualdade.",
+      "projetar crianças como produtos de catálogo e implantar chips no cérebro para aumentar produtividade não é progresso — é a destruição da dignidade humana em nome do lucro e da eficiência.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: 0, scty: -15 },
   },
@@ -767,7 +767,7 @@ export const questions: Question[] = [
     question:
       "Quando o judiciário e o parlamento são lentos e travados, um líder popular que passe por cima desses obstáculos para beneficiar os mais pobres pode ser legítimo.",
     example:
-      "um presidente que decreta por medida provisória uma reforma urgente, ignorando um Congresso paralisado por interesses de grupos ricos, pode ser visto como defensor do povo — mesmo que suas ações extrapolem os limites legais.",
+      "quando o parlamento está travado por lobbies e o judiciário protege os privilégios de sempre, um líder que age diretamente pelo povo não está rompendo a democracia — está exercendo-a de verdade.",
     context: "estado",
     effect: { econ: 15, dipl: -10, govt: -15, scty: 0 },
   },
@@ -775,7 +775,7 @@ export const questions: Question[] = [
     question:
       "A educação deve transmitir o conhecimento acumulado, os valores e a herança cultural de uma sociedade às novas gerações — e não servir como instrumento de desconstrução das normas, tradições e identidades consolidadas.",
     example:
-      "escolas que substituem o ensino de literatura clássica, matemática e história por projetos de 'desconstrução social' podem privar os alunos de uma formação sólida e de conexão com sua própria cultura.",
+      "escolas que substituem o ensino de literatura clássica, matemática e história por projetos de 'desconstrução social' privam os alunos de uma formação sólida e os deixam sem raízes, sem ferramentas e sem identidade.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: 0, scty: -10 },
   },
