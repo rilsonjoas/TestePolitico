@@ -973,7 +973,7 @@ export const ideologies: Ideology[] = [
         stats: { econ: 100, dipl: 30, govt: 20, scty: 50 },
       },
       {
-        name: "Álvaro Cunhal 🇵🇹" 
+        name: "Álvaro Cunhal 🇵🇹",
         link: "https://pt.wikipedia.org/wiki/%C3%81lvaro_Cunhal",
         stats: { econ: 100, dipl: 40, govt: 30, scty: 50 },
       },
