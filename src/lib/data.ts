@@ -854,7 +854,7 @@ export const ideologies: Ideology[] = [
         stats: { econ: 90, dipl: 60, govt: 95, scty: 90 },
       },
       {
-        name: "José Oiticica 🇷",
+        name: "José Oiticica 🇧🇷",
         link: "https://pt.wikipedia.org/wiki/Jos%C3%A9_Oiticica",
         stats: { econ: 95, dipl: 50, govt: 95, scty: 80 },
       },
@@ -968,7 +968,7 @@ export const ideologies: Ideology[] = [
         stats: { econ: 85, dipl: 60, govt: 60, scty: 85 },
       },
       {
-        name: "Luís Carlos Prestes 🇷",
+        name: "Luís Carlos Prestes 🇧🇷",
         link: "https://pt.wikipedia.org/wiki/Lu%C3%ADs_Carlos_Prestes",
         stats: { econ: 100, dipl: 30, govt: 20, scty: 50 },
       },
@@ -1243,7 +1243,7 @@ export const ideologies: Ideology[] = [
       "Você é radical demais para os liberais e moderado demais para os comunistas, então ninguém te convida para as festas. Acha que pode derrubar o sistema votando nele a cada 4 anos.",
     politicians: [
       {
-        name: "Leonel Brizola 🇷",
+        name: "Leonel Brizola 🇧🇷",
         link: "https://pt.wikipedia.org/wiki/Leonel_Brizola",
         stats: { econ: 75, dipl: 40, govt: 50, scty: 60 },
       },
@@ -1574,7 +1574,7 @@ export const ideologies: Ideology[] = [
         stats: { econ: 65, dipl: 75, govt: 65, scty: 85 },
       },
       {
-        name: "Fernando Henrique Cardoso 🇷",
+        name: "Fernando Henrique Cardoso 🇧🇷",
         link: "https://pt.wikipedia.org/wiki/Fernando_Henrique_Cardoso",
         stats: { econ: 50, dipl: 60, govt: 70, scty: 70 },
       },
@@ -1617,7 +1617,7 @@ export const ideologies: Ideology[] = [
         stats: { econ: 55, dipl: 80, govt: 65, scty: 90 },
       },
       {
-        name: "Erika Hilton 🇷",
+        name: "Erika Hilton 🇧🇷",
         link: "https://pt.wikipedia.org/wiki/Erika_Hilton",
         stats: { econ: 70, dipl: 80, govt: 70, scty: 100 },
       },
@@ -1920,7 +1920,7 @@ export const ideologies: Ideology[] = [
       "Você compartilha fake news no grupo da família e acha que a terra é plana porque 'a mídia mente'. Para você, qualquer um à esquerda de Gengis Khan é comunista.",
     politicians: [
       {
-        name: "Jair Bolsonaro 🇷",
+        name: "Jair Bolsonaro 🇧🇷",
         link: "https://pt.wikipedia.org/wiki/Jair_Bolsonaro",
         stats: { econ: 20, dipl: 20, govt: 20, scty: 20 },
       },
@@ -1931,7 +1931,7 @@ export const ideologies: Ideology[] = [
       },
 
       {
-        name: "Nikolas Ferreira 🇷",
+        name: "Nikolas Ferreira 🇧🇷",
         link: "https://pt.wikipedia.org/wiki/Nikolas_Ferreira",
         stats: { econ: 15, dipl: 25, govt: 25, scty: 15 },
       },
@@ -1941,7 +1941,7 @@ export const ideologies: Ideology[] = [
         stats: { econ: 40, dipl: 10, govt: 20, scty: 20 },
       },
       {
-        name: "Olavo de Carvalho 🇷",
+        name: "Olavo de Carvalho 🇧🇷",
         link: "https://pt.wikipedia.org/wiki/Olavo_de_Carvalho",
         stats: { econ: 15, dipl: 15, govt: 20, scty: 15 },
       },
@@ -2252,7 +2252,7 @@ export const ideologies: Ideology[] = [
         stats: { econ: 35, dipl: 35, govt: 45, scty: 20 },
       },
       {
-        name: "Gilberto Freyre 🇷",
+        name: "Gilberto Freyre 🇧🇷",
         link: "https://pt.wikipedia.org/wiki/Gilberto_Freyre",
         stats: { econ: 30, dipl: 40, govt: 40, scty: 20 },
       },
@@ -2317,12 +2317,12 @@ export const ideologies: Ideology[] = [
       "Você acredita que o mercado livre resolve tudo e que o governo é o problema, mas vive em uma cidade com calçadas públicas. Cita Adam Smith em festas e acha que o século XIX foi o auge da civilização.",
     politicians: [
       {
-        name: "Rui Barbosa 🇷",
+        name: "Rui Barbosa 🇧🇷",
         link: "https://pt.wikipedia.org/wiki/Rui_Barbosa",
         stats: { econ: 30, dipl: 60, govt: 60, scty: 80 },
       },
       {
-        name: "Joaquim Nabuco 🇷",
+        name: "Joaquim Nabuco 🇧🇷",
         link: "https://pt.wikipedia.org/wiki/Joaquim_Nabuco",
         stats: { econ: 40, dipl: 70, govt: 70, scty: 90 },
       },
@@ -2628,7 +2628,7 @@ export const ideologies: Ideology[] = [
       "Você cita o Roberto Campos em jantares de família e acha que o 'imposto é roubo' é a única frase que precisa para explicar toda a sociologia moderna. Provavelmente tem um adesivo de think tank no carro e acredita que a mão invisível do mercado vai consertar até o seu Wi-Fi ruim.",
     politicians: [
       {
-        name: "Roberto Campos 🇷",
+        name: "Roberto Campos 🇧🇷",
         link: "https://pt.wikipedia.org/wiki/Roberto_Campos",
         stats: { econ: 20, dipl: 60, govt: 70, scty: 70 },
       },
@@ -2643,7 +2643,7 @@ export const ideologies: Ideology[] = [
         stats: { econ: 25, dipl: 45, govt: 55, scty: 35 },
       },
       {
-        name: "Paulo Guedes 🇷",
+        name: "Paulo Guedes 🇧🇷",
         link: "https://pt.wikipedia.org/wiki/Paulo_Guedes",
         stats: { econ: 20, dipl: 55, govt: 70, scty: 70 },
       },
@@ -2680,12 +2680,12 @@ export const ideologies: Ideology[] = [
       "Você usa camisa verde e acha que o Brasil seria perfeito se fosse governado por um intelectual católico de mão de ferro. Sua solução para a luta de classes é fazer todo mundo rezar junto e obedecer ao líder.",
     politicians: [
       {
-        name: "Plínio Salgado 🇷",
+        name: "Plínio Salgado 🇧🇷",
         link: "https://pt.wikipedia.org/wiki/Pl%C3%ADnio_Salgado",
         stats: { econ: 50, dipl: 10, govt: 10, scty: 5 },
       },
       {
-        name: "Gustavo Barroso 🇷",
+        name: "Gustavo Barroso 🇧🇷",
         link: "https://pt.wikipedia.org/wiki/Gustavo_Barroso",
         stats: { econ: 45, dipl: 5, govt: 10, scty: 5 },
       },
@@ -2709,17 +2709,17 @@ export const ideologies: Ideology[] = [
       "Você quer um Estado mínimo, mas só para a economia. Para os costumes, quer um Estado bem presente na sua cama. Acha que liberdade é poder demitir funcionários sem aviso, mas não poder casar com quem quiser.",
     politicians: [
       {
-        name: "João Amoêdo 🇷",
+        name: "João Amoêdo 🇧🇷",
         link: "https://pt.wikipedia.org/wiki/Jo%C3%A3o_Amoêdo",
         stats: { econ: 20, dipl: 50, govt: 65, scty: 35 },
       },
       {
-        name: "Luís Felipe d'Avila 🇷",
+        name: "Luís Felipe d'Avila 🇧🇷",
         link: "https://pt.wikipedia.org/wiki/Lu%C3%ADs_Felipe_d%27Avila",
         stats: { econ: 15, dipl: 55, govt: 70, scty: 40 },
       },
       {
-        name: "Gustavo Franco 🇷",
+        name: "Gustavo Franco 🇧🇷",
         link: "https://pt.wikipedia.org/wiki/Gustavo_Franco",
         stats: { econ: 20, dipl: 60, govt: 70, scty: 50 },
       },
