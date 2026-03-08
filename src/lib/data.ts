@@ -229,11 +229,11 @@ export const questions: Question[] = [
   },
   {
     question:
-      "Privatizar serviços como energia, saneamento e telecomunicações tende a aumentar eficiência, reduzir custos e melhorar a qualidade para os usuários.",
+      "A concentração da propriedade em poucas megacorporações é tão ruim para a liberdade humana quanto o monopólio do Estado; a economia ideal seria baseada na pequena propriedade, no artesanato familiar e em cooperativas de trabalhadores.",
     example:
-      "após a privatização, o setor de telecomunicações em vários países passou por forte queda nos preços e rápida expansão da cobertura, algo que empresas estatais raramente conseguiram com a mesma velocidade.",
+      "tanto o capitalismo monopolista, que joga tudo nas mãos de meia dúzia de multinacionais, quanto o socialismo estatal, que joga tudo na mão de burocratas, retiram do trabalhador comum o controle sobre o seu próprio sustento.",
     context: "mercado",
-    effect: { econ: -10, dipl: 0, govt: 0, scty: 0 },
+    effect: { econ: 10, dipl: -5, govt: 5, scty: -10 },
   },
   {
     question:
@@ -269,11 +269,11 @@ export const questions: Question[] = [
   },
   {
     question:
-      "Um país tem o direito de usar suas forças militares para se defender quando for invadido ou atacado por outro país.",
+      "A criação do Estado de Israel foi um erro histórico e uma forma de colonialismo; o território deveria retornar integralmente ao controle do povo palestino.",
     example:
-      "se tropas estrangeiras invadirem o território nacional, o governo tem plena legitimidade para reagir militarmente para expulsá-las.",
+      "a fundação do Estado de Israel em 1948 expulsou milhares de palestinos de suas terras ancestrais, e a única solução justa é o desmantelamento das estruturas sionistas para a criação de um Estado palestino único e secular.",
     context: "internacional",
-    effect: { econ: 0, dipl: -5, govt: 0, scty: 0 },
+    effect: { econ: 0, dipl: 10, govt: 0, scty: 10 },
   },
   {
     question:
@@ -349,7 +349,7 @@ export const questions: Question[] = [
   },
   {
     question:
-      "Governos que violam direitos humanos de forma grave devem ser responsabilizados perante tribunais e organismos internacionais, mesmo que invocem soberania nacional para se defender.",
+      "Governos que violam direitos humanos de forma grave devem ser responsabilizados perante tribunais e organismos internacionais, mesmo que invoquem soberania nacional para se defender.",
     example:
       "um ditador que massacra civis não deveria ser protegido pelo argumento de que nenhum país externo pode interferir em seus assuntos internos.",
     context: "internacional",
@@ -397,11 +397,11 @@ export const questions: Question[] = [
   },
   {
     question:
-      "Em situações de ameaça à segurança nacional, o governo deve poder monitorar comunicações e prender suspeitos sem ordem judicial prévia.",
+      "O regime político de Cuba não é uma alternativa válida, mas sim uma ditadura cruel e fracassada que oprime seu povo e destrói sua economia em nome de premissas marxistas.",
     example:
-      "quando há uma ameaça real de ataque terrorista, cada minuto de atraso esperando um juiz pode custar vidas — a segurança da população não pode ser refém de burocracias pensadas para tempos normais.",
+      "o sistema de partido único em Cuba persegue violentamente opositores, restringe liberdades básicas como acesso à internet e força sua população civil à pobreza extrema enquanto a elite do partido militar se beneficia.",
     context: "estado",
-    effect: { econ: 0, dipl: 0, govt: -10, scty: 0 },
+    effect: { econ: -10, dipl: -5, govt: -10, scty: -5 },
   },
   {
     question:
@@ -477,11 +477,11 @@ export const questions: Question[] = [
   },
   {
     question:
-      "Tradições culturais, religiosas e familiares acumuladas ao longo de gerações são um patrimônio de sabedoria coletiva que deve ser preservado, mesmo que sua utilidade imediata nem sempre seja fácil de explicar racionalmente.",
+      "A sociedade é formada por diferentes esferas — a família, a igreja, o mercado e o Estado —, e cada uma recebe sua autoridade divina para atuar em seu próprio campo; o Estado não tem o direito de tentar controlar ou ditar regras sobre a vida religiosa e familiar.",
     example:
-      "ritos de passagem, celebrações religiosas e estruturas familiares tradicionais dão às pessoas senso de identidade, pertencimento e estabilidade que sistemas modernos raramente conseguem substituir.",
+      "um governo não pode determinar a educação moral que uma família decide dar aos filhos, assim como não pode interferir no que é pregado dentro de uma igreja ou escola confessional; a autoridade estatal tem limites que não devem ser cruzados.",
     context: "costumes",
-    effect: { econ: 0, dipl: 0, govt: 0, scty: -15 },
+    effect: { econ: 0, dipl: 0, govt: 10, scty: -15 },
   },
   {
     question:
@@ -629,19 +629,19 @@ export const questions: Question[] = [
   },
   {
     question:
-      "O modelo econômico atual, baseado em crescimento e consumo infinitos, está destruindo os recursos naturais do planeta e precisa ser reformulado antes que o dano seja irreversível.",
+      "O sistema de saúde público e os planos de saúde devem ser obrigados a custear tratamentos de transição de gênero, incluindo terapias hormonais e cirurgias, tratando-as como necessidades médicas essenciais.",
     example:
-      "a Terra possui recursos finitos como água potável, solos férteis e clima estável — um sistema que os consome mais rápido do que são renovados é insustentável.",
-    context: "ambiente",
-    effect: { econ: 10, dipl: 10, govt: 0, scty: 10 },
+      "uma pessoa transgênero não deveria viver em sofrimento psicológico crônico apenas por não ter condições financeiras de pagar por procedimentos médicos fundamentais para a sua saúde mental e corporal.",
+    context: "costumes",
+    effect: { econ: 5, dipl: 0, govt: 0, scty: 10 },
   },
   {
     question:
-      "Resolver a crise climática exige mudar a própria estrutura do sistema econômico, não apenas adotar novas tecnologias ou incentivos financeiros.",
+      "Adolescentes que cometem crimes violentos graves, como homicídio ou latrocínio, devem ser julgados e punidos como adultos, com a redução da maioridade penal para esses casos.",
     example:
-      "não basta trocar carros a gasolina por elétricos se o modelo de produção industrial em massa e de consumo descartável permanecer intocado.",
-    context: "ambiente",
-    effect: { econ: 10, dipl: 5, govt: 0, scty: 10 },
+      "um jovem de 16 ou 17 anos que planeja e executa um assassinato tem plena consciência da gravidade de seus atos e não deveria receber apenas medidas socioeducativas brandas e sair de ficha limpa pouco tempo depois.",
+    context: "estado",
+    effect: { econ: 0, dipl: 0, govt: -15, scty: -5 },
   },
   {
     question:
@@ -709,11 +709,11 @@ export const questions: Question[] = [
   },
   {
     question:
-      "A sociedade deveria aceitar um nível menor de consumo e crescimento econômico, se isso for necessário para preservar o meio ambiente para as próximas gerações.",
+      "As categorias esportivas femininas devem ser restritas exclusivamente a pessoas do sexo biológico feminino, para garantir a justiça nas competições, independentemente da identidade de gênero do atleta.",
     example:
-      "produzir menos bens descartáveis, limitar viagens aéreas e reduzir o consumo de carne mesmo que isso signifique um padrão de vida materialmente mais simples.",
-    context: "ambiente",
-    effect: { econ: 15, dipl: 0, govt: 0, scty: 10 },
+      "permitir que mulheres trans (que passaram pela puberdade masculina) compitam no esporte feminino de alto rendimento cria uma desvantagem física injusta e impossível de ser contornada para as atletas mulheres biológicas.",
+    context: "costumes",
+    effect: { econ: 0, dipl: 0, govt: 0, scty: -10 },
   },
   {
     question:
@@ -741,11 +741,11 @@ export const questions: Question[] = [
   },
   {
     question:
-      "O governo deveria ter o poder legal de monitorar mensagens e comunicações privadas na internet para prevenir crimes graves ou a disseminação de notícias falsas que causem pânico.",
+      "As grandes decisões geopolíticas e econômicas do mundo são controladas por uma elite global e coesa (muitas vezes associada a judeus, banqueiros ou sionistas) que enriquece manipulando o restante da humanidade.",
     example:
-      "autorizar que as forças de segurança leiam mensagens privadas de suspeitos de terrorismo ou de espalhadores de desinformação, mesmo sem autorização judicial prévia em casos urgentes.",
-    context: "estado",
-    effect: { econ: 0, dipl: 0, govt: -20, scty: -5 },
+      "uma rede internacional de banqueiros controla governos inteiros e o sistema financeiro, criando crises econômicas e financiando guerras para dominar as nações de forma invisível.",
+    context: "internacional",
+    effect: { econ: 10, dipl: -10, govt: 10, scty: -10 },
   },
   {
     question:
