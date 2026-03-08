@@ -13,9 +13,9 @@ export async function GET(req: NextRequest) {
   // Cores dos eixos
   const colors = {
     econ: { l: '#f44336', r: '#4caf50' }, // Igualdade vs Mercado
-    dipl: { l: '#ff9800', r: '#03a9f4' }, // Nação vs Global
+    dipl: { l: '#03a9f4', r: '#ff9800' }, // Global vs Nação
     govt: { l: '#ffeb3b', r: '#3f51b5' }, // Liberdade vs Autoridade
-    scty: { l: '#9c27b0', r: '#e91e63' }, // Tradição vs Progresso
+    scty: { l: '#3b82f6', r: '#9c27b0' }, // Progresso vs Tradição
   };
 
   return new ImageResponse(
@@ -60,8 +60,8 @@ export async function GET(req: NextRequest) {
           {/* Diplomático */}
           <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '24px', fontWeight: 'bold', marginBottom: '5px' }}>
-              <span style={{ color: colors.dipl.l }}>Nação</span>
-              <span style={{ color: colors.dipl.r }}>Global</span>
+              <span style={{ color: colors.dipl.l }}>Global</span>
+              <span style={{ color: colors.dipl.r }}>Nação</span>
             </div>
             <div style={{ display: 'flex', height: '30px', width: '100%', borderRadius: '15px', overflow: 'hidden' }}>
               <div style={{ width: `${d}%`, height: '100%', backgroundColor: colors.dipl.l, display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '10px' }}>{d > 15 && `${d.toFixed(1)}%`}</div>
@@ -84,8 +84,8 @@ export async function GET(req: NextRequest) {
           {/* Social */}
           <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '24px', fontWeight: 'bold', marginBottom: '5px' }}>
-              <span style={{ color: colors.scty.l }}>Tradição</span>
-              <span style={{ color: colors.scty.r }}>Progresso</span>
+              <span style={{ color: colors.scty.l }}>Progresso</span>
+              <span style={{ color: colors.scty.r }}>Tradição</span>
             </div>
             <div style={{ display: 'flex', height: '30px', width: '100%', borderRadius: '15px', overflow: 'hidden' }}>
               <div style={{ width: `${s}%`, height: '100%', backgroundColor: colors.scty.l, display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '10px' }}>{s > 15 && `${s.toFixed(1)}%`}</div>
