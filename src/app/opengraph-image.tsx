@@ -61,7 +61,7 @@ export default async function Image() {
             marginBottom: 50,
           }}
         >
-          Descubra sua ideologia política em 75 questões
+          Descubra sua ideologia política em 80 questões
         </span>
 
         {/* Values */}

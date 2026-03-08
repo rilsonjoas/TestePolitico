@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Logo } from '@/components/Logo';
+
 import { quizEvents } from '@/lib/analytics';
 
 export function InstructionsClient() {
@@ -17,7 +17,7 @@ export function InstructionsClient() {
         </p>
       </header>
 
-      <main className="max-w-2xl w-full bg-white dark:bg-gray-800/50 rounded-3xl p-8 md:p-12 shadow-xl border border-gray-100 dark:border-gray-800 text-center">
+      <main className="max-w-2xl w-full bg-white dark:bg-gray-800/50 rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-12 shadow-xl border border-gray-100 dark:border-gray-800 text-center">
         <div className="mb-8">
           <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-6">
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -25,10 +25,10 @@ export function InstructionsClient() {
             </svg>
           </div>
           <p className="text-xl leading-relaxed text-gray-700 dark:text-gray-200">
-            Você verá uma série de afirmações. Para cada uma, clique no botão que melhor representa o seu grau de concordância.
+            Você verá uma série de afirmações. Para cada uma, clique no botão que melhor representa o quanto você concorda ou discorda da afirmação.
           </p>
-          <p className="mt-4 text-sm text-gray-500 dark:text-gray-400 italic">
-            Não há respostas certas ou erradas, apenas a sua opinião sincera importa.
+          <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+            ATENÇÃO: Não há respostas certas ou erradas, apenas a sua opinião sincera importa.
           </p>
         </div>
 

@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/Toast';
 import { Ideology, getTopMatchedIdeologies, slugify, getClosestPolitician, Politician } from '@/lib/data';
 import { ShareResults } from '@/components/ShareResults';
 import { BookCard } from '@/components/BookCard';
@@ -19,7 +20,8 @@ import {
   Library,
   Trophy,
   History,
-  Sparkles
+  Sparkles,
+  Copy
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import '../results-image.css';
@@ -32,8 +34,24 @@ export default function ResultsClient() {
   const [topIdeologies, setTopIdeologies] = useState<Ideology[]>([]);
   const [matchedPolitician, setMatchedPolitician] = useState<Politician | null>(null);
   const [showRoast, setShowRoast] = useState(false);
+  const { showToast, ToastComponent } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
+    const hasParams = searchParams.has('e') && searchParams.has('d') && searchParams.has('g') && searchParams.has('s');
+    
+    if (hasParams) {
+      // Save current results to localStorage so user doesn't lose them
+      localStorage.setItem('lastResult', searchParams.toString());
+    } else {
+      // If arriving without params, try to recover from localStorage
+      const saved = localStorage.getItem('lastResult');
+      if (saved) {
+        router.replace(`/results?${saved}`);
+        return;
+      }
+    }
+
     const e = parseFloat(searchParams.get('e') || '50');
     const d = parseFloat(searchParams.get('d') || '50');
     const g = parseFloat(searchParams.get('g') || '50');
@@ -65,7 +83,7 @@ export default function ResultsClient() {
       quizEvents.completed();
       resultEvents.viewed(topMatches[0].name);
     }
-  }, [searchParams]);
+  }, [searchParams, router]);
 
   const matchedIdeology = topIdeologies[0];
   const otherIdeologies = topIdeologies.slice(1);
@@ -129,6 +147,7 @@ export default function ResultsClient() {
 
   return (
     <div className="w-full">
+      {ToastComponent}
       <motion.main
         variants={containerVariants}
         initial="hidden"
@@ -153,7 +172,7 @@ export default function ResultsClient() {
           <div className="flex flex-col gap-5">
             <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden">
               <div className="h-1 w-full bg-gradient-to-r from-red-500 via-yellow-500 to-blue-500" />
-              <div className="p-5">
+              <div className="p-4 md:p-5">
                 <h2 className="text-lg font-black text-gray-900 dark:text-white tracking-tight mb-4">
                   Seu perfil político
                 </h2>
@@ -191,7 +210,7 @@ export default function ResultsClient() {
                       </div>
                       <div className="flex justify-between px-0.5 mt-1.5">
                         <span className="text-xs font-black italic" style={{ color: axis.color1 }}>{axis.value1.toFixed(1)}%</span>
-                        <span className="text-xs font-black italic" style={{ color: axis.color2 }}>{axis.value2.toFixed(1)}%</span>
+                        <span className="text-xs font-black italic dark:!text-white" style={{ color: axis.color2 }}>{axis.value2.toFixed(1)}%</span>
                       </div>
                     </div>
                   ))}
@@ -211,11 +230,14 @@ export default function ResultsClient() {
                   <div className="flex items-center justify-between gap-2 flex-wrap">
                     <span className="text-lg font-black text-gray-900 dark:text-white leading-tight">{matchedPolitician.name}</span>
                     {matchedPolitician.affinity !== undefined && (
-                      <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/50 px-2.5 py-1 rounded-full border border-blue-200 dark:border-blue-700 shrink-0">
+                      <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/50 px-2.5 py-1 rounded-full border border-blue-200 dark:border-blue-700 shrink-0" title="Calculado pela distância matemática entre seus 4 eixos">
                         {matchedPolitician.affinity.toFixed(0)}% de afinidade
                       </span>
                     )}
                   </div>
+                  <p className="text-[10.5px] text-blue-800/60 dark:text-blue-200/50 mt-2.5 leading-tight pr-2">
+                    * Correspondência baseada na semelhança matemática entre os 4 eixos do seu resultado e a posição central desta figura, podendo diferir do seu resultado ideológico principal.
+                  </p>
                   <a
                     href={matchedPolitician.link}
                     target="_blank"
@@ -232,7 +254,7 @@ export default function ResultsClient() {
           {/* ---- RIGHT: Compass + Other matches ---- */}
           <div className="flex flex-col gap-5 min-w-0">
             {/* Political Compass */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-5">
+            <div className="bg-white dark:bg-gray-800 rounded-xl md:rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-4 md:p-5">
               <PoliticalCompass e={scores.e} g={scores.g} />
             </div>
 
@@ -319,9 +341,26 @@ export default function ResultsClient() {
                         <Flame size={13} />
                         <span>Modo zueira</span>
                       </div>
-                      <p className="text-base italic text-orange-800 dark:text-orange-200 font-medium leading-relaxed bg-orange-50 dark:bg-orange-900/10 p-4 rounded-xl">
-                        {matchedIdeology.roast}
-                      </p>
+                      <div className="text-base italic text-orange-800 dark:text-orange-200 font-medium leading-relaxed bg-orange-50 dark:bg-orange-900/10 p-4 rounded-xl relative group overflow-hidden">
+                        {/* Efeito de Brasas */}
+                        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                          <div className="absolute -top-4 -left-4 w-24 h-24 bg-orange-400/10 rounded-full blur-2xl animate-embers" />
+                          <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-red-500/10 rounded-full blur-3xl animate-embers" style={{ animationDelay: '1s' }} />
+                        </div>
+                        <span className="relative z-10">{matchedIdeology.roast}</span>
+                        <button
+                          onClick={() => {
+                            if (matchedIdeology.roast) {
+                              navigator.clipboard.writeText(`🔥 Mandei a real no Teste Político e olha o que deu: "${matchedIdeology.roast}" 💀 Faça o seu em: https://testepolitico.com.br`);
+                              showToast("Sapatada copiada! Mande para seus amigos 🚀", "success");
+                            }
+                          }}
+                          className="absolute bottom-2 right-2 p-1.5 bg-orange-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-orange-700 shadow-lg flex items-center gap-1.5 text-[10px] font-bold"
+                          title="Copiar sapatada para o WhatsApp"
+                        >
+                          <Copy size={12} /> Copiar sapatada
+                        </button>
+                      </div>
                     </motion.div>
                   )}
 
@@ -383,10 +422,10 @@ export default function ResultsClient() {
         {/* ===== SHARE SECTION ===== */}
         <motion.div variants={itemVariants} className="mt-5">
           <ShareResults
-            targetId="results-capture"
             scores={scores}
             matchedIdeology={matchedIdeology}
             enableComparison={true}
+            isRoastActive={showRoast}
           />
         </motion.div>
 

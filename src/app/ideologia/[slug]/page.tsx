@@ -1,4 +1,5 @@
 import { ideologies, slugify } from '@/lib/data';
+import { IdeologyContent } from './IdeologyContent';
 import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -11,9 +12,6 @@ import {
   ExternalLink,
   Shield,
   ArrowLeft,
-  Info,
-  History,
-  Lightbulb,
 } from 'lucide-react';
 
 export async function generateStaticParams() {
@@ -62,7 +60,7 @@ export default async function IdeologyPage({ params }: { params: Promise<{ slug:
   ];
 
   return (
-    <div className="container mx-auto p-4 md:p-8 flex flex-col items-center min-h-screen">
+    <div className="container mx-auto p-4 flex flex-col items-center min-h-screen">
       <header className="flex flex-col items-center mb-12 w-full max-w-2xl">
         <Link href="/" className="group flex flex-col items-center gap-4 transition-all duration-300">
           <Logo size={80} showText={false} />
@@ -70,7 +68,7 @@ export default async function IdeologyPage({ params }: { params: Promise<{ slug:
             Enciclopédia de Ideologias
           </p>
         </Link>
-        <h1 className="text-4xl md:text-6xl font-black mt-8 mb-4 text-gray-900 dark:text-white text-center">
+        <h1 className="text-3xl md:text-5xl lg:text-6xl font-black mt-6 md:mt-8 mb-4 text-gray-900 dark:text-white text-center">
           {ideology.name}
         </h1>
         <div className="h-1 w-24 bg-blue-600 dark:bg-blue-400 mx-auto rounded-full" />
@@ -80,56 +78,9 @@ export default async function IdeologyPage({ params }: { params: Promise<{ slug:
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Coluna Principal: Conteúdo Expandido e Stats */}
           <div className="lg:col-span-2 space-y-8">
-            <section className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
-              <div className="flex items-center gap-3 mb-6 text-blue-600 dark:text-blue-400">
-                <Info size={24} />
-                <h2 className="text-2xl font-bold">Resumo</h2>
-              </div>
-              <div className="space-y-4">
-                {ideology.desc.split('\n\n').map((paragraph, index) => (
-                  <p key={index} className="text-xl font-medium leading-relaxed text-gray-700 dark:text-gray-300">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            </section>
+            <IdeologyContent ideology={ideology} />
 
-            {ideology.content && (
-              <>
-                <section className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
-                  <div className="flex items-center gap-3 mb-6 text-indigo-600 dark:text-indigo-400">
-                    <History size={24} />
-                    <h2 className="text-2xl font-bold">Contexto Histórico</h2>
-                  </div>
-                  <p className="text-base leading-relaxed text-gray-700 dark:text-gray-300">
-                    {ideology.content.history}
-                  </p>
-                </section>
-
-                <section className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
-                  <div className="flex items-center gap-3 mb-6 text-teal-600 dark:text-teal-400">
-                    <Shield size={24} />
-                    <h2 className="text-2xl font-bold">Princípios Fundamentais</h2>
-                  </div>
-                  <p className="text-base leading-relaxed text-gray-700 dark:text-gray-300">
-                    {ideology.content.corePrinciples}
-                  </p>
-                </section>
-
-                <section className="bg-amber-50 dark:bg-amber-900/10 rounded-3xl p-8 border-2 border-dashed border-amber-200 dark:border-amber-800/50 relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-2 h-full bg-amber-400 dark:bg-amber-600" />
-                  <div className="flex items-center gap-3 mb-4 text-amber-600 dark:text-amber-500">
-                    <Lightbulb size={24} />
-                    <h2 className="text-xl font-black">Curiosidade</h2>
-                  </div>
-                  <p className="text-base font-medium italic leading-relaxed text-amber-800 dark:text-amber-200">
-                    &quot;{ideology.content.curiosities}&quot;
-                  </p>
-                </section>
-              </>
-            )}
-
-            <section className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
+            <section className="bg-white dark:bg-gray-800 rounded-2xl md:rounded-3xl shadow-xl p-5 md:p-8 border border-gray-100 dark:border-gray-700">
               <div className="flex items-center gap-3 mb-8 text-blue-600 dark:text-blue-400">
                 <Shield size={24} />
                 <h2 className="text-2xl font-bold">Valores matemáticos médios</h2>
@@ -216,7 +167,7 @@ export default async function IdeologyPage({ params }: { params: Promise<{ slug:
 
         {/* CTA Integrado mais elegante */}
         <section className="bg-gradient-to-br from-blue-600 to-indigo-700 p-1 rounded-3xl overflow-hidden shadow-2xl mt-8">
-          <div className="bg-white dark:bg-gray-900 p-8 rounded-[1.4rem] text-center">
+          <div className="bg-white dark:bg-gray-900 p-5 md:p-8 rounded-xl md:rounded-[1.4rem] text-center">
             <h3 className="text-2xl md:text-3xl font-black mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               Você se identifica com o {ideology.name}?
             </h3>

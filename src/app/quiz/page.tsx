@@ -206,7 +206,7 @@ const QuizContent = () => {
     <div className="container mx-auto p-4 md:p-8 flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       <header className="text-center my-8 w-full max-w-2xl">
         <div className="flex flex-col items-center gap-4 mb-6">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100">Teste Político</h1>
+          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-gray-100">Teste Político</h1>
         </div>
 
         {isChallengeMode && (
@@ -245,7 +245,7 @@ const QuizContent = () => {
       </header>
 
       <main className="text-center w-full max-w-2xl px-2">
-        <h2 className="text-base text-gray-500 dark:text-gray-400 font-normal mb-2 uppercase tracking-wider">
+        <h2 className="text-sm text-gray-500 dark:text-gray-400 font-normal mb-2 uppercase tracking-wider">
           Pergunta {questionIndex + 1} de {questions.length}
         </h2>
 
@@ -259,16 +259,26 @@ const QuizContent = () => {
             className="w-full"
           >
             <div
-              className="px-8 py-10 border border-gray-200 dark:border-gray-700 rounded-2xl min-h-[160px] flex items-center justify-center bg-white dark:bg-gray-800 shadow-xl mb-8"
+              className="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden bg-white dark:bg-gray-800 shadow-xl mb-8"
               aria-live="polite"
               aria-atomic="true"
             >
-              <p
-                className="text-2xl text-gray-900 dark:text-gray-100 font-medium text-center leading-relaxed"
-                id="question-text"
-              >
-                {questions[questionIndex].question}
-              </p>
+              <div className="px-5 py-7 md:px-8 md:py-10 flex items-center justify-center min-h-[140px] md:min-h-[160px]">
+                <p
+                  className="text-lg md:text-xl text-gray-900 dark:text-gray-100 font-medium text-center leading-relaxed"
+                  id="question-text"
+                >
+                  {questions[questionIndex].question}
+                </p>
+              </div>
+              {questions[questionIndex].example && (
+                <div className="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-200 dark:border-gray-700">
+                  <p className="text-sm text-gray-500 dark:text-gray-400 text-center italic leading-relaxed">
+                    <span className="font-semibold not-italic text-gray-400 dark:text-gray-500 uppercase tracking-wide text-xs">Por exemplo:</span>{" "}
+                    {questions[questionIndex].example}
+                  </p>
+                </div>
+              )}
             </div>
 
             <div

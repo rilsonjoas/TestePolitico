@@ -15,17 +15,24 @@ import {
   Globe2,
   Lock,
   MessageSquare,
-  HelpCircle,
-  Target
 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 
 export default function Home() {
+  const [lastResult, setLastResult] = useState<string | null>(null);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('lastResult');
+    if (saved) {
+      setLastResult(saved);
+    }
+  }, []);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Quiz",
     "name": "Teste Político 8 Valores",
-    "description": "Descubra sua ideologia política com base em 8 valores fundamentais. Responda a 70 perguntas para ver seu posicionamento no espectro político.",
+    "description": "Descubra sua ideologia política com base em 8 valores fundamentais. Responda a 80 perguntas para ver seu posicionamento no espectro político.",
     "educationalUse": "self-assessment",
     "about": {
       "@type": "Thing",
@@ -103,7 +110,7 @@ export default function Home() {
       </script>
 
       {/* Hero Section */}
-      <div className="relative overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-32">
+      <div className="relative overflow-hidden pt-10 pb-14 md:pt-16 md:pb-20 lg:pt-24 lg:pb-32">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full -z-10">
           <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/10 blur-[120px] rounded-full" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/10 blur-[120px] rounded-full" />
@@ -118,26 +125,33 @@ export default function Home() {
           >
             <Logo size={80} showText={false} className="shadow-2xl rounded-full p-2 bg-white dark:bg-gray-800" />
 
-            <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-tight max-w-4xl">
-              Você é de Esquerda <br /> ou <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">Direita</span>?
+            <h1 className="text-4xl md:text-7xl font-black tracking-tight leading-tight max-w-4xl">
+              Você é de <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-rose-500">Esquerda</span> <br /> ou <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">Direita</span>?
             </h1>
 
-            <p className="text-xl md:text-2xl text-gray-500 dark:text-gray-400 max-w-2xl font-medium">
+            <p className="text-base md:text-xl lg:text-2xl text-gray-500 dark:text-gray-400 max-w-2xl font-medium">
               Descubra sua verdadeira ideologia política em apenas 5 minutos!
               Mais de <strong>40 ideologias</strong> mapeadas. Compartilhe e compare com seus amigos!
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 mt-8">
-              <Link href="/instructions">
-                <Button size="lg" className="h-16 px-10 rounded-2xl text-xl font-black bg-blue-600 hover:bg-blue-700 hover:scale-105 active:scale-95 transition-all shadow-xl shadow-blue-500/25">
+            <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 mt-8 w-full sm:w-auto">
+              <Link href="/instructions" className="w-full sm:w-auto">
+                <Button size="lg" className="w-full sm:w-auto h-14 sm:h-16 px-6 sm:px-10 rounded-2xl text-lg sm:text-xl font-black bg-blue-600 hover:bg-blue-700 hover:scale-105 active:scale-95 transition-all shadow-xl shadow-blue-500/25">
                   COMEÇAR TESTE AGORA <Zap className="ml-2 fill-current" />
                 </Button>
               </Link>
-              <Link href="/ideologia">
-                <Button size="lg" variant="outline" className="h-16 px-10 rounded-2xl text-xl font-bold border-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all">
+              <Link href="/ideologia" className="w-full sm:w-auto">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto h-14 sm:h-16 px-6 sm:px-10 rounded-2xl text-lg sm:text-xl font-bold border-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all">
                   ENCICLOPÉDIA
                 </Button>
               </Link>
+              {lastResult && (
+                <Link href={`/results?${lastResult}`} className="w-full sm:w-auto">
+                  <Button size="lg" variant="secondary" className="w-full sm:w-auto h-14 sm:h-16 px-6 sm:px-10 rounded-2xl text-lg sm:text-xl font-bold border-2 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all shadow-sm">
+                    MEU RESULTADO
+                  </Button>
+                </Link>
+              )}
             </div>
 
             <motion.div
@@ -152,11 +166,11 @@ export default function Home() {
       </div>
 
       {/* Values Grid */}
-      <section className="py-20 bg-gray-50/50 dark:bg-gray-900/50 border-y border-gray-100 dark:border-gray-800">
+      <section className="py-12 md:py-20 bg-gray-50/50 dark:bg-gray-900/50 border-y border-gray-100 dark:border-gray-800">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-sm font-black uppercase tracking-[0.4em] text-blue-600 dark:text-blue-400 mb-4">A Estrutura do Teste</h2>
-            <p className="text-3xl md:text-4xl font-black">Os 8 valores políticos</p>
+            <h2 className="text-sm font-black uppercase tracking-[0.4em] text-blue-600 dark:text-blue-400 mb-3 md:mb-4">A Estrutura do Teste</h2>
+            <p className="text-2xl md:text-3xl lg:text-4xl font-black">Os 8 valores políticos</p>
           </div>
 
           <motion.div
@@ -164,7 +178,7 @@ export default function Home() {
             initial={shouldReduceMotion ? "visible" : "hidden"}
             whileInView={shouldReduceMotion ? undefined : "visible"}
             viewport={{ once: true }}
-            className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 md:gap-6"
+            className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 md:gap-4 lg:gap-6"
           >
             {values.map((value) => (
               <motion.div
@@ -192,7 +206,7 @@ export default function Home() {
       </section>
 
       {/* Axis Information */}
-      <section id="anchor" className="py-24 container mx-auto px-4 max-w-6xl">
+      <section id="anchor" className="py-12 md:py-24 container mx-auto px-4 max-w-6xl">
         <motion.div
           initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
           whileInView={shouldReduceMotion ? undefined : { opacity: 1 }}
@@ -200,7 +214,7 @@ export default function Home() {
           className="space-y-20"
         >
           <div className="text-center">
-            <h2 className="text-3xl md:text-5xl font-black mb-6">Os 4 eixos fundamentais</h2>
+            <h2 className="text-2xl md:text-3xl lg:text-5xl font-black mb-4 md:mb-6">Os 4 eixos fundamentais</h2>
             <p className="text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
               Cada par de valores representa um eixo de conflito político clássico.
               Sua resposta a cada pergunta molda sua posição final em cada um deles.
@@ -214,7 +228,7 @@ export default function Home() {
                 initial={shouldReduceMotion ? { x: 0, opacity: 1 } : { x: i % 2 === 0 ? -50 : 50, opacity: 0 }}
                 whileInView={shouldReduceMotion ? undefined : { x: 0, opacity: 1 }}
                 viewport={{ once: true }}
-                className="flex flex-col lg:flex-row items-stretch gap-8 p-8 md:p-12 rounded-[2.5rem] bg-white dark:bg-gray-800/40 border border-gray-100 dark:border-gray-800 shadow-2xl relative overflow-hidden group"
+                className="flex flex-col lg:flex-row items-stretch gap-6 p-5 md:p-8 lg:p-12 rounded-2xl md:rounded-[2.5rem] bg-white dark:bg-gray-800/40 border border-gray-100 dark:border-gray-800 shadow-2xl relative overflow-hidden group"
               >
                 <div className="lg:w-1/3 flex flex-col justify-center">
                   <div className="text-xs font-black uppercase tracking-[0.3em] text-gray-400 mb-2">EIXO #{i + 1}</div>
@@ -222,12 +236,12 @@ export default function Home() {
                   <div className="w-12 h-1 bg-blue-600 rounded-full group-hover:w-24 transition-all duration-500" />
                 </div>
 
-                <div className="lg:w-2/3 grid md:grid-cols-2 gap-8 items-center">
-                  <div className="p-6 rounded-2xl bg-gray-50 dark:bg-gray-900/50 border border-gray-50 dark:border-gray-800">
+                <div className="lg:w-2/3 grid md:grid-cols-2 gap-4 md:gap-8 items-center">
+                  <div className="p-4 md:p-6 rounded-xl md:rounded-2xl bg-gray-50 dark:bg-gray-900/50 border border-gray-50 dark:border-gray-800">
                     <h4 className="text-xl font-black mb-3" style={{ color: axis.color1 }}>{axis.values[0]}</h4>
                     <p className="text-sm dark:text-gray-400 leading-relaxed font-medium">{axis.desc1}</p>
                   </div>
-                  <div className="p-6 rounded-2xl bg-gray-50 dark:bg-gray-900/50 border border-gray-50 dark:border-gray-800">
+                  <div className="p-4 md:p-6 rounded-xl md:rounded-2xl bg-gray-50 dark:bg-gray-900/50 border border-gray-50 dark:border-gray-800">
                     <h4 className="text-xl font-black mb-3" style={{ color: axis.color2 }}>{axis.values[1]}</h4>
                     <p className="text-sm dark:text-gray-400 leading-relaxed font-medium">{axis.desc2}</p>
                   </div>
@@ -239,7 +253,7 @@ export default function Home() {
       </section>
 
       {/* Quick Info / Stats */}
-      <section className="py-20 bg-blue-600 dark:bg-blue-700 text-white overflow-hidden relative">
+      <section className="py-12 md:py-20 bg-blue-600 dark:bg-blue-700 text-white overflow-hidden relative">
         <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
           <Logo size={400} />
         </div>
@@ -265,11 +279,11 @@ export default function Home() {
       </section>
 
       {/* Testimonials or Trust Bar */}
-      <section className="py-24 container mx-auto px-4 text-center max-w-3xl">
+      <section className="py-12 md:py-24 container mx-auto px-4 text-center max-w-3xl">
         <h2 className="text-2xl font-black mb-12 uppercase tracking-widest text-gray-400">Por que fazer este teste?</h2>
         <div className="grid gap-8">
-          <div className="p-8 rounded-3xl bg-white dark:bg-gray-800 shadow-xl border border-gray-100 dark:border-gray-700 flex flex-col md:flex-row items-center gap-6 text-left">
-            <div className="w-16 h-16 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 shrink-0">
+          <div className="p-5 md:p-8 rounded-2xl md:rounded-3xl bg-white dark:bg-gray-800 shadow-xl border border-gray-100 dark:border-gray-700 flex flex-col md:flex-row items-center gap-5 md:gap-6 text-left">
+            <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 shrink-0">
               <Lock size={32} />
             </div>
             <div>
@@ -277,8 +291,8 @@ export default function Home() {
               <p className="text-gray-500 dark:text-gray-400">Suas respostas nunca saem do seu dispositivo. O cálculo é feito localmente e os resultados só são compartilhados se você quiser.</p>
             </div>
           </div>
-          <div className="p-8 rounded-3xl bg-white dark:bg-gray-800 shadow-xl border border-gray-100 dark:border-gray-700 flex flex-col md:flex-row items-center gap-6 text-left">
-            <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 shrink-0">
+          <div className="p-5 md:p-8 rounded-2xl md:rounded-3xl bg-white dark:bg-gray-800 shadow-xl border border-gray-100 dark:border-gray-700 flex flex-col md:flex-row items-center gap-5 md:gap-6 text-left">
+            <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 shrink-0">
               <MessageSquare size={32} />
             </div>
             <div>
@@ -289,8 +303,8 @@ export default function Home() {
         </div>
 
         <div className="mt-20">
-          <Link href="/instructions">
-            <Button size="xl" className="h-20 px-16 rounded-3xl text-2xl font-black group">
+          <Link href="/instructions" className="w-full sm:w-auto">
+            <Button size="xl" className="w-full sm:w-auto h-14 sm:h-20 px-8 sm:px-16 rounded-2xl sm:rounded-3xl text-lg sm:text-2xl font-black group">
               INICIAR AGORA
               <ArrowRight size={24} className="ml-3 group-hover:translate-x-2 transition-transform" />
             </Button>

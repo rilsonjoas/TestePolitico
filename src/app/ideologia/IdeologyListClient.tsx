@@ -29,7 +29,7 @@ export default function IdeologyListClient() {
     return (
         <>
             {/* Search Bar Premium */}
-            <div className="mt-12 w-full max-w-md relative group mb-16">
+            <div className="mt-8 md:mt-12 w-full max-w-md relative group mb-8 md:mb-16">
                 <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
                     <Search size={20} />
                 </div>
@@ -47,13 +47,13 @@ export default function IdeologyListClient() {
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
                 >
                     {filteredIdeologies.map((ideology) => (
                         <motion.div key={ideology.name} variants={itemVariants}>
                             <Link
                                 href={`/ideologia/${slugify(ideology.name)}`}
-                                className="group h-full flex flex-col bg-white dark:bg-gray-800 rounded-3xl p-8 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-2xl hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 relative overflow-hidden"
+                                className="group h-full flex flex-col bg-white dark:bg-gray-800 rounded-2xl md:rounded-3xl p-5 md:p-8 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-2xl hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 relative overflow-hidden"
                             >
                                 <div className="absolute top-0 left-0 w-1 h-full bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" />
 

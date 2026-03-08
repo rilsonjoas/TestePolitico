@@ -5,12 +5,18 @@ import { Logo } from './Logo';
 import { ThemeToggleButton } from './ThemeToggleButton';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { Menu, X, BarChart2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export function Header() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [resultUrl, setResultUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('lastResult');
+    setResultUrl(saved ? `/results?${saved}` : null);
+  }, [pathname]);
 
   const navLinks = [
     { href: '/', label: 'Início' },
@@ -49,6 +55,20 @@ export function Header() {
               {link.label}
             </Link>
           ))}
+          {resultUrl && (
+            <Link
+              href={resultUrl}
+              className={cn(
+                "flex items-center gap-1.5 text-sm font-bold px-3 py-1.5 rounded-full border transition-colors",
+                pathname.startsWith('/results')
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+              )}
+            >
+              <BarChart2 size={14} />
+              Meu resultado
+            </Link>
+          )}
           <div className="pl-4 border-l border-gray-200 dark:border-gray-700">
             <ThemeToggleButton />
           </div>
@@ -71,6 +91,21 @@ export function Header() {
       {isMenuOpen && (
         <div className="md:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 absolute w-full left-0 animate-in slide-in-from-top-2">
           <nav className="flex flex-col p-4 space-y-4">
+            {resultUrl && (
+              <Link
+                href={resultUrl}
+                onClick={handleLinkClick}
+                className={cn(
+                  "px-4 py-3 rounded-lg text-sm font-bold transition-colors flex items-center gap-2",
+                  pathname.startsWith('/results')
+                    ? "bg-blue-600 text-white"
+                    : "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
+                )}
+              >
+                <BarChart2 size={16} />
+                Meu resultado
+              </Link>
+            )}
             {navLinks.map((link) => (
               <Link
                 key={link.href}

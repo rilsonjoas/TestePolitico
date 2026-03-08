@@ -27,10 +27,10 @@ export const metadata: Metadata = {
   publisher: siteName,
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
+      { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
       { url: '/favicon.svg', sizes: 'any', type: 'image/svg+xml' },
     ],
-    shortcut: '/favicon.ico',
+    shortcut: '/favicon.png',
     apple: '/favicon.png',
   },
   openGraph: {
@@ -40,11 +40,20 @@ export const metadata: Metadata = {
     siteName: siteName,
     title: shareTitle,
     description: shareDescription,
+    images: [
+      {
+        url: "/testepolítico.png",
+        width: 1200,
+        height: 630,
+        alt: siteName,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: shareTitle,
     description: shareDescription,
+    images: ["/testepolítico.png"],
   },
 };
 

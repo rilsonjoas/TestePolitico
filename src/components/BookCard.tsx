@@ -1,7 +1,8 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { useState, useEffect } from 'react';
-import { ExternalLink, BookOpen, ShoppingCart } from 'lucide-react';
+import { BookOpen, ShoppingCart } from 'lucide-react';
 
 interface BookCardProps {
     title: string;
