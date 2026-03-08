@@ -58,6 +58,7 @@ COPY nginx-prod.conf /etc/nginx/nginx.conf
 
 # Copiar arquivos estáticos do builder
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/public/ads.txt ./ads.txt
 COPY --from=builder /app/.next/static ./_next/static
 
 # Healthcheck
