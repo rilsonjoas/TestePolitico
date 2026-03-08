@@ -69,7 +69,18 @@ export function calculateIdeologyDistance(
   const govtDist = Math.abs(userScores.govt - ideology.stats.govt);
   const sctyDist = Math.abs(userScores.scty - ideology.stats.scty);
 
-  return econDist + diplDist + govtDist + sctyDist;
+  const baseDist = econDist + diplDist + govtDist + sctyDist;
+
+  // Calculamos a "extremidade" da ideologia (o quão distante ela é do centro 50,50,50,50)
+  const extremity = Math.abs(ideology.stats.econ - 50) + 
+                    Math.abs(ideology.stats.dipl - 50) + 
+                    Math.abs(ideology.stats.govt - 50) + 
+                    Math.abs(ideology.stats.scty - 50);
+
+  // Ideologias mais extremas recebem um desconto na distância para compensar 
+  // a tendência matemática (maldição da dimensionalidade) que favorece o centro.
+  // Quanto maior a extremidade (max 200), menor o multiplicador.
+  return baseDist * (120 / (120 + extremity));
 }
 
 /**
