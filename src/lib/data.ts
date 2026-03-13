@@ -405,11 +405,11 @@ export const questions: Question[] = [
   },
   {
     question:
-      "O Estado, por sua própria natureza, tende a crescer e a restringir a liberdade das pessoas; por isso o ideal seria que ele fosse o menor possível ou que não existisse.",
+      "O Estado deve ser reduzido ao mínimo essencial (como segurança, justiça e defesa), deixando todas as outras áreas da vida e da economia para a livre iniciativa e para os indivíduos.",
     example:
-      "cada nova lei, agência reguladora ou imposto criado pelo governo reduz um pouco mais a capacidade de cada pessoa de decidir sobre sua própria vida.",
+      "o governo não deve tentar gerenciar a saúde, a educação ou a economia, focando apenas em garantir contratos, proteger a propriedade e manter a ordem.",
     context: "estado",
-    effect: { econ: 0, dipl: 0, govt: 20, scty: 0 },
+    effect: { econ: -10, dipl: 0, govt: 15, scty: 0 },
   },
   {
     question:
@@ -445,9 +445,9 @@ export const questions: Question[] = [
   },
   {
     question:
-      "Viver em uma democracia é o único sistema que garante de forma real a dignidade e os direitos das pessoas; trocar democracia por ‘eficiência’ ou ‘ordem’ sempre acaba em perseguição e autoritarismo.",
+      "A democracia representativa, com eleições livres e alternância de poder, é o único arranjo político capaz de proteger de fato os direitos civis e a dignidade humana no longo prazo.",
     example:
-      "países que limitaram eleições livres em nome da estabilidade econômica acabaram em ditaduras.",
+      "mesmo que sistemas não-democráticos pareçam trazer avanços econômicos em curto prazo, a falta de prestação de contas aos cidadãos fatalmente leva a abusos de poder.",
     context: "estado",
     effect: { econ: 0, dipl: 0, govt: 10, scty: 0 },
   },
