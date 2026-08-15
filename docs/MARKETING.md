@@ -7,14 +7,32 @@ essa é a melhor janela do ano pra um teste de ideologia em português.
 
 ## 0. Pré-requisito: neutralidade percebida
 
-Antes de qualquer push de tráfego, vale um passe nas perguntas — ver
-`README.md`/observação desta sessão: algumas frases da amostra revisada
-embutem o contra-argumento no `example`, o que pode soar tendencioso pra
-quem está do lado oposto. Em ano de eleição, "teste político enviesado" é
-o tipo de acusação que vira print e mata a viralização antes de começar.
-Não precisa ser perfeito, mas vale um passe de "essa frase soa justa pros
-dois lados?" antes do empurrão principal de outubro. Baixo custo, alto
-risco se pulado.
+Antes de qualquer push de tráfego, vale um passe nas perguntas. Em ano
+de eleição, "teste político enviesado" é o tipo de acusação que vira
+print e mata a viralização antes de começar — baixo custo de corrigir
+agora, alto risco se pulado. Achado numa revisão de amostra (~15 das 70
+perguntas) em 2026-08-14, não uma auditoria completa:
+
+- [ ] **Perguntas compostas.** Várias afirmações empacotam mais de uma
+      alegação na mesma frase (ex: "reduz preços, aumenta qualidade E
+      estimula inovação"). Numa escala Likert, quem concorda com uma
+      parte e discorda de outra não tem como expressar isso — a
+      resposta vira ruído, não sinal. Ação: revisar as 70 perguntas
+      procurando por "E" ligando duas alegações independentes e separar
+      em perguntas distintas, ou reescrever pra uma alegação só.
+- [ ] **Contra-argumento embutido como fato no `example`.** Em pelo
+      menos uma pergunta do lado "mercado" (ex: renda básica "cria
+      dependência financeira e desincentiva o trabalho a longo prazo"),
+      o `example` apresenta uma posição contestada como se fosse dado
+      objetivo, em vez de apresentá-la como a lógica *daquele lado*.
+      Ação: passar pelas ~70 entradas perguntando "esse `example` soa
+      como uma explicação justa de por que alguém *daquele lado*
+      pensa assim, ou soa como o lado oposto explicando por que aquilo
+      está errado?" — reescrever qualquer `example` que falhe nesse
+      teste. Vale pedir pra alguém de cada lado do espectro ler antes
+      de publicar, não só uma leitura solo.
+- [ ] Depois do passe acima, considerar repetir a checagem pras ~40+
+      ideologias/roasts — mesmo risco de tom desigual entre lados.
 
 ## 1. Por que agora é a janela certa
 
