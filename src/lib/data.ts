@@ -141,7 +141,7 @@ export const politicalDictionary: Record<string, string> = {
 export const questions: Question[] = [
   {
     question:
-      "A concorrência entre empresas, sem intervenção excessiva do Estado, é o principal mecanismo que reduz preços, aumenta qualidade e estimula inovação em uma economia.",
+      "A concorrência entre empresas, sem intervenção excessiva do Estado, é o principal mecanismo que reduz preços e melhora a qualidade dos produtos em uma economia.",
     example:
       "mercados onde várias empresas competem pelo mesmo cliente — como o de smartphones ou de transporte por aplicativo — tendem a oferecer produtos melhores a preços menores do que monopólios ou setores controlados pelo governo.",
     context: "mercado",
@@ -189,19 +189,27 @@ export const questions: Question[] = [
   },
   {
     question:
-      "O setor privado, movido pela concorrência e pelo lucro, tende a entregar serviços de saúde, moradia e alimentação com mais eficiência e qualidade do que programas administrados pelo Estado.",
+      "O setor privado, movido pela concorrência e pelo lucro, tende a entregar moradia e alimentação com mais eficiência do que programas administrados pelo Estado.",
     example:
-      "planos de saúde privados em concorrência costumam oferecer atendimento mais rápido e hospitais mais bem equipados do que o sistema público em muitos países.",
+      "construtoras e produtores privados competindo entre si tendem a entregar mais moradias e alimentos a preços menores do que projetos públicos de habitação e abastecimento geridos de forma centralizada.",
     context: "mercado",
     effect: { econ: -10, dipl: 0, govt: 0, scty: 0 },
   },
   {
     question:
-      "Programas do governo que pagam uma renda mensal a pessoas de baixa renda criam dependência financeira e desincentivam o trabalho a longo prazo.",
+      "Programas do governo que pagam uma renda mensal a pessoas de baixa renda tendem a criar uma dependência financeira duradoura desse auxílio.",
     example:
-      "quem recebe o benefício indefinidamente perde a motivação de buscar emprego — afinal, trabalhar significa arriscar perder o auxílio por um salário que pode não valer a pena.",
+      "quem vive do benefício por muitos anos pode acabar sem outra fonte de renda ou rede de apoio, ficando vulnerável caso o programa seja reduzido ou cortado no futuro.",
     context: "estado",
-    effect: { econ: -10, dipl: 0, govt: 0, scty: 0 },
+    effect: { econ: -8, dipl: 0, govt: 0, scty: 0 },
+  },
+  {
+    question:
+      "Programas do governo que pagam uma renda mensal a pessoas de baixa renda desincentivam a busca por emprego formal a longo prazo.",
+    example:
+      "na visão de quem defende esse ponto, um salário inicial baixo compensa pouco frente ao risco de perder o auxílio — o que reduziria o incentivo a procurar trabalho.",
+    context: "estado",
+    effect: { econ: -8, dipl: 0, govt: 0, scty: 0 },
   },
   {
     question:
@@ -213,7 +221,7 @@ export const questions: Question[] = [
   },
   {
     question:
-      "Impostos altos sobre quem ganha mais desestimulam o trabalho, o investimento e a criação de riqueza — prejudicando, no fim, toda a sociedade, incluindo os mais pobres.",
+      "Impostos altos sobre quem ganha mais desestimulam o investimento e a criação de riqueza — prejudicando, no fim, toda a sociedade, incluindo os mais pobres.",
     example:
       "um empresário que ficará com menos da metade do que ganhar tende a investir menos, contratar menos e buscar países com tributação mais baixa.",
     context: "estado",
@@ -229,11 +237,19 @@ export const questions: Question[] = [
   },
   {
     question:
-      "A concentração da propriedade em poucas megacorporações é tão ruim para a liberdade humana quanto o monopólio do Estado; a economia ideal seria baseada na pequena propriedade, no artesanato familiar e em cooperativas de trabalhadores.",
+      "A concentração da propriedade em poucas megacorporações é tão ruim para a liberdade humana quanto o monopólio do Estado.",
     example:
       "tanto o capitalismo monopolista, que joga tudo nas mãos de meia dúzia de multinacionais, quanto o socialismo estatal, que joga tudo na mão de burocratas, retiram do trabalhador comum o controle sobre o seu próprio sustento.",
     context: "mercado",
-    effect: { econ: 10, dipl: -5, govt: 5, scty: -10 },
+    effect: { econ: 5, dipl: -5, govt: 5, scty: -5 },
+  },
+  {
+    question:
+      "A economia ideal seria baseada na pequena propriedade, no artesanato familiar e em cooperativas de trabalhadores, em vez de grandes corporações privadas ou empresas estatais.",
+    example:
+      "uma padaria de bairro administrada pela própria família, ou uma fábrica gerida coletivamente pelos operários, distribui poder econômico de um jeito que nem a grande empresa privada nem a estatal conseguem.",
+    context: "mercado",
+    effect: { econ: 10, dipl: 0, govt: 0, scty: -5 },
   },
   {
     question:
@@ -373,11 +389,19 @@ export const questions: Question[] = [
   },
   {
     question:
-      "Em situações de ameaça grave à segurança pública, o Estado deve ter autoridade para restringir liberdades individuais, como prender suspeitos sem processo ou monitorar comunicações sem autorização judicial.",
+      "Em situações de ameaça grave à segurança pública, o Estado deve poder monitorar comunicações privadas sem autorização judicial prévia.",
     example:
-      "quando uma organização terrorista está planejando um ataque, não existe tempo para longas tramitações judiciais — a segurança da maioria justifica plenamente ações imediatas do Estado.",
+      "quando uma organização terrorista está planejando um ataque, esperar uma autorização judicial pode significar perder a janela de tempo para impedi-lo.",
     context: "estado",
-    effect: { econ: 0, dipl: 0, govt: -10, scty: -5 },
+    effect: { econ: 0, dipl: 0, govt: -8, scty: -3 },
+  },
+  {
+    question:
+      "Em situações de ameaça grave à segurança pública, o Estado deve poder prender suspeitos sem processo judicial regular.",
+    example:
+      "diante de uma ameaça iminente, a segurança da maioria justificaria manter um suspeito detido mesmo antes de qualquer decisão judicial sobre o caso.",
+    context: "estado",
+    effect: { econ: 0, dipl: 0, govt: -12, scty: -6 },
   },
   {
     question:
@@ -413,7 +437,7 @@ export const questions: Question[] = [
   },
   {
     question:
-      "O sentimento de identidade nacional deve estar acima das divergências políticas internas, e criticar o próprio país em público é irresponsável e prejudica a coesão nacional.",
+      "Criticar o próprio país em público, especialmente perante estrangeiros ou em fóruns internacionais, é irresponsável e prejudica a coesão nacional.",
     example:
       "mesmo discordando de decisões do governo, um cidadão deveria evitar manifestar essa crítica perante estrangeiros ou em fóruns internacionais.",
     context: "costumes",
@@ -501,11 +525,19 @@ export const questions: Question[] = [
   },
   {
     question:
-      "As gerações anteriores tinham valores mais sólidos e uma vida social mais saudável do que a atual. O mundo moderno, com o excesso de tecnologia e a quebra de tradições, está prejudicando a saúde mental e o caráter dos jovens.",
+      "As gerações anteriores tinham valores mais sólidos e uma vida social mais saudável do que a atual.",
     example:
-      "jovens de gerações anteriores cresceram com famílias presentes, comunidades coesas e valores claros — hoje crescem olhando para uma tela, comparando sua vida com versões editadas da vida alheia e sem saber quem são.",
+      "jovens de gerações anteriores cresciam com famílias presentes e comunidades coesas, com valores claros compartilhados por todos ao redor.",
     context: "costumes",
-    effect: { econ: 0, dipl: 0, govt: 0, scty: -10 },
+    effect: { econ: 0, dipl: 0, govt: 0, scty: -8 },
+  },
+  {
+    question:
+      "O excesso de tecnologia no mundo moderno está prejudicando a saúde mental e o caráter dos jovens.",
+    example:
+      "hoje os jovens crescem olhando para uma tela, comparando sua vida com versões editadas da vida alheia e sem saber quem são.",
+    context: "costumes",
+    effect: { econ: 0, dipl: 0, govt: 0, scty: -8 },
   },
   {
     question:
@@ -533,11 +565,19 @@ export const questions: Question[] = [
   },
   {
     question:
-      "A normalização do sexo casual e a promoção de modelos de relacionamento fora dos padrões tradicionais enfraquecem a família e prejudicam a estabilidade social.",
+      "A normalização do sexo casual enfraquece a família e prejudica a estabilidade social.",
     example:
-      "a crescente aceitação pública de relações poligâmicas ou de conteúdo sexual explícito como entretenimento normalizado torna mais difícil para crianças formarem valores sãos.",
+      "a crescente aceitação pública de conteúdo sexual explícito como entretenimento normalizado torna mais difícil para crianças formarem valores sãos.",
     context: "costumes",
-    effect: { econ: 0, dipl: 0, govt: 0, scty: -10 },
+    effect: { econ: 0, dipl: 0, govt: 0, scty: -8 },
+  },
+  {
+    question:
+      "A promoção de modelos de relacionamento fora dos padrões tradicionais enfraquece a família e prejudica a estabilidade social.",
+    example:
+      "na visão de quem defende esse ponto, a crescente aceitação pública de relações poligâmicas ou de outros arranjos fora do casamento monogâmico tradicional representa um risco à estrutura familiar.",
+    context: "costumes",
+    effect: { econ: 0, dipl: 0, govt: 0, scty: -8 },
   },
   {
     question:
@@ -669,11 +709,19 @@ export const questions: Question[] = [
   },
   {
     question:
-      "Uma pessoa adulta tem o direito de consumir qualquer substância que queira, inclusive drogas, sem interferência do Estado, e o comércio dessas substâncias deveria ser legal e regulado como qualquer outro produto.",
+      "Uma pessoa adulta tem o direito de consumir qualquer substância que queira, inclusive drogas, sem interferência do Estado.",
     example:
-      "assim como o álcool e o cigarro são legais, apesar de causarem danos, a maconha e outras drogas também deveriam poder ser vendidas livremente para adultos.",
+      "assim como beber álcool é uma escolha pessoal legal, mesmo causando danos à saúde, o uso de maconha ou outras drogas por um adulto deveria ser tratado como uma decisão só dele.",
     context: "individual",
-    effect: { econ: 0, dipl: 0, govt: 15, scty: 5 },
+    effect: { econ: 0, dipl: 0, govt: 12, scty: 5 },
+  },
+  {
+    question:
+      "O comércio de drogas atualmente ilegais deveria ser legalizado e regulado pelo Estado, como acontece hoje com o álcool e o cigarro.",
+    example:
+      "assim como o álcool e o cigarro são vendidos legalmente sob regras de idade e tributação, a maconha e outras drogas também poderiam ser vendidas livremente para adultos dentro de um mercado regulado.",
+    context: "individual",
+    effect: { econ: 0, dipl: 0, govt: 10, scty: 3 },
   },
   {
     question:
@@ -717,11 +765,19 @@ export const questions: Question[] = [
   },
   {
     question:
-      "A livre entrada de produtos, pessoas e ideias estrangeiras acaba enfraquecendo a cultura, as tradições e a identidade de um povo; o Estado deve criar barreiras para proteger o modo de vida e os valores nacionais diante da globalização.",
+      "A livre entrada de produtos e capital estrangeiro no país acaba enfraquecendo a economia e os negócios nacionais; o Estado deve criar barreiras para proteger indústrias e empresas locais.",
     example:
-      "limitar a importação de conteúdo cultural estrangeiro — filmes, música, programas — ou restringir o acesso de estrangeiros a terras e negócios estratégicos para preservar a identidade nacional.",
+      "restringir o acesso de estrangeiros a terras e negócios estratégicos, ou taxar produtos importados, para proteger a produção e os empregos nacionais.",
     context: "internacional",
-    effect: { econ: 0, dipl: -20, govt: 0, scty: -15 },
+    effect: { econ: 5, dipl: -15, govt: 0, scty: 0 },
+  },
+  {
+    question:
+      "A livre entrada de pessoas e ideias estrangeiras acaba enfraquecendo a cultura, as tradições e a identidade de um povo; o Estado deve criar barreiras para proteger o modo de vida e os valores nacionais diante da globalização.",
+    example:
+      "limitar a importação de conteúdo cultural estrangeiro — filmes, música, programas — para preservar a identidade nacional diante da influência de outras culturas.",
+    context: "internacional",
+    effect: { econ: 0, dipl: -10, govt: 0, scty: -15 },
   },
   {
     question:
@@ -2026,7 +2082,7 @@ export const ideologies: Ideology[] = [
       curiosities: "Javier Milei foi eleito presidente da Argentina em 2023 com uma plataforma que inclua abolir o Banco Central argentino e dolarizar a economia — prometendo medidas que nenhum outro chefe de Estado havia tentado em escala nacional. Seu comportamento excluíante e uso agressivo das redes sociais redefiniu o debate político argentino, ao mesmo tempo que tornou o libertarianismo radica l num fenômeno cult global especialmente entre jovens do sexo masculino descontentes com o establishmént político."
     },
     roast:
-      "Para você, leis de trânsito são tirania e impostos são literalmente estupro. Você provavelmente explicou o padrão ouro para uma mulher numa festa e ela fingiu desmaiar para fugir.",
+      "Para você, leis de trânsito são tirania e impostos são roubo à mão armada. Você provavelmente explicou o padrão ouro para uma mulher numa festa e ela fingiu desmaiar para fugir.",
     politicians: [
       {
         name: "Ron Paul (EUA)",
@@ -2536,7 +2592,7 @@ export const ideologies: Ideology[] = [
       curiosities: "Javier Milei, presidente da Argentina desde 2023, é o mais proeminente político autodeclarado anarco-capitalista do mundo — mas enfrenta a ironia prática de governar usando exatamente o aparato estatal que sua filosofia condena como ilegítimo. Rothbard, apesar de defender o livre mercado radical, chegou a fazer alianças táticas com a esquerda anti-intervencionista contra guerras americanas, revelando que o anarco-capitalismo como projeto político real é repleto de tensões e paradoxos práticos."
     },
     roast:
-      "Você pagaria para andar na calçada e acha que vender órgãos infantis é 'livre mercado'. Sua utopia é um condomínio fechado armado até os dentes onde a lei é ditada pelo dono da rua.",
+      "Você pagaria pedágio pra andar na calçada e jura que a segurança privada nunca viraria milícia de bairro. Sua utopia é um condomínio fechado armado até os dentes onde a lei é ditada pelo dono da rua — e olha que seu presidente favorito precisa do Estado que jura ser ilegítimo pra continuar no cargo.",
     politicians: [
       {
         name: "Murray Rothbard (Teórico)",

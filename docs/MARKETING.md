@@ -13,26 +13,58 @@ print e mata a viralização antes de começar — baixo custo de corrigir
 agora, alto risco se pulado. Achado numa revisão de amostra (~15 das 70
 perguntas) em 2026-08-14, não uma auditoria completa:
 
-- [ ] **Perguntas compostas.** Várias afirmações empacotam mais de uma
+- [x] **Perguntas compostas.** Várias afirmações empacotam mais de uma
       alegação na mesma frase (ex: "reduz preços, aumenta qualidade E
       estimula inovação"). Numa escala Likert, quem concorda com uma
       parte e discorda de outra não tem como expressar isso — a
-      resposta vira ruído, não sinal. Ação: revisar as 70 perguntas
-      procurando por "E" ligando duas alegações independentes e separar
-      em perguntas distintas, ou reescrever pra uma alegação só.
-- [ ] **Contra-argumento embutido como fato no `example`.** Em pelo
+      resposta vira ruído, não sinal. Feito em 2026-08-18: revisadas as
+      80 perguntas (não 70 — a contagem real já tinha divergido do
+      README antes desse passe). 11 identificadas como compostas; 4
+      reescritas pra uma alegação só, 7 separadas em duas perguntas
+      cada (com `effect` recalibrado por alegação). Total foi de 80
+      para 87 perguntas. `tsc --noEmit` e `vitest run` (47 testes)
+      passando depois da mudança.
+- [x] **Contra-argumento embutido como fato no `example`.** Em pelo
       menos uma pergunta do lado "mercado" (ex: renda básica "cria
       dependência financeira e desincentiva o trabalho a longo prazo"),
       o `example` apresenta uma posição contestada como se fosse dado
       objetivo, em vez de apresentá-la como a lógica *daquele lado*.
-      Ação: passar pelas ~70 entradas perguntando "esse `example` soa
-      como uma explicação justa de por que alguém *daquele lado*
-      pensa assim, ou soa como o lado oposto explicando por que aquilo
-      está errado?" — reescrever qualquer `example` que falhe nesse
-      teste. Vale pedir pra alguém de cada lado do espectro ler antes
-      de publicar, não só uma leitura solo.
-- [ ] Depois do passe acima, considerar repetir a checagem pras ~40+
+      Feito em 2026-08-18: passe pelas 89 perguntas (pós-split acima)
+      aplicando o teste "esse `example` soa como explicação justa
+      daquele lado, ou como o lado oposto explicando por que está
+      errado?". A instância original (renda básica) foi corrigida no
+      mesmo passe da divisão de perguntas compostas, com a frase
+      reescrita como "na visão de quem defende esse ponto...". Não foi
+      achada nenhuma outra instância clara do padrão — o estilo do
+      arquivo já é consistente: quase todo `example` é escrito "na voz"
+      do lado que a pergunta representa, de forma afirmativa mas fiel à
+      lógica daquele lado (não uma paródia do lado oposto), o que passa
+      no teste mesmo sem hedging. Isso foi uma leitura solo, não uma
+      leitura cruzada por alguém de cada lado do espectro — a
+      recomendação de pedir essa segunda opinião antes de publicar
+      continua de pé.
+- [x] Depois do passe acima, considerar repetir a checagem pras ~40+
       ideologias/roasts — mesmo risco de tom desigual entre lados.
+      Feito em 2026-08-18: as 43 entradas de `roast` foram extraídas e
+      comparadas por "família" (ideologias nunca implementadas na
+      prática vs. as que tiveram implementação real com atrocidades).
+      Padrão geral já era consistente — o peso da piada escala com dano
+      histórico real (Stalinismo/Maoísmo/Nazismo levam piada pesada
+      porque aconteceu de fato; utopias nunca testadas de qualquer lado
+      levam piada de "ingênuo/impraticável"), então não reescrevi tudo.
+      2 exceções corrigidas: **Anarco-Capitalismo** usava uma imagem de
+      tráfico de órgãos infantis bem mais pesada que qualquer utopia
+      teórica equivalente do lado esquerdo (Anarco-Comunismo,
+      Distributismo etc.) — trocada pela ironia real e já documentada
+      no próprio verbete (Milei precisa do Estado que sua filosofia
+      considera ilegítimo). **Libertarianismo** usava estupro como
+      piada pra "impostos" — não é bem uma questão de lado, é que
+      nenhuma outra das 43 entradas recorre a violência sexual como
+      punchline, nem as mais duras (Nazismo, Stalinismo) — trocado por
+      "roubo à mão armada", que mantém a hipérbole sem o mesmo risco.
+      `desc`/`content` (história, princípios, curiosidades) não foram
+      revisados a fundo — são de tom enciclopédico em toda a amostra
+      que conferi, risco bem menor que o campo `roast`.
 
 ## 1. Por que agora é a janela certa
 
