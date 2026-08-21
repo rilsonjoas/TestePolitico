@@ -7,11 +7,19 @@
 
 **🌐 Live Demo:** [testepolitico.com.br](https://testepolitico.com.br/)
 
-Bem-vindo ao repositório do **Teste Político 8 Valores**, uma aplicação full-stack front-heavy projetada para calcular, com precisão matemática, o posicionamento ideológico de um usuário através de um quiz de 70 perguntas. 
+Bem-vindo ao repositório do **Teste Político 8 Valores**, uma aplicação full-stack front-heavy projetada para calcular, com precisão matemática, o posicionamento ideológico de um usuário através de um quiz de 87 perguntas. 
 
 Este projeto foi construído não apenas como uma ferramenta de entretenimento viral, mas como um laboratório prático de **Algoritmos de Recomendação**, **Manipulação de Estados Complexos no React** e **Acessibilidade (a11y)**.
 
 ---
+
+## 🎯 Por que isto existe
+
+Este projeto é, antes de tudo, um dos pilares do meu portfólio de 2026 — prioridade concreta de crescimento profissional, não só side project solto. A escolha de tema (posicionamento político por distância euclidiana em 4 eixos) foi deliberada: é complexo o suficiente pra exigir álgebra linear de verdade, estado de UI não-trivial (87 perguntas sem reload) e rigor de acessibilidade — exatamente o tipo de profundidade técnica que separa "fiz um CRUD" de "resolvi um problema difícil".
+
+A ferramenta em si é deliberadamente neutra: os eixos e a distância são matemática pura aplicada a respostas do usuário, sem agenda embutida — o cuidado de fazer isso com rigor (100% de cobertura de teste, fórmula documentada, não caixa-preta) é o mesmo princípio de excelência que aplico em qualquer projeto, laboratório técnico ou ministério: fazer bem feito porque o processo importa, não só o resultado.
+
+Hoje é uma demo completa e testada no ar. A visão de futuro é menos sobre este produto crescer sozinho e mais sobre o que ele já cumpriu: prova de mastery técnica real, citável em entrevista, que abre a próxima fase de carreira.
 
 ## 📐 A Matemática por Trás do Quiz
 
@@ -56,7 +64,7 @@ Isso nos gera um selo maravilhoso de **"78% de afinidade"**, facilitando o compa
 A escolha das ferramentas para este projeto seguiu o princípio de **"Zero-Latency & High-Usability"** (Baixa latência e alta usabilidade).
 
 ### **Next.js 15 (App Router)**
-Utilizado primordialmente pelo seu suporte nativo ao SSR (Server-Side Rendering) e facilidade na injeção de Metadata dinâmica. O componente de Quiz roda quase exclusivamente como `'use client'`, garantindo que a troca de 70 perguntas ocorra sem *nenhuma recarga de página* e com transições suaves.
+Utilizado primordialmente pelo seu suporte nativo ao SSR (Server-Side Rendering) e facilidade na injeção de Metadata dinâmica. O componente de Quiz roda quase exclusivamente como `'use client'`, garantindo que a troca de 87 perguntas ocorra sem *nenhuma recarga de página* e com transições suaves.
 
 ### **Framer Motion + Tailwind CSS**
 - **Tailwind** lida com o Design System inteiro. Foram utilizadas escalas responsivas (como textos diminuindo via `text-[10px]` dinâmico em telas curtas para evitar quebra de layout de nomes grandes nas barras de resultado).
@@ -66,7 +74,7 @@ Utilizado primordialmente pelo seu suporte nativo ao SSR (Server-Side Rendering)
 Um dos destaques do painel de resultados é o `<PoliticalCompass />`. Para evitar o peso gigantesco de bibliotecas engessadas como `Chart.js` ou `Recharts`, a bússola foi construída usando puramente `CSS Absolute Elements` iterados em cima do DOM do React pelo vetor `[left: X%, top: Y%]`. Isso entrega um gráfico de dispersão com custo de renderização praticamente nulo.
 
 ### **Data Structure `(src/lib/data.ts)`**
-Atuando como um "NoSQL Database" pseudo-local, o TypeScript organiza toda base enciclopédica do projeto (Mais de 40 ideologias catalogadas, 70 perguntas com pesos elásticos que variam entre `5`, `10` e `20`, atreladas a autores históricos). Ao expor tipos fixos e pré-compilados, o auto-complete da IDE blinda o código contra typos em tempo de desenvolvimento.
+Atuando como um "NoSQL Database" pseudo-local, o TypeScript organiza toda base enciclopédica do projeto (43 ideologias catalogadas, 87 perguntas com pesos elásticos que variam entre `5`, `10` e `20`, atreladas a autores históricos). Ao expor tipos fixos e pré-compilados, o auto-complete da IDE blinda o código contra typos em tempo de desenvolvimento.
 
 ---
 

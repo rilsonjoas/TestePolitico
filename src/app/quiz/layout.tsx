@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
+import { questions } from '@/lib/data';
 
 export const metadata: Metadata = {
   title: 'Quiz Político',
-  description: 'Responda 80 perguntas e descubra sua ideologia política. Teste completo baseado no modelo 8values.',
+  description: `Responda ${questions.length} perguntas e descubra sua ideologia política. Teste completo baseado no modelo 8values.`,
 };
 
 export default function QuizLayout({

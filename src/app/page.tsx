@@ -32,7 +32,7 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "Quiz",
     "name": "Teste Político 8 Valores",
-    "description": "Descubra sua ideologia política com base em 8 valores fundamentais. Responda a 80 perguntas para ver seu posicionamento no espectro político.",
+    "description": `Descubra sua ideologia política com base em 8 valores fundamentais. Responda a ${questions.length} perguntas para ver seu posicionamento no espectro político.`,
     "educationalUse": "self-assessment",
     "about": {
       "@type": "Thing",
@@ -202,6 +202,44 @@ export default function Home() {
               </motion.div>
             ))}
           </motion.div>
+        </div>
+      </section>
+
+      {/* About the Test */}
+      <section className="py-12 md:py-20 container mx-auto px-4 max-w-5xl">
+        <div className="bg-white dark:bg-gray-800/50 rounded-2xl md:rounded-3xl p-6 md:p-10 lg:p-14 shadow-xl border border-gray-100 dark:border-gray-800">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-black mb-4">Como funciona o teste?</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+            <div className="text-center space-y-3">
+              <div className="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-2xl flex items-center justify-center mx-auto text-2xl font-black">1</div>
+              <h3 className="font-bold text-lg">Responda {questions.length} perguntas</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                Cada pergunta apresenta uma afirmação sobre economia, diplomacia, estado ou sociedade.
+                Escolha o quanto você concorda ou discorda, de &ldquo;Discordo totalmente&rdquo; a &ldquo;Concordo totalmente&rdquo;.
+                O teste leva cerca de 10-15 minutos.
+              </p>
+            </div>
+            <div className="text-center space-y-3">
+              <div className="w-14 h-14 bg-purple-100 dark:bg-purple-900/30 text-purple-600 rounded-2xl flex items-center justify-center mx-auto text-2xl font-black">2</div>
+              <h3 className="font-bold text-lg">Veja seu perfil</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                Seu posicionamento é calculado em 8 valores políticos independentes, formando 4 eixos:
+                Econômico (Igualdade vs Mercado), Diplomático (Nação vs Global), Civil (Liberdade vs Autoridade)
+                e Social (Tradição vs Progresso).
+              </p>
+            </div>
+            <div className="text-center space-y-3">
+              <div className="w-14 h-14 bg-green-100 dark:bg-green-900/30 text-green-600 rounded-2xl flex items-center justify-center mx-auto text-2xl font-black">3</div>
+              <h3 className="font-bold text-lg">Compare ideologias</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                Receba sua compatibilidade com mais de 40 ideologias políticas mapeadas,
+                desde o anarquismo até o autoritarismo. Veja o mapa political compass, porcentagens
+                detalhadas e a explicação de cada ideologia.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 

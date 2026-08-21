@@ -2,10 +2,11 @@ import { Logo } from '@/components/Logo';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import IdeologyListClient from './IdeologyListClient';
+import { ideologies } from '@/lib/data';
 
 export const metadata: Metadata = {
   title: 'Enciclopédia de Ideologias | Teste Político 8 Valores',
-  description: 'Explore nosso guia completo com 45 ideologias políticas, desde o Anarquismo até o Fascismo, com resumos e dados matemáticos detalhados da sua bússola moral.',
+  description: `Explore nosso guia completo com ${ideologies.length} ideologias políticas, desde o Anarquismo até o Fascismo, com resumos e dados matemáticos detalhados da sua bússola moral.`,
   openGraph: {
     title: 'Enciclopédia de Ideologias do Espectro Político',
     description: 'Encontre o significado, princípios e figuras públicas para dezenas de ideologias mundiais.',
