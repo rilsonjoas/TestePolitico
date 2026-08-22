@@ -55,6 +55,9 @@ export const metadata: Metadata = {
     description: shareDescription,
     images: ["/testepolítico.png"],
   },
+  verification: {
+    google: "2LwHQzrTGbXw2WjrYl22Q8TfXKrkNqeDeecMuSON35Y",
+  },
 };
 
 export default function RootLayout({
