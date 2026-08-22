@@ -7,6 +7,10 @@
 
 **🌐 Live Demo:** [testepolitico.com.br](https://testepolitico.com.br/)
 
+> [!NOTE]
+> Roadmap (engenharia + backlog de produto, inclui o status real do
+> AdSense) em [`ROADMAP.md`](ROADMAP.md).
+
 Bem-vindo ao repositório do **Teste Político 8 Valores**, uma aplicação full-stack front-heavy projetada para calcular, com precisão matemática, o posicionamento ideológico de um usuário através de um quiz de 87 perguntas. 
 
 Este projeto foi construído não apenas como uma ferramenta de entretenimento viral, mas como um laboratório prático de **Algoritmos de Recomendação**, **Manipulação de Estados Complexos no React** e **Acessibilidade (a11y)**.
