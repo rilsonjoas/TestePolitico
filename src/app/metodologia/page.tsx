@@ -85,10 +85,10 @@ export default function MetodologiaPage() {
             </h2>
           </div>
           <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-6">
-            O **Teste Político 8 Valores** foi desenhado com o compromisso da transparência matemática. Diferente de algoritmos opacos de redes sociais ou ferramentas baseadas em IA generativa sem regras fixas, cada resultado neste teste é calculado através de **Álgebra Linear determinística em um espaço Euclidiano quadridimensional (ℝ⁴)**.
+            O <strong>Teste Político 8 Valores</strong> foi desenhado com o compromisso da transparência matemática. Diferente de algoritmos opacos de redes sociais ou ferramentas baseadas em IA generativa sem regras fixas, cada resultado neste teste é calculado através de <strong>Álgebra Linear determinística em um espaço Euclidiano quadridimensional (ℝ⁴)</strong>.
           </p>
           <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-            Ao responder às **{questions.length} perguntas**, o sistema gera um vetor de coordenadas únicas que é comparado com os perfis exatos de **{ideologies.length} ideologias catalogadas** na base de dados.
+            Ao responder às <strong>{questions.length} perguntas</strong>, o sistema gera um vetor de coordenadas únicas que é comparado com os perfis exatos de <strong>{ideologies.length} ideologias catalogadas</strong> na base de dados.
           </p>
         </section>
 
@@ -127,14 +127,14 @@ export default function MetodologiaPage() {
             </h2>
           </div>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            Para encontrar com qual ideologia um usuário mais se assemelha, o algoritmo calcula a **Distância Euclidiana** entre o vetor do usuário U = (E_u, D_u, G_u, S_u) e o vetor de referência de cada ideologia I = (E_i, D_i, G_i, S_i):
+            Para encontrar com qual ideologia um usuário mais se assemelha, o algoritmo calcula a <strong>Distância Euclidiana</strong> entre o vetor do usuário U = (E<sub>u</sub>, D<sub>u</sub>, G<sub>u</sub>, S<sub>u</sub>) e o vetor de referência de cada ideologia I = (E<sub>i</sub>, D<sub>i</sub>, G<sub>i</sub>, S<sub>i</sub>):
           </p>
 
           {/* Math Box */}
           <div className="bg-slate-900 text-white p-6 md:p-8 rounded-2xl shadow-inner font-mono text-center space-y-4 overflow-x-auto">
             <p className="text-gray-400 text-xs uppercase tracking-widest">Fórmula da Distância Euclidiana em ℝ⁴</p>
             <div className="text-xl md:text-2xl font-bold text-emerald-400">
-              {`d(U, I) = √[ (E_u - E_i)² + (D_u - D_i)² + (G_u - G_i)² + (S_u - S_i)² ]`}
+              d(U, I) = √[ (E<sub>u</sub> - E<sub>i</sub>)² + (D<sub>u</sub> - D<sub>i</sub>)² + (G<sub>u</sub> - G<sub>i</sub>)² + (S<sub>u</sub> - S<sub>i</sub>)² ]
             </div>
             <p className="text-xs text-gray-400">
               Quanto menor a distância geométrica d, mais semelhantes são as visões políticas.
@@ -147,13 +147,13 @@ export default function MetodologiaPage() {
               Como a distância geométrica bruta não é intuitiva para o público geral, o sistema aplica um normalizador linear onde a distância máxima teórica entre dois polos opostos em 4 dimensões é dada por:
             </p>
             <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl font-mono text-sm text-center border border-gray-200 dark:border-gray-700">
-              {`d_máxima = √[ 100² × 4 ] = √40000 = 200`}
+              d<sub>máxima</sub> = √[ 100² × 4 ] = √40000 = 200
             </div>
             <p>
-              A porcentagem final de afinidade (ou *Match Percentage*) é calculada por:
+              A porcentagem final de afinidade (ou <em>Match Percentage</em>) é calculada por:
             </p>
             <div className="bg-blue-50 dark:bg-blue-950/40 p-4 rounded-xl font-mono text-sm text-center border border-blue-200 dark:border-blue-800 text-blue-900 dark:text-blue-300 font-bold">
-              {`Afinidade (%) = max( 0, 100 × ( 1 - d / 200 ) )`}
+              Afinidade (%) = max( 0, 100 × ( 1 - d / 200 ) )
             </div>
           </div>
         </section>
@@ -241,7 +241,7 @@ export default function MetodologiaPage() {
             </h2>
           </div>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            Todo o código que executa o cálculo de distância euclidiana e normalização é **100% público e de código aberto**. Qualquer pesquisador, estudante ou cientista político pode inspecionar exatamente o algoritmo no nosso repositório no GitHub:
+            Todo o código que executa o cálculo de distância euclidiana e normalização é <strong>100% público e de código aberto</strong>. Qualquer pesquisador, estudante ou cientista político pode inspecionar exatamente o algoritmo no nosso repositório no GitHub:
           </p>
           <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-sm font-mono text-gray-600 dark:text-gray-300">
@@ -271,7 +271,7 @@ export default function MetodologiaPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
             <Link href="/quiz">
-              <Button size="lg" variant="secondary" className="w-full sm:w-auto font-black text-blue-900 px-8 py-6 text-lg rounded-2xl shadow-xl hover:scale-105 transition-transform">
+              <Button size="lg" className="w-full sm:w-auto font-black bg-white text-blue-900 hover:bg-gray-100 px-8 py-6 text-lg rounded-2xl shadow-xl hover:scale-105 transition-all">
                 INICIAR O TESTE
               </Button>
             </Link>

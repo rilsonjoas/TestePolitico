@@ -58,7 +58,7 @@ export default function EixosIndexPage() {
               Por exemplo, alguém pode apoiar o livre mercado na economia (visão liberal) e ao mesmo tempo defender fronteiras abertas e causas ambientais mundiais (visão globalista). Outra pessoa pode ser a favor da redistribuição de renda estatal (visão socialista) e simultaneamente defender valores tradicionais morais e religiosos (visão conservadora).
             </p>
             <p>
-              Nosso modelo utiliza **4 eixos independentes** (que resultam em **8 valores opostos**), permitindo mapear a complexidade do pensamento humano com rigor matemático e imparcialidade.
+              Nosso modelo utiliza <strong>4 eixos independentes</strong> (que resultam em <strong>8 valores opostos</strong>), permitindo mapear a complexidade do pensamento humano com rigor matemático e imparcialidade.
             </p>
           </div>
         </section>
