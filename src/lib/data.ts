@@ -127,7 +127,7 @@ export const dictionaryTerms: DictionaryTerm[] = [
     category: "Econômico",
     definition: "Conceito central da economia política marxista que descreve a diferença entre o valor gerado pelo trabalho e o salário efetivamente pago ao trabalhador pelo detentor dos meios de produção.",
     example: "Um operário produz R$ 500 em mercadorias em uma jornada diária, mas recebe R$ 100 de salário. A diferença de R$ 400 constitui a mais-valia apropriada pelo capitalista.",
-    relatedIdeologySlug: "marxismo-leninismo"
+    relatedIdeologySlug: "marxismo"
   },
   {
     term: "Laissez-faire",
@@ -151,7 +151,7 @@ export const dictionaryTerms: DictionaryTerm[] = [
     category: "Econômico",
     definition: "Processo de transferência de empresas, ativos ou serviços públicos do controle estatal para a iniciativa privada.",
     example: "A venda de companhias telefônicas ou de distribuição de energia elétrica anteriormente geridas pelo governo para investidores privados.",
-    relatedIdeologySlug: "neoliberalismo"
+    relatedIdeologySlug: "liberalismo-de-direita"
   },
   {
     term: "Desregulamentação",
@@ -183,7 +183,7 @@ export const dictionaryTerms: DictionaryTerm[] = [
     category: "Teoria Política",
     definition: "Método de análise sociológica desenvolvido por Karl Marx e Friedrich Engels que postula que as condições materiais e econômicas de uma sociedade determinam suas instituições políticas, leis e cultura.",
     example: "Analisar a transição do feudalismo para o capitalismo com base nas mudanças nos modos de produção agrícolas e industriais, e não apenas nas ideias dos reis ou filósofos.",
-    relatedIdeologySlug: "marxismo-leninismo"
+    relatedIdeologySlug: "marxismo"
   },
   {
     term: "Fetichismo da Mercadoria",
@@ -199,7 +199,7 @@ export const dictionaryTerms: DictionaryTerm[] = [
     category: "Teoria Política",
     definition: "Conceito marxista que descreve a fase de transição entre o capitalismo e a sociedade comunista sem classes, durante a qual a classe trabalhadora detém o poder político para desmantelar as estruturas burguesas.",
     example: "A reorganização dos soviets (conselhos de trabalhadores) na Rússia pós-1917 como órgãos deliberativos de poder operário.",
-    relatedIdeologySlug: "marxismo-leninismo"
+    relatedIdeologySlug: "marxismo"
   },
   {
     term: "Centralismo Democrático",
@@ -207,7 +207,7 @@ export const dictionaryTerms: DictionaryTerm[] = [
     category: "Teoria Política",
     definition: "Princípio de organização partidária idealizado por Lênin, no qual há total liberdade de debate interno antes de uma decisão, mas unidade absoluta de ação por parte de todos os membros uma vez aprovada a resolução.",
     example: "Discussões intensas em convenções do partido bolchevique seguidas da obrigação de todos os militantes defenderem a linha vencedora publicamente.",
-    relatedIdeologySlug: "marxismo-leninismo"
+    relatedIdeologySlug: "leninismo"
   },
   {
     term: "Soberania Nacional",
@@ -215,7 +215,7 @@ export const dictionaryTerms: DictionaryTerm[] = [
     category: "Diplomático",
     definition: "Princípio do direito internacional que assegura o direito supremo e inalienável de um Estado-nação autônomo de governar a si mesmo sem ingerência de potências estrangeiras.",
     example: "Recusar tratados internacionais de fiscalização quando estes violam leis constitucionais internas do país.",
-    relatedIdeologySlug: "nacionalismo-conservador"
+    relatedIdeologySlug: "nacional-autoritarismo"
   },
   {
     term: "Imperialismo",
@@ -223,7 +223,7 @@ export const dictionaryTerms: DictionaryTerm[] = [
     category: "Diplomático",
     definition: "Política de expansão do domínio territorial, econômico ou cultural de uma nação sobre outros territórios através da força militar ou de pressões econômicas.",
     example: "A partilha da África promovida pelas potências europeias durante a Conferência de Berlim em 1884.",
-    relatedIdeologySlug: "anti-imperialismo"
+    relatedIdeologySlug: "socialismo-revolucionario"
   },
   {
     term: "Multiculturalismo",
@@ -239,7 +239,7 @@ export const dictionaryTerms: DictionaryTerm[] = [
     category: "Social",
     definition: "Princípio constitucional de neutralidade religiosa do Estado, garantindo a separação formal entre a administração pública e os dogmas de qualquer fé religiosa.",
     example: "A proibição de símbolos ou rituais religiosos oficiais em tribunais e escolas públicas estatais.",
-    relatedIdeologySlug: "liberalismo-social"
+    relatedIdeologySlug: "liberalismo-de-esquerda"
   },
   {
     term: "Pluralismo Político",
@@ -247,7 +247,7 @@ export const dictionaryTerms: DictionaryTerm[] = [
     category: "Civil",
     definition: "Conceito democrático que aceita e protege a existência concomitante de múltiplas visões de mundo, partidos políticos e grupos de interesse em um debate público livre.",
     example: "Garantir espaço igual em debates eleitorais para partidos de extrema-esquerda, centro e direita representados no parlamento.",
-    relatedIdeologySlug: "democracia-liberal"
+    relatedIdeologySlug: "liberalismo-classico"
   },
   {
     term: "Libertarianismo",
@@ -287,7 +287,7 @@ export const dictionaryTerms: DictionaryTerm[] = [
     category: "Social",
     definition: "Filosofia política e social que valoriza a preservação de costumes tradicionais, da ordem jurídica e das instituições históricas (família, religião, comunidade), opondo-se a mudanças radicais súbitas.",
     example: "Defesa do valor da moralidade tradicional, da estabilidade familiar e da prudência em reformas sociais legislativas.",
-    relatedIdeologySlug: "nacionalismo-conservador"
+    relatedIdeologySlug: "conservadorismo"
   },
   {
     term: "Reacionarismo",
@@ -311,7 +311,7 @@ export const dictionaryTerms: DictionaryTerm[] = [
     category: "Econômico",
     definition: "Transformação dos processos produtivos através da inteligência artificial, robótica e informática, com profundos impactos na demanda por mão de obra humana.",
     example: "A implementação de caixas autoatendimento e veículos autônomos substituindo empregos formais na indústria de serviços e logística.",
-    relatedIdeologySlug: "socio-ecologismo"
+    relatedIdeologySlug: "tecnocracia"
   }
 ];
 

@@ -85,7 +85,7 @@ export default function MetodologiaPage() {
             </h2>
           </div>
           <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-6">
-            O **Teste Político 8 Valores** foi desenhado com o compromisso da transparência matemática. Diferente de algoritmos opacos de redes sociais ou ferramentas baseadas em IA generativa sem regras fixas, cada resultado neste teste é calculado através de **Álgebra Linear determinística em um espaço Euclidiano quadridimensional ({"$\\mathbb{R}^4$"})**.
+            O **Teste Político 8 Valores** foi desenhado com o compromisso da transparência matemática. Diferente de algoritmos opacos de redes sociais ou ferramentas baseadas em IA generativa sem regras fixas, cada resultado neste teste é calculado através de **Álgebra Linear determinística em um espaço Euclidiano quadridimensional (ℝ⁴)**.
           </p>
           <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
             Ao responder às **{questions.length} perguntas**, o sistema gera um vetor de coordenadas únicas que é comparado com os perfis exatos de **{ideologies.length} ideologias catalogadas** na base de dados.
@@ -99,19 +99,19 @@ export default function MetodologiaPage() {
               Etapa 1
             </span>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-              O Espaço Vetorial ({"$\\mathbb{R}^4$"})
+              O Espaço Vetorial (ℝ⁴)
             </h2>
           </div>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            Cada indivíduo ou ideologia é representado por um vetor de 4 coordenadas no intervalo $[-100, 100]$ (posteriormente normalizado para $[0\%, 100\%]$):
+            Cada indivíduo ou ideologia é representado por um vetor de 4 coordenadas no intervalo [-100, +100] (posteriormente normalizado para [0%, 100%]):
           </p>
 
           <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 font-mono text-sm space-y-2 text-gray-800 dark:text-gray-200">
             <p className="font-bold text-blue-600 dark:text-blue-400">Vetor = (Econômico, Diplomático, Civil, Social)</p>
-            <p>• Econômico ($E$): 0% (Igualdade) $\rightarrow$ 100% (Mercado)</p>
-            <p>• Diplomático ($D$): 0% (Global) $\rightarrow$ 100% (Nação)</p>
-            <p>• Civil ($G$): 0% (Liberdade) $\rightarrow$ 100% (Autoridade)</p>
-            <p>• Social ($S$): 0% (Progresso) $\rightarrow$ 100% (Tradição)</p>
+            <p>• Econômico (E): 0% (Igualdade) → 100% (Mercado)</p>
+            <p>• Diplomático (D): 0% (Global) → 100% (Nação)</p>
+            <p>• Civil (G): 0% (Liberdade) → 100% (Autoridade)</p>
+            <p>• Social (S): 0% (Progresso) → 100% (Tradição)</p>
           </div>
         </section>
 
@@ -127,17 +127,17 @@ export default function MetodologiaPage() {
             </h2>
           </div>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            Para encontrar com qual ideologia um usuário mais se assemelha, o algoritmo calcula a **Distância Euclidiana** entre o vetor do usuário $U = (E_u, D_u, G_u, S_u)$ e o vetor de referência de cada ideologia $I = (E_i, D_i, G_i, S_i)$:
+            Para encontrar com qual ideologia um usuário mais se assemelha, o algoritmo calcula a **Distância Euclidiana** entre o vetor do usuário U = (E_u, D_u, G_u, S_u) e o vetor de referência de cada ideologia I = (E_i, D_i, G_i, S_i):
           </p>
 
-          {/* KaTeX Math Box */}
+          {/* Math Box */}
           <div className="bg-slate-900 text-white p-6 md:p-8 rounded-2xl shadow-inner font-mono text-center space-y-4 overflow-x-auto">
-            <p className="text-gray-400 text-xs uppercase tracking-widest">Fórmula da Distância Euclidiana em {"$\\mathbb{R}^4$"}</p>
+            <p className="text-gray-400 text-xs uppercase tracking-widest">Fórmula da Distância Euclidiana em ℝ⁴</p>
             <div className="text-xl md:text-2xl font-bold text-emerald-400">
               {`d(U, I) = √[ (E_u - E_i)² + (D_u - D_i)² + (G_u - G_i)² + (S_u - S_i)² ]`}
             </div>
             <p className="text-xs text-gray-400">
-              Quanto menor a distância geométrica $d$, mais semelhantes são as visões políticas.
+              Quanto menor a distância geométrica d, mais semelhantes são as visões políticas.
             </p>
           </div>
 
@@ -211,19 +211,19 @@ export default function MetodologiaPage() {
               <tbody className="divide-y divide-gray-100 dark:divide-gray-700/60 text-gray-700 dark:text-gray-300">
                 <tr>
                   <td className="p-4 font-bold text-gray-900 dark:text-white">1 Eixo (Esquerda / Direita)</td>
-                  <td className="p-4">1D ({"$\\mathbb{R}^1$"})</td>
+                  <td className="p-4">1D (ℝ¹)</td>
                   <td className="p-4">Simplicidade de comunicação jornalística.</td>
                   <td className="p-4">Mistura economia, diplomacia e costumes no mesmo pacote.</td>
                 </tr>
                 <tr>
                   <td className="p-4 font-bold text-gray-900 dark:text-white">Political Compass Clássico</td>
-                  <td className="p-4">2D ({"$\\mathbb{R}^2$"})</td>
+                  <td className="p-4">2D (ℝ²)</td>
                   <td className="p-4">Separa economia de autoridade estatal.</td>
                   <td className="p-4">Ignora a diplomacia (globalismo) e a guerra cultural (tradição).</td>
                 </tr>
                 <tr className="bg-blue-50/50 dark:bg-blue-900/20 font-medium">
                   <td className="p-4 font-black text-blue-600 dark:text-blue-400">Teste Político 8 Valores</td>
-                  <td className="p-4 font-bold">4D ({"$\\mathbb{R}^4$"})</td>
+                  <td className="p-4 font-bold">4D (ℝ⁴)</td>
                   <td className="p-4 font-semibold text-gray-900 dark:text-white">Mapeamento completo (Econômico, Diplomático, Civil, Social).</td>
                   <td className="p-4">Exige maior número de perguntas ({questions.length}) para precisão.</td>
                 </tr>
