@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { BookCard } from '@/components/BookCard';
 import { Metadata } from 'next';
+import { BreadcrumbNav } from '@/components/BreadcrumbNav';
+import { JsonLd } from '@/components/JsonLd';
 import {
   Users,
   BookOpen,
@@ -59,8 +61,33 @@ export default async function IdeologyPage({ params }: { params: Promise<{ slug:
     { name: 'Social', value: stats.scty, label1: 'Progresso', label2: 'Tradição', color1: '#3a86ff', color2: '#8338ec' },
   ];
 
+  const baseUrl = 'https://testepolitico.com.br';
+
+  const schemaData = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `O que é ${ideology.name}?`,
+    description: ideology.desc,
+    url: `${baseUrl}/ideologia/${p.slug}`,
+    publisher: {
+      '@type': 'Organization',
+      name: 'Teste Político',
+      url: baseUrl,
+    },
+  };
+
   return (
     <div className="container mx-auto p-4 flex flex-col items-center min-h-screen">
+      <JsonLd data={schemaData} />
+      <div className="w-full max-w-5xl">
+        <BreadcrumbNav
+          items={[
+            { label: 'Ideologias', href: '/ideologia' },
+            { label: ideology.name },
+          ]}
+        />
+      </div>
+
       <header className="flex flex-col items-center mb-12 w-full max-w-2xl">
         <Link href="/" className="group flex flex-col items-center gap-4 transition-all duration-300">
           <Logo size={80} showText={false} />

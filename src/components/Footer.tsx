@@ -34,10 +34,28 @@ export function Footer() {
 
           <nav className="flex flex-wrap items-center justify-center gap-6 text-sm font-medium">
             <Link 
+              href="/eixos" 
+              className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >
+              4 Eixos
+            </Link>
+            <Link 
               href="/ideologia" 
               className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               Ideologias
+            </Link>
+            <Link 
+              href="/metodologia" 
+              className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >
+              Metodologia
+            </Link>
+            <Link 
+              href="/dicionario" 
+              className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >
+              Dicionário
             </Link>
             <Link 
               href="/sobre" 

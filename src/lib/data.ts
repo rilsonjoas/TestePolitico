@@ -111,39 +111,222 @@ export function getClosestPolitician(
   return closestPolitician;
 }
 
-export const politicalDictionary: Record<string, string> = {
-  "mais-valia": "A diferença entre o valor que o trabalhador produz e o salário que ele realmente recebe.",
-  "fetichismo da mercadoria": "Quando as pessoas passam a valorizar um produto mais pelo seu status ou marca do que pelo trabalho humano por trás dele.",
-  "materialismo histórico": "A ideia de que a economia e as condições materiais de vida são o que realmente moldam a história e a sociedade.",
-  "ditadura do proletariado": "Uma fase de transição onde a classe trabalhadora assume o controle político para reorganizar a sociedade.",
-  "centralismo democrático": "Um método onde as decisões são debatidas livremente internamente, mas, uma vez decididas, todos devem agir juntos.",
-  "laissez-faire": "Uma expressão que significa 'deixe fazer', defendendo que o governo não deve interferir em nada na economia.",
-  "welfare state": "Estado de Bem-Estar Social: quando o governo garante serviços básicos como saúde e educação para todos os cidadãos.",
-  "estatismo": "A crença de que o Estado deve ter um papel central e forte no controle da economia e da sociedade.",
-  "corporativismo": "Um sistema onde o governo organiza a sociedade em grupos de interesses (como sindicatos e associações patronais) sob seu controle.",
-  "privatização": "Quando o governo vende empresas ou serviços públicos para empresas particulares.",
-  "desregulamentação": "A redução ou retirada de leis e regras do governo sobre os negócios e a economia.",
-  "secularismo": "A separação total entre o governo/estado e as religiões, garantindo que as leis não se baseiem em crenças religiosas.",
-  "pluralismo": "A aceitação e convivência de diferentes opiniões, culturas e grupos dentro de uma mesma sociedade.",
-  "multiculturalismo": "O reconhecimento e a valorização de várias culturas diferentes convivendo pacificamente no mesmo país.",
-  "imperialismo": "Quando países poderosos usam sua força econômica ou militar para dominar e influenciar países mais fracos.",
-  "soberania": "O poder absoluto de um país de governar a si mesmo e tomar suas próprias decisões sem interferência externa.",
-  "automação": "O uso de máquinas, robôs e softwares para realizar trabalhos que antes eram feitos por humanos.",
-  "libertarianismo": "Uma filosofia que defende a liberdade individual máxima e a interferência mínima do governo na vida e na economia.",
-  "autoritarismo": "Um sistema de governo que exige obediência cega à autoridade, limitando as liberdades individuais e a oposição.",
-  "totalitarismo": "Um tipo extremo de governo que tenta controlar absolutamente todos os aspectos da vida pública e privada das pessoas.",
-  "reacionário": "Alguém que deseja voltar a um estado social ou político do passado, opondo-se a mudanças e ao progresso.",
-  "progressismo": "A crença de que a sociedade deve evoluir constantemente através de reformas sociais, avanços científicos e igualdade.",
-  "conservadorismo": "Uma visão que valoriza a preservação das tradições, da ordem social e das instituições que funcionaram ao longo do tempo.",
-  "liberalismo": "Uma corrente que defende a liberdade individual, a democracia e, geralmente, a economia de mercado com menos peso do governo."
-};
+export interface DictionaryTerm {
+  term: string;
+  slug: string;
+  category: 'Econômico' | 'Diplomático' | 'Civil' | 'Social' | 'Teoria Política';
+  definition: string;
+  example?: string;
+  relatedIdeologySlug?: string;
+}
+
+export const dictionaryTerms: DictionaryTerm[] = [
+  {
+    term: "Mais-valia",
+    slug: "mais-valia",
+    category: "Econômico",
+    definition: "Conceito central da economia política marxista que descreve a diferença entre o valor gerado pelo trabalho e o salário efetivamente pago ao trabalhador pelo detentor dos meios de produção.",
+    example: "Um operário produz R$ 500 em mercadorias em uma jornada diária, mas recebe R$ 100 de salário. A diferença de R$ 400 constitui a mais-valia apropriada pelo capitalista.",
+    relatedIdeologySlug: "marxismo-leninismo"
+  },
+  {
+    term: "Laissez-faire",
+    slug: "laissez-faire",
+    category: "Econômico",
+    definition: "Expressão em francês que significa 'deixe fazer'. Defende a não-intervenção do Estado na economia, confiando na autorregulação do livre mercado através da oferta e da demanda.",
+    example: "A eliminação de subsídios, o fim de controles de preços e a redução de tarifas de importação são políticas de inspiração laissez-faire.",
+    relatedIdeologySlug: "anarco-capitalismo"
+  },
+  {
+    term: "Welfare State (Estado de Bem-Estar)",
+    slug: "welfare-state",
+    category: "Econômico",
+    definition: "Modelo político e econômico em que o Estado assume a responsabilidade primária pela proteção social e bem-estar de seus cidadãos por meio de saúde pública universal, educação gratuita e seguridade social.",
+    example: "O modelo nórdico (Suécia, Noruega, Dinamarca) combina economias de mercado competitivas com forte rede de proteção social financiada por impostos progressivos.",
+    relatedIdeologySlug: "social-democracia"
+  },
+  {
+    term: "Privatização",
+    slug: "privatizacao",
+    category: "Econômico",
+    definition: "Processo de transferência de empresas, ativos ou serviços públicos do controle estatal para a iniciativa privada.",
+    example: "A venda de companhias telefônicas ou de distribuição de energia elétrica anteriormente geridas pelo governo para investidores privados.",
+    relatedIdeologySlug: "neoliberalismo"
+  },
+  {
+    term: "Desregulamentação",
+    slug: "desregulamentacao",
+    category: "Econômico",
+    definition: "A remoção ou simplificação de leis e regras governamentais sobre atividades econômicas para incentivar a concorrência e a inovação.",
+    example: "A desregulamentação do setor de aviação civil que permitiu o surgimento de companhias aéreas de baixo custo (low-cost).",
+    relatedIdeologySlug: "liberalismo-classico"
+  },
+  {
+    term: "Estatismo",
+    slug: "estatismo",
+    category: "Econômico",
+    definition: "Doutrina que defende a intervenção direta e ostensiva do Estado no planejamento, gestão e controle dos setores estratégicos da economia.",
+    example: "A criação de monopólios estatais para a exploração de minérios, energia e infraestrutura de transportes.",
+    relatedIdeologySlug: "socialismo-de-estado"
+  },
+  {
+    term: "Corporativismo",
+    slug: "corporativismo",
+    category: "Civil",
+    definition: "Sistema de organização socioeconômica em que o governo medeia e controla as relações entre grandes grupos de interesse (como sindicatos patronais e de trabalhadores).",
+    example: "O modelo trabalhista da Era Vargas no Brasil com a CLT e o imposto sindical obrigatório sob supervisão do Ministério do Trabalho.",
+    relatedIdeologySlug: "fascismo"
+  },
+  {
+    term: "Materialismo Histórico",
+    slug: "materialismo-historico",
+    category: "Teoria Política",
+    definition: "Método de análise sociológica desenvolvido por Karl Marx e Friedrich Engels que postula que as condições materiais e econômicas de uma sociedade determinam suas instituições políticas, leis e cultura.",
+    example: "Analisar a transição do feudalismo para o capitalismo com base nas mudanças nos modos de produção agrícolas e industriais, e não apenas nas ideias dos reis ou filósofos.",
+    relatedIdeologySlug: "marxismo-leninismo"
+  },
+  {
+    term: "Fetichismo da Mercadoria",
+    slug: "fetichismo-da-mercadoria",
+    category: "Teoria Política",
+    definition: "Fenômeno em economias de mercado no qual os produtos do trabalho humano parecem ter um valor intrínseco ou mágico, ocultando as relações sociais reais de exploração por trás de sua produção.",
+    example: "Atribuir o alto preço de um tênis de grife exclusivamente ao seu 'prestígio', ignorando o trabalho dos operários que o costuraram na fábrica.",
+    relatedIdeologySlug: "anarco-comunismo"
+  },
+  {
+    term: "Ditadura do Proletariado",
+    slug: "ditadura-do-proletariado",
+    category: "Teoria Política",
+    definition: "Conceito marxista que descreve a fase de transição entre o capitalismo e a sociedade comunista sem classes, durante a qual a classe trabalhadora detém o poder político para desmantelar as estruturas burguesas.",
+    example: "A reorganização dos soviets (conselhos de trabalhadores) na Rússia pós-1917 como órgãos deliberativos de poder operário.",
+    relatedIdeologySlug: "marxismo-leninismo"
+  },
+  {
+    term: "Centralismo Democrático",
+    slug: "centralismo-democratico",
+    category: "Teoria Política",
+    definition: "Princípio de organização partidária idealizado por Lênin, no qual há total liberdade de debate interno antes de uma decisão, mas unidade absoluta de ação por parte de todos os membros uma vez aprovada a resolução.",
+    example: "Discussões intensas em convenções do partido bolchevique seguidas da obrigação de todos os militantes defenderem a linha vencedora publicamente.",
+    relatedIdeologySlug: "marxismo-leninismo"
+  },
+  {
+    term: "Soberania Nacional",
+    slug: "soberania-nacional",
+    category: "Diplomático",
+    definition: "Princípio do direito internacional que assegura o direito supremo e inalienável de um Estado-nação autônomo de governar a si mesmo sem ingerência de potências estrangeiras.",
+    example: "Recusar tratados internacionais de fiscalização quando estes violam leis constitucionais internas do país.",
+    relatedIdeologySlug: "nacionalismo-conservador"
+  },
+  {
+    term: "Imperialismo",
+    slug: "imperialismo",
+    category: "Diplomático",
+    definition: "Política de expansão do domínio territorial, econômico ou cultural de uma nação sobre outros territórios através da força militar ou de pressões econômicas.",
+    example: "A partilha da África promovida pelas potências europeias durante a Conferência de Berlim em 1884.",
+    relatedIdeologySlug: "anti-imperialismo"
+  },
+  {
+    term: "Multiculturalismo",
+    slug: "multiculturalismo",
+    category: "Social",
+    definition: "Política social e modelo cultural que incentiva a coexistência pacífica e a preservação de diversas identidades étnicas, religiosas e linguísticas dentro de um mesmo território nacional.",
+    example: "O modelo canadense de oficializar múltiplos idiomas regionais e conceder autonomia cultural às comunidades indígenas e de imigrantes.",
+    relatedIdeologySlug: "social-democracia"
+  },
+  {
+    term: "Secularismo (Laicidade)",
+    slug: "secularismo",
+    category: "Social",
+    definition: "Princípio constitucional de neutralidade religiosa do Estado, garantindo a separação formal entre a administração pública e os dogmas de qualquer fé religiosa.",
+    example: "A proibição de símbolos ou rituais religiosos oficiais em tribunais e escolas públicas estatais.",
+    relatedIdeologySlug: "liberalismo-social"
+  },
+  {
+    term: "Pluralismo Político",
+    slug: "pluralismo",
+    category: "Civil",
+    definition: "Conceito democrático que aceita e protege a existência concomitante de múltiplas visões de mundo, partidos políticos e grupos de interesse em um debate público livre.",
+    example: "Garantir espaço igual em debates eleitorais para partidos de extrema-esquerda, centro e direita representados no parlamento.",
+    relatedIdeologySlug: "democracia-liberal"
+  },
+  {
+    term: "Libertarianismo",
+    slug: "libertarianismo",
+    category: "Civil",
+    definition: "Filosofia política que coloca a liberdade individual e o princípio de não-agressão como valores morais fundamentais, opondo-se ao estatismo e aos impostos compulsórios.",
+    example: "Defender o direito de cada cidadão de realizar trocas comerciais voluntárias, ter posse de armas e usar moedas descentralizadas sem licenças do governo.",
+    relatedIdeologySlug: "anarco-capitalismo"
+  },
+  {
+    term: "Autoritarismo",
+    slug: "autoritarismo",
+    category: "Civil",
+    definition: "Forma de governo caracterizada pelo acúmulo de poder nas mãos de um único líder ou elite, com rígida limitação do pluralismo político e restrição de liberdades civis.",
+    example: "Regimes que fecham o parlamento, censuram jornais da oposição e prendem dissidentes sem devido processo legal.",
+    relatedIdeologySlug: "fascismo"
+  },
+  {
+    term: "Totalitarismo",
+    slug: "totalitarismo",
+    category: "Civil",
+    definition: "Forma extrema de autoritarismo em que o Estado busca exercer controle absoluto não apenas sobre a política e a economia, mas também sobre a vida privada, a cultura e o pensamento dos cidadãos.",
+    example: "O regime de vigilância de massa, polícia secreta e culto à personalidade instaurado na Alemanha Nazista e na União Soviética Stalinista.",
+    relatedIdeologySlug: "fascismo"
+  },
+  {
+    term: "Progressismo",
+    slug: "progressismo",
+    category: "Social",
+    definition: "Movimento político e social focado em reformas estruturais da sociedade visando à ampliação de direitos civis, redução de desigualdades históricas e apoio à evolução dos costumes.",
+    example: "Defesa do casamento igualitário, igualdade salarial de gênero e políticas de reparação histórica.",
+    relatedIdeologySlug: "social-democracia"
+  },
+  {
+    term: "Conservadorismo",
+    slug: "conservadorismo",
+    category: "Social",
+    definition: "Filosofia política e social que valoriza a preservação de costumes tradicionais, da ordem jurídica e das instituições históricas (família, religião, comunidade), opondo-se a mudanças radicais súbitas.",
+    example: "Defesa do valor da moralidade tradicional, da estabilidade familiar e da prudência em reformas sociais legislativas.",
+    relatedIdeologySlug: "nacionalismo-conservador"
+  },
+  {
+    term: "Reacionarismo",
+    slug: "reacionarismo",
+    category: "Social",
+    definition: "Posição política que não apenas rejeita o progresso moderno, mas advoga ativamente o retorno a um estado político ou social anterior julgado superior.",
+    example: "Movimentos que defendem a restauração de monarquias absolutistas ou a revogação de sufrágios universais conquistados no século XX.",
+    relatedIdeologySlug: "fascismo"
+  },
+  {
+    term: "Liberalismo Clássico",
+    slug: "liberalismo-classico",
+    category: "Teoria Política",
+    definition: "Doutrina política e econômica nascida no Iluminismo que defende os direitos naturais inalienáveis (vida, liberdade e propriedade), governos representativos limitados e livre mercado.",
+    example: "As teorias filosóficas de John Locke e Adam Smith sobre limites do poder real e divisão dos poderes estatais.",
+    relatedIdeologySlug: "liberalismo-classico"
+  },
+  {
+    term: "Automação e Futuro do Trabalho",
+    slug: "automacao",
+    category: "Econômico",
+    definition: "Transformação dos processos produtivos através da inteligência artificial, robótica e informática, com profundos impactos na demanda por mão de obra humana.",
+    example: "A implementação de caixas autoatendimento e veículos autônomos substituindo empregos formais na indústria de serviços e logística.",
+    relatedIdeologySlug: "socio-ecologismo"
+  }
+];
+
+export const politicalDictionary: Record<string, string> = dictionaryTerms.reduce((acc, item) => {
+  acc[item.slug] = item.definition;
+  return acc;
+}, {} as Record<string, string>);
+
 
 export const questions: Question[] = [
   {
     question:
       "A concorrência entre empresas, sem intervenção excessiva do Estado, é o principal mecanismo que reduz preços e melhora a qualidade dos produtos em uma economia.",
     example:
-      "mercados onde várias empresas competem pelo mesmo cliente — como o de smartphones ou de transporte por aplicativo — tendem a oferecer produtos melhores a preços menores do que monopólios ou setores controlados pelo governo.",
+      "Mercados onde várias empresas competem pelo mesmo cliente — como o de smartphones ou de transporte por aplicativo — tendem a oferecer produtos melhores a preços menores do que monopólios ou setores controlados pelo governo.",
     context: "mercado",
     effect: { econ: -10, dipl: 0, govt: 0, scty: 0 },
   },
@@ -151,7 +334,7 @@ export const questions: Question[] = [
     question:
       "O governo deve criar órgãos e leis para fiscalizar empresas e proteger os consumidores de abusos.",
     example:
-      "impedir que empresas de energia, internet ou alimentos cobrem preços abusivos quando não existe concorrência real.",
+      "Impedir que empresas de energia, internet ou alimentos cobrem preços abusivos quando não existe concorrência real.",
     context: "mercado",
     effect: { econ: 10, dipl: 0, govt: 0, scty: 0 },
   },
@@ -159,7 +342,7 @@ export const questions: Question[] = [
     question:
       "O governo deve interferir o mínimo possível na economia e deixar as empresas e pessoas tomarem suas próprias decisões econômicas.",
     example:
-      "reduzir impostos, simplificar licenças para abrir negócios e eliminar controles de preço fixados pelo Estado.",
+      "Reduzir impostos, simplificar licenças para abrir negócios e eliminar controles de preço fixados pelo Estado.",
     context: "mercado",
     effect: { econ: -20, dipl: 0, govt: 0, scty: 0 },
   },
@@ -167,7 +350,7 @@ export const questions: Question[] = [
     question:
       "O governo deve manter seus gastos equilibrados com o que arrecada em impostos, mesmo que para isso precise cortar programas sociais, para evitar dívidas que prejudiquem todos no futuro.",
     example:
-      "gastar mais do que se arrecada leva à inflação e ao calote da dívida pública, que prejudicam especialmente os mais pobres.",
+      "Gastar mais do que se arrecada leva à inflação e ao calote da dívida pública, que prejudicam especialmente os mais pobres.",
     context: "estado",
     effect: { econ: -10, dipl: 0, govt: 0, scty: 0 },
   },
@@ -175,7 +358,7 @@ export const questions: Question[] = [
     question:
       "O Estado deve ser o principal financiador da pesquisa científica, porque empresas privadas costumam investir apenas no que dá lucro rápido, ignorando pesquisas de impacto social.",
     example:
-      "estudos sobre doenças raras, energias limpas ou prevenção de pandemias raramente atraem investimento privado suficiente.",
+      "Estudos sobre doenças raras, energias limpas ou prevenção de pandemias raramente atraem investimento privado suficiente.",
     context: "estado",
     effect: { econ: 10, dipl: 0, govt: 0, scty: 10 },
   },
@@ -183,7 +366,7 @@ export const questions: Question[] = [
     question:
       "O governo deve cobrar impostos extras sobre produtos importados para proteger as empresas e empregos nacionais da concorrência estrangeira.",
     example:
-      "sobretaxar carros, calçados ou alimentos importados para que as fábricas locais consigam competir em preço.",
+      "Sobretaxar carros, calçados ou alimentos importados para que as fábricas locais consigam competir em preço.",
     context: "mercado",
     effect: { econ: 5, dipl: -10, govt: 0, scty: 0 },
   },
@@ -191,7 +374,7 @@ export const questions: Question[] = [
     question:
       "O setor privado, movido pela concorrência e pelo lucro, tende a entregar moradia e alimentação com mais eficiência do que programas administrados pelo Estado.",
     example:
-      "construtoras e produtores privados competindo entre si tendem a entregar mais moradias e alimentos a preços menores do que projetos públicos de habitação e abastecimento geridos de forma centralizada.",
+      "Construtoras e produtores privados competindo entre si tendem a entregar mais moradias e alimentos a preços menores do que projetos públicos de habitação e abastecimento geridos de forma centralizada.",
     context: "mercado",
     effect: { econ: -10, dipl: 0, govt: 0, scty: 0 },
   },
@@ -199,7 +382,7 @@ export const questions: Question[] = [
     question:
       "Programas do governo que pagam uma renda mensal a pessoas de baixa renda tendem a criar uma dependência financeira duradoura desse auxílio.",
     example:
-      "quem vive do benefício por muitos anos pode acabar sem outra fonte de renda ou rede de apoio, ficando vulnerável caso o programa seja reduzido ou cortado no futuro.",
+      "Quem vive do benefício por muitos anos pode acabar sem outra fonte de renda ou rede de apoio, ficando vulnerável caso o programa seja reduzido ou cortado no futuro.",
     context: "estado",
     effect: { econ: -8, dipl: 0, govt: 0, scty: 0 },
   },
@@ -207,7 +390,7 @@ export const questions: Question[] = [
     question:
       "Programas do governo que pagam uma renda mensal a pessoas de baixa renda desincentivam a busca por emprego formal a longo prazo.",
     example:
-      "na visão de quem defende esse ponto, um salário inicial baixo compensa pouco frente ao risco de perder o auxílio — o que reduziria o incentivo a procurar trabalho.",
+      "Na visão de quem defende esse ponto, um salário inicial baixo compensa pouco frente ao risco de perder o auxílio — o que reduziria o incentivo a procurar trabalho.",
     context: "estado",
     effect: { econ: -8, dipl: 0, govt: 0, scty: 0 },
   },
@@ -215,7 +398,7 @@ export const questions: Question[] = [
     question:
       "A solidariedade deve ser um ato voluntário das pessoas — por meio de igrejas, ONGs e comunidades —, e não uma obrigação imposta pelo Estado por meio de impostos.",
     example:
-      "cada um deveria poder decidir para qual causa ou instituição destinar seu dinheiro, em vez de o governo fazer essa escolha por todos.",
+      "Cada um deveria poder decidir para qual causa ou instituição destinar seu dinheiro, em vez de o governo fazer essa escolha por todos.",
     context: "individual",
     effect: { econ: -5, dipl: 0, govt: 0, scty: 0 },
   },
@@ -223,7 +406,7 @@ export const questions: Question[] = [
     question:
       "Impostos altos sobre quem ganha mais desestimulam o investimento e a criação de riqueza — prejudicando, no fim, toda a sociedade, incluindo os mais pobres.",
     example:
-      "um empresário que ficará com menos da metade do que ganhar tende a investir menos, contratar menos e buscar países com tributação mais baixa.",
+      "Um empresário que ficará com menos da metade do que ganhar tende a investir menos, contratar menos e buscar países com tributação mais baixa.",
     context: "estado",
     effect: { econ: -10, dipl: 0, govt: 0, scty: 0 },
   },
@@ -231,7 +414,7 @@ export const questions: Question[] = [
     question:
       "O Estado deve cobrar impostos elevados sobre heranças de grande valor para reduzir a vantagem que filhos de famílias ricas têm sobre os demais desde o nascimento.",
     example:
-      "cobrar 50% de imposto sobre heranças acima de R$ 10 milhões e usar esse dinheiro em educação e saúde pública.",
+      "Cobrar 50% de imposto sobre heranças acima de R$ 10 milhões e usar esse dinheiro em educação e saúde pública.",
     context: "estado",
     effect: { econ: 15, dipl: 0, govt: 0, scty: 10 },
   },
@@ -239,7 +422,7 @@ export const questions: Question[] = [
     question:
       "A concentração da propriedade em poucas megacorporações é tão ruim para a liberdade humana quanto o monopólio do Estado.",
     example:
-      "tanto o capitalismo monopolista, que joga tudo nas mãos de meia dúzia de multinacionais, quanto o socialismo estatal, que joga tudo na mão de burocratas, retiram do trabalhador comum o controle sobre o seu próprio sustento.",
+      "Tanto o capitalismo monopolista, que joga tudo nas mãos de meia dúzia de multinacionais, quanto o socialismo estatal, que joga tudo na mão de burocratas, retiram do trabalhador comum o controle sobre o seu próprio sustento.",
     context: "mercado",
     effect: { econ: 5, dipl: -5, govt: 5, scty: -5 },
   },
@@ -247,7 +430,7 @@ export const questions: Question[] = [
     question:
       "A economia ideal seria baseada na pequena propriedade, no artesanato familiar e em cooperativas de trabalhadores, em vez de grandes corporações privadas ou empresas estatais.",
     example:
-      "uma padaria de bairro administrada pela própria família, ou uma fábrica gerida coletivamente pelos operários, distribui poder econômico de um jeito que nem a grande empresa privada nem a estatal conseguem.",
+      "Uma padaria de bairro administrada pela própria família, ou uma fábrica gerida coletivamente pelos operários, distribui poder econômico de um jeito que nem a grande empresa privada nem a estatal conseguem.",
     context: "mercado",
     effect: { econ: 10, dipl: 0, govt: 0, scty: -5 },
   },
@@ -255,7 +438,7 @@ export const questions: Question[] = [
     question:
       "A quantidade excessiva de regulações e burocracia impostas pelo governo sufoca o empreendedorismo e reduz o crescimento econômico.",
     example:
-      "exigir dezenas de licenças, alvarás e certificados para abrir um pequeno negócio desestimula quem quer empreender.",
+      "Exigir dezenas de licenças, alvarás e certificados para abrir um pequeno negócio desestimula quem quer empreender.",
     context: "mercado",
     effect: { econ: -10, dipl: 0, govt: 0, scty: 0 },
   },
@@ -263,7 +446,7 @@ export const questions: Question[] = [
     question:
       "O Estado tem a obrigação de oferecer educação de qualidade a todos por meio de escolas públicas, e essa qualidade não pode depender da condição financeira da família.",
     example:
-      "dar vouchers para escolas privadas favorece quem já pode bancar parte do custo, sem resolver o problema de quem não tem condições nenhuma.",
+      "Dar vouchers para escolas privadas favorece quem já pode bancar parte do custo, sem resolver o problema de quem não tem condições nenhuma.",
     context: "estado",
     effect: { econ: 10, dipl: 0, govt: 0, scty: 5 },
   },
@@ -271,7 +454,7 @@ export const questions: Question[] = [
     question:
       "A propriedade privada dos meios de produção — fábricas, fazendas, empresas — é o fundamento da prosperidade econômica e da liberdade individual; quando o Estado assume o controle, a eficiência cai e a liberdade encolhe.",
     example:
-      "o contraste entre economias de mercado e economias planificadas do século XX mostra que o controle estatal sobre empresas levou sistematicamente a escassez, baixa qualidade e pouca inovação.",
+      "O contraste entre economias de mercado e economias planificadas do século XX mostra que o controle estatal sobre empresas levou sistematicamente a escassez, baixa qualidade e pouca inovação.",
     context: "mercado",
     effect: { econ: -20, dipl: 0, govt: 0, scty: 0 },
   },
@@ -279,7 +462,7 @@ export const questions: Question[] = [
     question:
       "Organizações internacionais como a ONU, a União Europeia e o Mercosul têm poder excessivo e deveriam ser enfraquecidas ou extintas, pois interferem nas decisões internas de cada país.",
     example:
-      "um país que votar pela sua própria lei de imigração não pode aceitar que burocratas não eleitos em Bruxelas ou Nova York a derrubem — soberania popular não se delega a tribunal nenhum.",
+      "Um país que votar pela sua própria lei de imigração não pode aceitar que burocratas não eleitos em Bruxelas ou Nova York a derrubem — soberania popular não se delega a tribunal nenhum.",
     context: "internacional",
     effect: { econ: 0, dipl: -10, govt: 0, scty: 0 },
   },
@@ -287,7 +470,7 @@ export const questions: Question[] = [
     question:
       "A criação do Estado de Israel foi um erro histórico e uma forma de colonialismo; o território deveria retornar integralmente ao controle do povo palestino.",
     example:
-      "a fundação do Estado de Israel em 1948 expulsou milhares de palestinos de suas terras ancestrais, e a única solução justa é o desmantelamento das estruturas sionistas para a criação de um Estado palestino único e secular.",
+      "A fundação do Estado de Israel em 1948 expulsou milhares de palestinos de suas terras ancestrais, e a única solução justa é o desmantelamento das estruturas sionistas para a criação de um Estado palestino único e secular.",
     context: "internacional",
     effect: { econ: 0, dipl: 10, govt: 0, scty: 10 },
   },
@@ -295,7 +478,7 @@ export const questions: Question[] = [
     question:
       "Países vizinhos devem se unir em blocos de cooperação — como a União Europeia ou o Mercosul — para negociar juntos melhores acordos comerciais e ter mais peso nas decisões mundiais.",
     example:
-      "países pequenos conseguem muito pouco sozinhos nas negociações com EUA ou China, mas ganham força quando negociam em bloco.",
+      "Países pequenos conseguem muito pouco sozinhos nas negociações com EUA ou China, mas ganham força quando negociam em bloco.",
     context: "internacional",
     effect: { econ: -5, dipl: 10, govt: 0, scty: 5 },
   },
@@ -303,7 +486,7 @@ export const questions: Question[] = [
     question:
       "Um país deve preservar ao máximo sua independência para tomar decisões sem ceder a pressões de outros países ou de organismos internacionais.",
     example:
-      "desenvolver tecnologia e indústria própria em áreas estratégicas — como energia e defesa — mesmo que seja mais caro do que simplesmente importar.",
+      "Desenvolver tecnologia e indústria própria em áreas estratégicas — como energia e defesa — mesmo que seja mais caro do que simplesmente importar.",
     context: "internacional",
     effect: { econ: 0, dipl: -25, govt: 0, scty: 0 },
   },
@@ -311,7 +494,7 @@ export const questions: Question[] = [
     question:
       "A humanidade seria melhor governada por um único governo mundial com autoridade real sobre todos os países, em vez de nações separadas que frequentemente entram em conflito.",
     example:
-      "um governo mundial poderia impedir guerras, regular emissões de carbono e proteger direitos humanos em qualquer lugar, sem depender da cooperação voluntária de cada país.",
+      "Um governo mundial poderia impedir guerras, regular emissões de carbono e proteger direitos humanos em qualquer lugar, sem depender da cooperação voluntária de cada país.",
     context: "internacional",
     effect: { econ: 0, dipl: 20, govt: 0, scty: 0 },
   },
@@ -319,7 +502,7 @@ export const questions: Question[] = [
     question:
       "A diplomacia e a cooperação entre países são mais eficazes do que o poder militar para garantir a paz e os interesses de uma nação no mundo.",
     example:
-      "um país pode ter mais influência pelo seu desenvolvimento cultural, econômico e diplomático do que pelo tamanho do seu exército.",
+      "Um país pode ter mais influência pelo seu desenvolvimento cultural, econômico e diplomático do que pelo tamanho do seu exército.",
     context: "internacional",
     effect: { econ: 0, dipl: 10, govt: 0, scty: 0 },
   },
@@ -327,7 +510,7 @@ export const questions: Question[] = [
     question:
       "Um país deve ter total autonomia para iniciar uma ação militar quando julgar necessário, sem precisar da aprovação de outros países ou da ONU.",
     example:
-      "se o governo considerar que uma ameaça justifica uma intervenção militar, ele não deveria precisar aguardar o consenso internacional para agir.",
+      "Se o governo considerar que uma ameaça justifica uma intervenção militar, ele não deveria precisar aguardar o consenso internacional para agir.",
     context: "internacional",
     effect: { econ: 0, dipl: -10, govt: 0, scty: 0 },
   },
@@ -335,7 +518,7 @@ export const questions: Question[] = [
     question:
       "Altos investimentos em forças armadas representam um desperdício de dinheiro público que poderia ser melhor usado em saúde, educação e infraestrutura.",
     example:
-      "um país que gasta 5% do seu orçamento com o exército poderia usar esse dinheiro para construir hospitais e universidades.",
+      "Um país que gasta 5% do seu orçamento com o exército poderia usar esse dinheiro para construir hospitais e universidades.",
     context: "estado",
     effect: { econ: 0, dipl: 10, govt: 0, scty: 0 },
   },
@@ -343,7 +526,7 @@ export const questions: Question[] = [
     question:
       "Enviar dinheiro ou ajuda humanitária para outros países é, na maioria das vezes, um desperdício, pois o próprio país ainda tem necessidades internas urgentes não resolvidas.",
     example:
-      "um país que ainda luta contra a fome doméstica não deveria destinar bilhões a auxílios externos.",
+      "Um país que ainda luta contra a fome doméstica não deveria destinar bilhões a auxílios externos.",
     context: "internacional",
     effect: { econ: -5, dipl: -10, govt: 0, scty: 0 },
   },
@@ -351,7 +534,7 @@ export const questions: Question[] = [
     question:
       "Alguns sistemas de valores e formas de organizar a sociedade são objetivamente melhores do que outros.",
     example:
-      "julgar que uma cultura que pratica casamentos forçados de crianças ou persegue minorias religiosas é 'inferior' não é etnocentrismo — é um julgamento moral universal. O relativismo cultural, levado ao extremo, impede condenar qualquer prática, por mais que viole a dignidade humana.",
+      "Julgar que uma cultura que pratica casamentos forçados de crianças ou persegue minorias religiosas é 'inferior' não é etnocentrismo — é um julgamento moral universal. O relativismo cultural, levado ao extremo, impede condenar qualquer prática, por mais que viole a dignidade humana.",
     context: "internacional",
     effect: { econ: 0, dipl: -10, govt: 0, scty: 0 },
   },
@@ -359,7 +542,7 @@ export const questions: Question[] = [
     question:
       "A colaboração científica entre países traz mais benefícios para toda a humanidade do que cada país investir apenas em pesquisa própria e isolada.",
     example:
-      "a vacina da COVID-19 foi desenvolvida em tempo recorde graças ao compartilhamento de dados científicos entre dezenas de países. Pesquisadores de diferentes nações, compartilhando dados e resultados em tempo real, chegaram a soluções em meses que teriam levado anos de forma isolada.",
+      "A vacina da COVID-19 foi desenvolvida em tempo recorde graças ao compartilhamento de dados científicos entre dezenas de países. Pesquisadores de diferentes nações, compartilhando dados e resultados em tempo real, chegaram a soluções em meses que teriam levado anos de forma isolada.",
     context: "internacional",
     effect: { econ: 0, dipl: 10, govt: 0, scty: 10 },
   },
@@ -367,7 +550,7 @@ export const questions: Question[] = [
     question:
       "Governos que violam direitos humanos de forma grave devem ser responsabilizados perante tribunais e organismos internacionais, mesmo que invoquem soberania nacional para se defender.",
     example:
-      "um ditador que massacra civis não deveria ser protegido pelo argumento de que nenhum país externo pode interferir em seus assuntos internos.",
+      "Um ditador que massacra civis não deveria ser protegido pelo argumento de que nenhum país externo pode interferir em seus assuntos internos.",
     context: "internacional",
     effect: { econ: 0, dipl: 10, govt: 5, scty: 0 },
   },
@@ -375,7 +558,7 @@ export const questions: Question[] = [
     question:
       "Derrubar um regime opressor pela força nunca é moralmente justificável; a mudança política deve sempre acontecer por vias pacíficas, como eleições, protestos e reformas legais.",
     example:
-      "mesmo que um governo seja corrupto e cruel, a solução correta é derrotá-lo nas urnas ou por pressão popular pacífica, não através de levantes armados.",
+      "Mesmo que um governo seja corrupto e cruel, a solução correta é derrotá-lo nas urnas ou por pressão popular pacífica, não através de levantes armados.",
     context: "estado",
     effect: { econ: 0, dipl: 5, govt: 0, scty: 0 },
   },
@@ -383,7 +566,7 @@ export const questions: Question[] = [
     question:
       "As leis e políticas públicas de um país devem ser baseadas em princípios religiosos, já que os valores morais da religião são um guia ético legítimo para a sociedade.",
     example:
-      "quando uma sociedade tem valores morais enraizados na fé, criar leis que ignoram completamente essa base é impor uma visão de mundo secular e artificial que desconecta o direito da ética que o próprio povo já vive no dia a dia.",
+      "Quando uma sociedade tem valores morais enraizados na fé, criar leis que ignoram completamente essa base é impor uma visão de mundo secular e artificial que desconecta o direito da ética que o próprio povo já vive no dia a dia.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: -10, scty: -10 },
   },
@@ -391,7 +574,7 @@ export const questions: Question[] = [
     question:
       "Em situações de ameaça grave à segurança pública, o Estado deve poder monitorar comunicações privadas sem autorização judicial prévia.",
     example:
-      "quando uma organização terrorista está planejando um ataque, esperar uma autorização judicial pode significar perder a janela de tempo para impedi-lo.",
+      "Quando uma organização terrorista está planejando um ataque, esperar uma autorização judicial pode significar perder a janela de tempo para impedi-lo.",
     context: "estado",
     effect: { econ: 0, dipl: 0, govt: -8, scty: -3 },
   },
@@ -399,7 +582,7 @@ export const questions: Question[] = [
     question:
       "Em situações de ameaça grave à segurança pública, o Estado deve poder prender suspeitos sem processo judicial regular.",
     example:
-      "diante de uma ameaça iminente, a segurança da maioria justificaria manter um suspeito detido mesmo antes de qualquer decisão judicial sobre o caso.",
+      "Diante de uma ameaça iminente, a segurança da maioria justificaria manter um suspeito detido mesmo antes de qualquer decisão judicial sobre o caso.",
     context: "estado",
     effect: { econ: 0, dipl: 0, govt: -12, scty: -6 },
   },
@@ -407,7 +590,7 @@ export const questions: Question[] = [
     question:
       "Decisões complexas sobre economia, saúde ou segurança não deveriam ser definidas diretamente pelo voto popular, pois são assuntos técnicos que a maioria das pessoas não domina o suficiente para decidir bem.",
     example:
-      "a população em geral não tem como avaliar a fundo os riscos de uma política monetária ou de uma aprovação emergencial de vacinas. Isso não deveria ser decidido por plebiscitos.",
+      "A população em geral não tem como avaliar a fundo os riscos de uma política monetária ou de uma aprovação emergencial de vacinas. Isso não deveria ser decidido por plebiscitos.",
     context: "estado",
     effect: { econ: 0, dipl: 0, govt: -10, scty: 0 },
   },
@@ -415,7 +598,7 @@ export const questions: Question[] = [
     question:
       "Um paciente com doença terminal e sem perspectiva de cura deve ter o direito legal de solicitar a um médico que ponha fim à sua vida, se esse for seu desejo consciente e livre.",
     example:
-      "uma pessoa com câncer em estágio terminal, com grande sofrimento e sem possibilidade de recuperação, deveria poder optar por uma morte digna e assistida.",
+      "Uma pessoa com câncer em estágio terminal, com grande sofrimento e sem possibilidade de recuperação, deveria poder optar por uma morte digna e assistida.",
     context: "individual",
     effect: { econ: 0, dipl: 0, govt: 10, scty: 0 },
   },
@@ -423,7 +606,7 @@ export const questions: Question[] = [
     question:
       "O regime político de Cuba não é uma alternativa válida, mas sim uma ditadura cruel e fracassada que oprime seu povo e destrói sua economia em nome de premissas marxistas.",
     example:
-      "o sistema de partido único em Cuba persegue violentamente opositores, restringe liberdades básicas como acesso à internet e força sua população civil à pobreza extrema enquanto a elite do partido militar se beneficia.",
+      "O sistema de partido único em Cuba persegue violentamente opositores, restringe liberdades básicas como acesso à internet e força sua população civil à pobreza extrema enquanto a elite do partido militar se beneficia.",
     context: "estado",
     effect: { econ: -10, dipl: -5, govt: -10, scty: -5 },
   },
@@ -431,7 +614,7 @@ export const questions: Question[] = [
     question:
       "O Estado deve ser reduzido ao mínimo essencial (como segurança, justiça e defesa), deixando todas as outras áreas da vida e da economia para a livre iniciativa e para os indivíduos.",
     example:
-      "o governo não deve tentar gerenciar a saúde, a educação ou a economia, focando apenas em garantir contratos, proteger a propriedade e manter a ordem.",
+      "O governo não deve tentar gerenciar a saúde, a educação ou a economia, focando apenas em garantir contratos, proteger a propriedade e manter a ordem.",
     context: "estado",
     effect: { econ: -10, dipl: 0, govt: 15, scty: 0 },
   },
@@ -439,7 +622,7 @@ export const questions: Question[] = [
     question:
       "Criticar o próprio país em público, especialmente perante estrangeiros ou em fóruns internacionais, é irresponsável e prejudica a coesão nacional.",
     example:
-      "mesmo discordando de decisões do governo, um cidadão deveria evitar manifestar essa crítica perante estrangeiros ou em fóruns internacionais.",
+      "Mesmo discordando de decisões do governo, um cidadão deveria evitar manifestar essa crítica perante estrangeiros ou em fóruns internacionais.",
     context: "costumes",
     effect: { econ: 0, dipl: -10, govt: -5, scty: -5 },
   },
@@ -447,7 +630,7 @@ export const questions: Question[] = [
     question:
       "A liberdade de criticar, satirizar e questionar qualquer pessoa ou instituição com poder é uma garantia essencial contra a opressão, e nada e ninguém deveria estar acima dessa crítica.",
     example:
-      "jornalistas e cidadãos devem poder fazer piadas ou críticas duras sobre presidentes, juízes e até líderes religiosos sem medo de prisão ou processo.",
+      "Jornalistas e cidadãos devem poder fazer piadas ou críticas duras sobre presidentes, juízes e até líderes religiosos sem medo de prisão ou processo.",
     context: "individual",
     effect: { econ: 0, dipl: 0, govt: 10, scty: 5 },
   },
@@ -455,7 +638,7 @@ export const questions: Question[] = [
     question:
       "Em uma democracia, quando a maioria da população aprova uma mudança, o governo deve implementá-la, mesmo que essa decisão restrinja direitos de grupos minoritários ou contrarie tratados internacionais.",
     example:
-      "se a maioria votar para proibir o uso de símbolos religiosos de uma minoria em espaços públicos, ou para restringir direitos civis de um grupo específico, o Estado deve implementar essa decisão sem precisar se justificar perante cortes constitucionais ou organismos internacionais.",
+      "Se a maioria votar para proibir o uso de símbolos religiosos de uma minoria em espaços públicos, ou para restringir direitos civis de um grupo específico, o Estado deve implementar essa decisão sem precisar se justificar perante cortes constitucionais ou organismos internacionais.",
     context: "estado",
     effect: { econ: 0, dipl: 0, govt: -10, scty: 0 },
   },
@@ -463,7 +646,7 @@ export const questions: Question[] = [
     question:
       "Um líder que toma decisões rápidas e firmes, mesmo sem consenso amplo, consegue mais resultado prático do que um que busca constantemente a aprovação de todos.",
     example:
-      "em uma crise econômica ou de segurança pública, um líder forte que age com rapidez pode salvar mais vidas do que um que depende de longas deliberações parlamentares.",
+      "Em uma crise econômica ou de segurança pública, um líder forte que age com rapidez pode salvar mais vidas do que um que depende de longas deliberações parlamentares.",
     context: "estado",
     effect: { econ: 0, dipl: 0, govt: -10, scty: 0 },
   },
@@ -471,7 +654,7 @@ export const questions: Question[] = [
     question:
       "A democracia representativa, com eleições livres e alternância de poder, é o único arranjo político capaz de proteger de fato os direitos civis e a dignidade humana no longo prazo.",
     example:
-      "mesmo que sistemas não-democráticos pareçam trazer avanços econômicos em curto prazo, a falta de prestação de contas aos cidadãos fatalmente leva a abusos de poder.",
+      "Mesmo que sistemas não-democráticos pareçam trazer avanços econômicos em curto prazo, a falta de prestação de contas aos cidadãos fatalmente leva a abusos de poder.",
     context: "estado",
     effect: { econ: 0, dipl: 0, govt: 10, scty: 0 },
   },
@@ -479,7 +662,7 @@ export const questions: Question[] = [
     question:
       "O governo deve criar leis ambientais rígidas para proteger o meio ambiente, mesmo que isso limite certos setores da economia.",
     example:
-      "proibir empresas de despejar resíduos em rios ou exigir que indústrias reduzam suas emissões, mesmo que isso aumente os custos de produção.",
+      "Proibir empresas de despejar resíduos em rios ou exigir que indústrias reduzam suas emissões, mesmo que isso aumente os custos de produção.",
     context: "ambiente",
     effect: { econ: 5, dipl: 0, govt: 0, scty: 10 },
   },
@@ -487,7 +670,7 @@ export const questions: Question[] = [
     question:
       "O avanço científico e tecnológico é o principal caminho para resolver os grandes problemas da humanidade, inclusive questões éticas e sociais.",
     example:
-      "inteligência artificial na medicina, energias renováveis e educação digital podem melhorar a vida de bilhões de pessoas mais rapidamente do que mudanças políticas.",
+      "Inteligência artificial na medicina, energias renováveis e educação digital podem melhorar a vida de bilhões de pessoas mais rapidamente do que mudanças políticas.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: 0, scty: 10 },
   },
@@ -495,7 +678,7 @@ export const questions: Question[] = [
     question:
       "Os pais devem ter o direito de matricular seus filhos em escolas baseadas em valores religiosos, sem que o governo possa obrigá-los a seguir um currículo laico definido pelo Estado.",
     example:
-      "uma família cristã ou muçulmana deveria poder ensinar seus filhos com base em sua fé, inclusive em temas como criação do mundo ou sexualidade.",
+      "Uma família cristã ou muçulmana deveria poder ensinar seus filhos com base em sua fé, inclusive em temas como criação do mundo ou sexualidade.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: 10, scty: -10 },
   },
@@ -503,7 +686,7 @@ export const questions: Question[] = [
     question:
       "A sociedade é formada por diferentes esferas — a família, a igreja, o mercado e o Estado —, e cada uma recebe sua autoridade divina para atuar em seu próprio campo; o Estado não tem o direito de tentar controlar ou ditar regras sobre a vida religiosa e familiar.",
     example:
-      "um governo não pode determinar a educação moral que uma família decide dar aos filhos, assim como não pode interferir no que é pregado dentro de uma igreja ou escola confessional; a autoridade estatal tem limites que não devem ser cruzados.",
+      "Um governo não pode determinar a educação moral que uma família decide dar aos filhos, assim como não pode interferir no que é pregado dentro de uma igreja ou escola confessional; a autoridade estatal tem limites que não devem ser cruzados.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: 10, scty: -15 },
   },
@@ -511,7 +694,7 @@ export const questions: Question[] = [
     question:
       "Igrejas, templos e demais instituições religiosas deveriam pagar os mesmos impostos que qualquer outra empresa ou associação.",
     example:
-      "uma Igreja que arrecada milhões de reais por mês em doações dos fiéis não deveria ter isenção fiscal diferente de uma fundação civil ou de um clube esportivo.",
+      "Uma Igreja que arrecada milhões de reais por mês em doações dos fiéis não deveria ter isenção fiscal diferente de uma fundação civil ou de um clube esportivo.",
     context: "estado",
     effect: { econ: 5, dipl: 0, govt: 0, scty: 10 },
   },
@@ -519,7 +702,7 @@ export const questions: Question[] = [
     question:
       "Combater as mudanças climáticas exige metas e regras obrigatórias para todos os países, inclusive restrições sobre como cada um produz energia e alimentos.",
     example:
-      "países ricos deveriam financiar a transição energética de países em desenvolvimento e aceitar limites sobre suas emissões de carbônicas, mesmo que isso custe caro à sua economia.",
+      "Países ricos deveriam financiar a transição energética de países em desenvolvimento e aceitar limites sobre suas emissões de carbônicas, mesmo que isso custe caro à sua economia.",
     context: "ambiente",
     effect: { econ: 0, dipl: 10, govt: 0, scty: 10 },
   },
@@ -527,7 +710,7 @@ export const questions: Question[] = [
     question:
       "As gerações anteriores tinham valores mais sólidos e uma vida social mais saudável do que a atual.",
     example:
-      "jovens de gerações anteriores cresciam com famílias presentes e comunidades coesas, com valores claros compartilhados por todos ao redor.",
+      "Jovens de gerações anteriores cresciam com famílias presentes e comunidades coesas, com valores claros compartilhados por todos ao redor.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: 0, scty: -8 },
   },
@@ -535,7 +718,7 @@ export const questions: Question[] = [
     question:
       "O excesso de tecnologia no mundo moderno está prejudicando a saúde mental e o caráter dos jovens.",
     example:
-      "hoje os jovens crescem olhando para uma tela, comparando sua vida com versões editadas da vida alheia e sem saber quem são.",
+      "Hoje os jovens crescem olhando para uma tela, comparando sua vida com versões editadas da vida alheia e sem saber quem são.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: 0, scty: -8 },
   },
@@ -551,7 +734,7 @@ export const questions: Question[] = [
     question:
       "O casamento como união estável entre homem e mulher é uma instituição com bases históricas, religiosas e biológicas sólidas e não deve ser redefinida por lei para incluir outros tipos de união.",
     example:
-      "para muitas religiões e culturas ao redor do mundo, o casamento está fundamentalmente ligado à complementaridade entre os sexos e à formação de uma família para a criação de filhos.",
+      "Para muitas religiões e culturas ao redor do mundo, o casamento está fundamentalmente ligado à complementaridade entre os sexos e à formação de uma família para a criação de filhos.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: -10, scty: -10 },
   },
@@ -559,7 +742,7 @@ export const questions: Question[] = [
     question:
       "Algumas culturas desenvolveram, ao longo da história, valores e instituições — como respeito aos direitos individuais, separação de poderes e Estado de Direito — que comprovadamente geram mais liberdade e prosperidade do que outras.",
     example:
-      "afirmar que a escravidão era apenas 'diferente' de outras formas de organização social, ou que a liberdade de imprensa é 'relativa' ao contexto cultural, é uma posição que dificilmente se sustenta quando analisamos os resultados históricos.",
+      "Afirmar que a escravidão era apenas 'diferente' de outras formas de organização social, ou que a liberdade de imprensa é 'relativa' ao contexto cultural, é uma posição que dificilmente se sustenta quando analisamos os resultados históricos.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: 0, scty: -10 },
   },
@@ -567,7 +750,7 @@ export const questions: Question[] = [
     question:
       "A normalização do sexo casual enfraquece a família e prejudica a estabilidade social.",
     example:
-      "a crescente aceitação pública de conteúdo sexual explícito como entretenimento normalizado torna mais difícil para crianças formarem valores sãos.",
+      "A crescente aceitação pública de conteúdo sexual explícito como entretenimento normalizado torna mais difícil para crianças formarem valores sãos.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: 0, scty: -8 },
   },
@@ -575,7 +758,7 @@ export const questions: Question[] = [
     question:
       "A promoção de modelos de relacionamento fora dos padrões tradicionais enfraquece a família e prejudica a estabilidade social.",
     example:
-      "na visão de quem defende esse ponto, a crescente aceitação pública de relações poligâmicas ou de outros arranjos fora do casamento monogâmico tradicional representa um risco à estrutura familiar.",
+      "Na visão de quem defende esse ponto, a crescente aceitação pública de relações poligâmicas ou de outros arranjos fora do casamento monogâmico tradicional representa um risco à estrutura familiar.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: 0, scty: -8 },
   },
@@ -583,7 +766,7 @@ export const questions: Question[] = [
     question:
       "Imigrantes que vêm morar em um país devem adotar a língua e os costumes locais e não criar comunidades separadas que mantenham valores próprios em contradição com os do país que os recebeu.",
     example:
-      "um imigrante não deveria reivindicar o direito de aplicar leis de sua cultura de origem dentro do território nacional.",
+      "Um imigrante não deveria reivindicar o direito de aplicar leis de sua cultura de origem dentro do território nacional.",
     context: "costumes",
     effect: { econ: 0, dipl: -5, govt: 0, scty: -10 },
   },
@@ -591,7 +774,7 @@ export const questions: Question[] = [
     question:
       "O aborto deve ser proibido ou permitido apenas em casos extremos de risco de vida da mãe, pois a decisão de interromper uma gravidez não deve ser tratada como uma simples escolha pessoal da mulher.",
     example:
-      "uma gravidez resultante de escolha consciente da mulher não justificaria o aborto, mesmo no primeiro trimestre.",
+      "Uma gravidez resultante de escolha consciente da mulher não justificaria o aborto, mesmo no primeiro trimestre.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: -10, scty: -10 },
   },
@@ -599,7 +782,7 @@ export const questions: Question[] = [
     question:
       "O acesso de civis a armas de fogo deve ser fortemente restringido, pois a presença de armas entre a população em geral aumenta o risco de violência doméstica, acidentes fatais e homicídios.",
     example:
-      "países com rígido controle de armas, como Japão e Nova Zelândia, registram taxas de homicídio por arma de fogo muito menores do que países com pouco controle.",
+      "Países com rígido controle de armas, como Japão e Nova Zelândia, registram taxas de homicídio por arma de fogo muito menores do que países com pouco controle.",
     context: "estado",
     effect: { econ: 0, dipl: 0, govt: -5, scty: 0 },
   },
@@ -607,7 +790,7 @@ export const questions: Question[] = [
     question:
       "Um sistema de saúde baseado na concorrência entre planos e hospitais privados tende a gerar mais inovação, melhores equipamentos e atendimento mais rápido do que um serviço monopolizado pelo Estado.",
     example:
-      "países com forte presença privada regulada na saúde, como Suíça e Holanda, atingem alta qualidade e acesso universal sem depender de um sistema estatal único.",
+      "Países com forte presença privada regulada na saúde, como Suíça e Holanda, atingem alta qualidade e acesso universal sem depender de um sistema estatal único.",
     context: "mercado",
     effect: { econ: -10, dipl: 0, govt: 0, scty: 0 },
   },
@@ -615,7 +798,7 @@ export const questions: Question[] = [
     question:
       "A prostituição deveria ser proibida e tratada como crime pelo Estado, pois são atividades que ferem a dignidade humana e não podem ser equiparadas a profissões comuns.",
     example:
-      "legalizar a prostituição envia a mensagem de que o corpo humano pode ser comprado como uma mercadoria em uma loja.",
+      "Legalizar a prostituição envia a mensagem de que o corpo humano pode ser comprado como uma mercadoria em uma loja.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: -10, scty: -10 },
   },
@@ -623,7 +806,7 @@ export const questions: Question[] = [
     question:
       "A velocidade com que a sociedade adota novas tecnologias e abandona valores tradicionais está acontecendo rápido demais e coloca em risco aspectos essenciais da experiência humana.",
     example:
-      "a substituição de relações humanas por interações digitais e de trabalho artesanal por automação empobrece a vida das pessoas — nenhum ganho de eficiência compensa perder aquilo que nos torna humanos.",
+      "A substituição de relações humanas por interações digitais e de trabalho artesanal por automação empobrece a vida das pessoas — nenhum ganho de eficiência compensa perder aquilo que nos torna humanos.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: 0, scty: -10 },
   },
@@ -631,7 +814,7 @@ export const questions: Question[] = [
     question:
       "A manipulação genética de embriões humanos e o uso da biotecnologia para ampliar capacidades além do tratamento de doenças ultrapassam limites éticos que a ciência não deve ignorar em nome do progresso.",
     example:
-      "projetar crianças como se fossem produtos de catálogo — mais inteligentes, mais bonitas, mais produtivas — é tratar a vida humana como mercadoria e abrir a porta para uma eugenia que a história já mostrou aonde leva.",
+      "Projetar crianças como se fossem produtos de catálogo — mais inteligentes, mais bonitas, mais produtivas — é tratar a vida humana como mercadoria e abrir a porta para uma eugenia que a história já mostrou aonde leva.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: 0, scty: -10 },
   },
@@ -639,7 +822,7 @@ export const questions: Question[] = [
     question:
       "Um país deveria facilitar ao máximo a entrada de trabalhadores estrangeiros, eliminando burocracia de vistos e exigências acadêmicas para quem queira vir trabalhar.",
     example:
-      "qualquer pessoa disposta a trabalhar deveria poder se instalar e buscar emprego, sem precisar de um diploma universitário ou de um contrato prévio para obter autorização de trabalho.",
+      "Qualquer pessoa disposta a trabalhar deveria poder se instalar e buscar emprego, sem precisar de um diploma universitário ou de um contrato prévio para obter autorização de trabalho.",
     context: "internacional",
     effect: { econ: 0, dipl: 10, govt: 10, scty: 0 },
   },
@@ -647,7 +830,7 @@ export const questions: Question[] = [
     question:
       "Os governos têm a obrigação moral de ajudar a resolver crises humanitárias e proteger direitos humanos em outros países, mesmo que isso tenha um custo para o contribuinte.",
     example:
-      "um país rico deveria financiar auxílio a refugiados de guerra ou a vítimas de fome em outras nações, porque a vida de um estrangeiro tem o mesmo valor que a de um cidadão local.",
+      "Um país rico deveria financiar auxílio a refugiados de guerra ou a vítimas de fome em outras nações, porque a vida de um estrangeiro tem o mesmo valor que a de um cidadão local.",
     context: "internacional",
     effect: { econ: 0, dipl: 10, govt: 0, scty: 0 },
   },
@@ -655,7 +838,7 @@ export const questions: Question[] = [
     question:
       "Políticas de cotas e tratamento diferenciado com base em raça ou gênero ferem o princípio da igualdade perante a lei e deveriam ser substituídas por igualdade de oportunidades para todos, sem distinção de grupo.",
     example:
-      "selecionar candidatos a universidades ou empregos levando em conta a cor da pele ou o sexo, em vez de somente o desempenho e o mérito, é uma forma de discriminação — mesmo que bem-intencionada.",
+      "Selecionar candidatos a universidades ou empregos levando em conta a cor da pele ou o sexo, em vez de somente o desempenho e o mérito, é uma forma de discriminação — mesmo que bem-intencionada.",
     context: "estado",
     effect: { econ: 0, dipl: 0, govt: 0, scty: -10 },
   },
@@ -663,7 +846,7 @@ export const questions: Question[] = [
     question:
       "É legítimo que um governo priorize os interesses de seus cidadãos nacionais em relação aos de estrangeiros ou a acordos internacionais, especialmente em áreas como empregos, benefícios sociais e segurança.",
     example:
-      "um país pode preferir dar empregos a nacionais a imigrantes ou pode recusar cumprir um tratado que prejudique sua indústria local.",
+      "Um país pode preferir dar empregos a nacionais a imigrantes ou pode recusar cumprir um tratado que prejudique sua indústria local.",
     context: "internacional",
     effect: { econ: 0, dipl: -10, govt: 0, scty: 0 },
   },
@@ -671,7 +854,7 @@ export const questions: Question[] = [
     question:
       "O sistema de saúde público e os planos de saúde devem ser obrigados a custear tratamentos de transição de gênero, incluindo terapias hormonais e cirurgias, tratando-as como necessidades médicas essenciais.",
     example:
-      "uma pessoa transgênero não deveria viver em sofrimento psicológico crônico apenas por não ter condições financeiras de pagar por procedimentos médicos fundamentais para a sua saúde mental e corporal.",
+      "Uma pessoa transgênero não deveria viver em sofrimento psicológico crônico apenas por não ter condições financeiras de pagar por procedimentos médicos fundamentais para a sua saúde mental e corporal.",
     context: "costumes",
     effect: { econ: 5, dipl: 0, govt: 0, scty: 10 },
   },
@@ -679,7 +862,7 @@ export const questions: Question[] = [
     question:
       "Adolescentes que cometem crimes violentos graves, como homicídio ou latrocínio, devem ser julgados e punidos como adultos, com a redução da maioridade penal para esses casos.",
     example:
-      "um jovem de 16 ou 17 anos que planeja e executa um assassinato tem plena consciência da gravidade de seus atos e não deveria receber apenas medidas socioeducativas brandas e sair de ficha limpa pouco tempo depois.",
+      "Um jovem de 16 ou 17 anos que planeja e executa um assassinato tem plena consciência da gravidade de seus atos e não deveria receber apenas medidas socioeducativas brandas e sair de ficha limpa pouco tempo depois.",
     context: "estado",
     effect: { econ: 0, dipl: 0, govt: -15, scty: -5 },
   },
@@ -687,7 +870,7 @@ export const questions: Question[] = [
     question:
       "O Estado deve fiscalizar e punir empresas que paguem salários diferentes a homens e mulheres que exercem a mesma função, não se pode deixar isso apenas para o livre mercado corrigir.",
     example:
-      "um governo deveria poder exigir auditoria salarial de empresas e multar aquelas que comprovadamente pagam menos a mulheres pelo mesmo cargo.",
+      "Um governo deveria poder exigir auditoria salarial de empresas e multar aquelas que comprovadamente pagam menos a mulheres pelo mesmo cargo.",
     context: "estado",
     effect: { econ: 5, dipl: 0, govt: 0, scty: 10 },
   },
@@ -695,7 +878,7 @@ export const questions: Question[] = [
     question:
       "A lei deve obrigar empresas e instituições públicas a reservar uma proporção dos cargos de liderança para mulheres, pois sem essa obrigação as desigualdades históricas continuam se reproduzindo.",
     example:
-      "exigir que ao menos 30% dos cargos de direção em grandes empresas e no parlamento sejam ocupados por mulheres.",
+      "Exigir que ao menos 30% dos cargos de direção em grandes empresas e no parlamento sejam ocupados por mulheres.",
     context: "estado",
     effect: { econ: 5, dipl: 0, govt: -5, scty: 10 },
   },
@@ -703,7 +886,7 @@ export const questions: Question[] = [
     question:
       "Ter a posse de uma terra, imóvel ou empresa só é moralmente justo se o dono estiver de fato gerindo e produzindo nela, pois quem apenas arrenda ou vive de investimentos está se beneficiando do trabalho alheio sem contribuir diretamente.",
     example:
-      "um latifundiário que tem 10 mil hectares improdutivos que apenas aluga deveria perder o direito de propriedade para quem vai de fato produzir.",
+      "Um latifundiário que tem 10 mil hectares improdutivos que apenas aluga deveria perder o direito de propriedade para quem vai de fato produzir.",
     context: "mercado",
     effect: { econ: 10, dipl: 0, govt: -5, scty: 5 },
   },
@@ -711,7 +894,7 @@ export const questions: Question[] = [
     question:
       "Uma pessoa adulta tem o direito de consumir qualquer substância que queira, inclusive drogas, sem interferência do Estado.",
     example:
-      "assim como beber álcool é uma escolha pessoal legal, mesmo causando danos à saúde, o uso de maconha ou outras drogas por um adulto deveria ser tratado como uma decisão só dele.",
+      "Assim como beber álcool é uma escolha pessoal legal, mesmo causando danos à saúde, o uso de maconha ou outras drogas por um adulto deveria ser tratado como uma decisão só dele.",
     context: "individual",
     effect: { econ: 0, dipl: 0, govt: 12, scty: 5 },
   },
@@ -719,7 +902,7 @@ export const questions: Question[] = [
     question:
       "O comércio de drogas atualmente ilegais deveria ser legalizado e regulado pelo Estado, como acontece hoje com o álcool e o cigarro.",
     example:
-      "assim como o álcool e o cigarro são vendidos legalmente sob regras de idade e tributação, a maconha e outras drogas também poderiam ser vendidas livremente para adultos dentro de um mercado regulado.",
+      "Assim como o álcool e o cigarro são vendidos legalmente sob regras de idade e tributação, a maconha e outras drogas também poderiam ser vendidas livremente para adultos dentro de um mercado regulado.",
     context: "individual",
     effect: { econ: 0, dipl: 0, govt: 10, scty: 3 },
   },
@@ -727,7 +910,7 @@ export const questions: Question[] = [
     question:
       "O objetivo da prisão deve ser punir o criminoso pelo crime que cometeu, não tentar reintegrá-lo à sociedade. Quem pratica um crime grave merece um castigo severo e proporcional, sem privilégios.",
     example:
-      "assassinos e estupradores deveriam cumprir suas penas em condições duras, sem programas de ressocialização que na prática são regalias pagas pelo contribuinte.",
+      "Assassinos e estupradores deveriam cumprir suas penas em condições duras, sem programas de ressocialização que na prática são regalias pagas pelo contribuinte.",
     context: "estado",
     effect: { econ: 0, dipl: 0, govt: -15, scty: -10 },
   },
@@ -735,7 +918,7 @@ export const questions: Question[] = [
     question:
       "O maior problema da sociedade não é a disputa entre esquerda e direita, mas uma elite política e econômica corrupta que usa o Estado para enriquecer às custas do restante da população.",
     example:
-      "partidos de esquerda e de direita que chegam ao poder tendem a proteger os mesmos grupos econômicos privilegiados que financiaram suas campanhas.",
+      "Partidos de esquerda e de direita que chegam ao poder tendem a proteger os mesmos grupos econômicos privilegiados que financiaram suas campanhas.",
     context: "estado",
     effect: { econ: 5, dipl: -5, govt: -5, scty: -5 },
   },
@@ -743,7 +926,7 @@ export const questions: Question[] = [
     question:
       "Alterar radicalmente o corpo humano por meios tecnológicos — como chips cerebrais ou edição genética — vai além do tratamento de doenças e representa uma ruptura perigosa com a natureza humana e com valores fundamentais.",
     example:
-      "projetar crianças como produtos de catálogo e implantar chips no cérebro para aumentar produtividade não é progresso — é a destruição da dignidade humana em nome do lucro e da eficiência.",
+      "Projetar crianças como produtos de catálogo e implantar chips no cérebro para aumentar produtividade não é progresso — é a destruição da dignidade humana em nome do lucro e da eficiência.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: 0, scty: -15 },
   },
@@ -751,7 +934,7 @@ export const questions: Question[] = [
     question:
       "O monopólio estatal sobre a justiça e a segurança pública deve ser questionado; empresas privadas competindo entre si provavelmente ofereceriam policiamento e tribunais mais eficientes e justos do que o Estado.",
     example:
-      "imagine poder contratar a empresa de segurança que te dá mais garantias e que se responsabiliza financeiramente por falhas, em vez de depender de uma polícia pública sem concorrência.",
+      "Imagine poder contratar a empresa de segurança que te dá mais garantias e que se responsabiliza financeiramente por falhas, em vez de depender de uma polícia pública sem concorrência.",
     context: "estado",
     effect: { econ: -15, dipl: 0, govt: 20, scty: 0 },
   },
@@ -759,7 +942,7 @@ export const questions: Question[] = [
     question:
       "As categorias esportivas femininas devem ser restritas exclusivamente a pessoas do sexo biológico feminino, para garantir a justiça nas competições, independentemente da identidade de gênero do atleta.",
     example:
-      "permitir que mulheres trans (que passaram pela puberdade masculina) compitam no esporte feminino de alto rendimento cria uma desvantagem física injusta e impossível de ser contornada para as atletas mulheres biológicas.",
+      "Permitir que mulheres trans (que passaram pela puberdade masculina) compitam no esporte feminino de alto rendimento cria uma desvantagem física injusta e impossível de ser contornada para as atletas mulheres biológicas.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: 0, scty: -10 },
   },
@@ -767,7 +950,7 @@ export const questions: Question[] = [
     question:
       "A livre entrada de produtos e capital estrangeiro no país acaba enfraquecendo a economia e os negócios nacionais; o Estado deve criar barreiras para proteger indústrias e empresas locais.",
     example:
-      "restringir o acesso de estrangeiros a terras e negócios estratégicos, ou taxar produtos importados, para proteger a produção e os empregos nacionais.",
+      "Restringir o acesso de estrangeiros a terras e negócios estratégicos, ou taxar produtos importados, para proteger a produção e os empregos nacionais.",
     context: "internacional",
     effect: { econ: 5, dipl: -15, govt: 0, scty: 0 },
   },
@@ -775,7 +958,7 @@ export const questions: Question[] = [
     question:
       "A livre entrada de pessoas e ideias estrangeiras acaba enfraquecendo a cultura, as tradições e a identidade de um povo; o Estado deve criar barreiras para proteger o modo de vida e os valores nacionais diante da globalização.",
     example:
-      "limitar a importação de conteúdo cultural estrangeiro — filmes, música, programas — para preservar a identidade nacional diante da influência de outras culturas.",
+      "Limitar a importação de conteúdo cultural estrangeiro — filmes, música, programas — para preservar a identidade nacional diante da influência de outras culturas.",
     context: "internacional",
     effect: { econ: 0, dipl: -10, govt: 0, scty: -15 },
   },
@@ -783,7 +966,7 @@ export const questions: Question[] = [
     question:
       "Decisões técnicas complexas — como política monetária, regulamentação de vacinas ou gestão de infraestrutura — deveriam estar nas mãos de especialistas e técnicos, não de políticos eleitos que priorizam o que agrada o eleitor.",
     example:
-      "as taxas de juros de um banco central deveriam ser decididas por economistas independentes, e não por um presidente eleito que precisa ser popular.",
+      "As taxas de juros de um banco central deveriam ser decididas por economistas independentes, e não por um presidente eleito que precisa ser popular.",
     context: "estado",
     effect: { econ: 0, dipl: 0, govt: -20, scty: 5 },
   },
@@ -791,7 +974,7 @@ export const questions: Question[] = [
     question:
       "Economias com mercados abertos e baixa interferência estatal geram mais crescimento, mais empregos e padrão de vida mais alto do que economias planificadas pelo governo.",
     example:
-      "o contraste entre Coreia do Sul (economia de mercado) e Coreia do Norte (economia planificada) — dois países com a mesma origem cultural — é um exemplo claro: o Sul tem renda per capita dezenas de vezes maior.",
+      "O contraste entre Coreia do Sul (economia de mercado) e Coreia do Norte (economia planificada) — dois países com a mesma origem cultural — é um exemplo claro: o Sul tem renda per capita dezenas de vezes maior.",
     context: "mercado",
     effect: { econ: -20, dipl: 0, govt: 0, scty: 0 },
   },
@@ -799,7 +982,7 @@ export const questions: Question[] = [
     question:
       "As grandes decisões geopolíticas e econômicas do mundo são controladas por uma elite global e coesa (muitas vezes associada a judeus, banqueiros ou sionistas) que enriquece manipulando o restante da humanidade.",
     example:
-      "uma rede internacional de banqueiros controla governos inteiros e o sistema financeiro, criando crises econômicas e financiando guerras para dominar as nações de forma invisível.",
+      "Uma rede internacional de banqueiros controla governos inteiros e o sistema financeiro, criando crises econômicas e financiando guerras para dominar as nações de forma invisível.",
     context: "internacional",
     effect: { econ: 10, dipl: -10, govt: 10, scty: -10 },
   },
@@ -807,7 +990,7 @@ export const questions: Question[] = [
     question:
       "Com a automação eliminando cada vez mais postos de trabalho, o governo deveria garantir uma renda básica mensal a todos os cidadãos, independentemente de emprego, para que as pessoas possam viver com dignidade e escolher livremente suas atividades.",
     example:
-      "se robôs e softwares já fazem o trabalho de motoristas, caixas de supermercado e operadores de fábrica, o governo deveria pagar um auxílio mensal a todos para cobrir necessidades básicas.",
+      "Se robôs e softwares já fazem o trabalho de motoristas, caixas de supermercado e operadores de fábrica, o governo deveria pagar um auxílio mensal a todos para cobrir necessidades básicas.",
     context: "estado",
     effect: { econ: 15, dipl: 0, govt: 0, scty: 10 },
   },
@@ -815,7 +998,7 @@ export const questions: Question[] = [
     question:
       "A existência de países separados com fronteiras e interesses próprios é uma das principais causas de guerras e desigualdades; o ideal seria um único governo mundial com leis iguais para todos os seres humanos.",
     example:
-      "conflitos entre países por território, recursos ou influência seriam impossíveis se existisse uma autoridade mundial legítima acima de qualquer governo nacional.",
+      "Conflitos entre países por território, recursos ou influência seriam impossíveis se existisse uma autoridade mundial legítima acima de qualquer governo nacional.",
     context: "internacional",
     effect: { econ: 0, dipl: 25, govt: 0, scty: 5 },
   },
@@ -823,7 +1006,7 @@ export const questions: Question[] = [
     question:
       "Quando o judiciário e o parlamento são lentos e travados, um líder popular que passe por cima desses obstáculos para beneficiar os mais pobres pode ser legítimo.",
     example:
-      "quando o parlamento está travado por lobbies e o judiciário protege os privilégios de sempre, um líder que age diretamente pelo povo não está rompendo a democracia — está exercendo-a de verdade.",
+      "Quando o parlamento está travado por lobbies e o judiciário protege os privilégios de sempre, um líder que age diretamente pelo povo não está rompendo a democracia — está exercendo-a de verdade.",
     context: "estado",
     effect: { econ: 15, dipl: -10, govt: -15, scty: 0 },
   },
@@ -831,7 +1014,7 @@ export const questions: Question[] = [
     question:
       "A educação deve transmitir o conhecimento acumulado, os valores e a herança cultural de uma sociedade às novas gerações — e não servir como instrumento de desconstrução das normas, tradições e identidades consolidadas.",
     example:
-      "escolas que substituem o ensino de literatura clássica, matemática e história por projetos de 'desconstrução social' privam os alunos de uma formação sólida e os deixam sem raízes, sem ferramentas e sem identidade.",
+      "Escolas que substituem o ensino de literatura clássica, matemática e história por projetos de 'desconstrução social' privam os alunos de uma formação sólida e os deixam sem raízes, sem ferramentas e sem identidade.",
     context: "costumes",
     effect: { econ: 0, dipl: 0, govt: 0, scty: -10 },
   },

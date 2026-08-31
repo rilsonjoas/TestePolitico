@@ -20,7 +20,11 @@ export function Header() {
 
   const navLinks = [
     { href: '/', label: 'Início' },
-    { href: '/sobre', label: 'Sobre o Método' },
+    { href: '/eixos', label: '4 Eixos' },
+    { href: '/ideologia', label: 'Ideologias' },
+    { href: '/metodologia', label: 'Metodologia' },
+    { href: '/dicionario', label: 'Dicionário' },
+    { href: '/sobre', label: 'Sobre' },
     { href: '/contato', label: 'Contato' },
   ];
 
