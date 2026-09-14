@@ -3,7 +3,10 @@ import { ideologies, slugify } from '@/lib/data';
 import { eixosData } from '@/lib/eixosData';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://testepolitico.com.br';
+  // baseUrl usa o subdomínio canônico www: o domínio raiz 307-redireciona
+  // pra www (Vercel), então apontar o sitemap pra raiz gerava redirect em
+  // cadeia pra cada URL (achado 2026-09-14, canonical www × não-www).
+  const baseUrl = 'https://www.testepolitico.com.br';
 
   // Páginas estáticas principais
   const routes = [

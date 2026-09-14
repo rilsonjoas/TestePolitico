@@ -21,7 +21,7 @@ Seguindo o padrão de engenharia do projeto:
   - [x] Dicionário de Ciência Política (`/dicionario`) com 24+ conceitos teóricos e práticos com busca em tempo real.
   - [x] Marcação Schema.org (JSON-LD) em todas as rotas (`DefinedTermSet`, `TechArticle`, `Article`, `FAQPage`, `BreadcrumbList`).
   - [x] Seções de FAQ Interativas e Breadcrumbs Semânticos.
-  - [x] Sitemap dinâmico (`/sitemap.ts`) e robots (`/robots.ts`) cobrindo 66 páginas estáticas.
+  - [x] Sitemap dinâmico (`/sitemap.ts`) e robots (`/robots.ts`) cobrindo 57 páginas (10 estáticas + 4 eixos + 43 ideologias; verificado ao vivo 2026-09-14).
 - [x] **P9 Documentação**: README.md e ROADMAP.md atualizados.
 
 ---

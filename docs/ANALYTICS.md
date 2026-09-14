@@ -74,7 +74,7 @@ Disparado quando um usuário sai do quiz antes de completar.
 - `event_category`: "engagement"
 - `event_label`: "Abandonado na questão X"
 - `question_number`: Número da questão onde abandonou
-- `total_questions`: Total de questões (70)
+- `total_questions`: Total de questões (87)
 - `completion_percentage`: Porcentagem do quiz completada
 
 **Localização**: `src/app/quiz/page.tsx` (ao desmontar o componente)
@@ -86,7 +86,7 @@ Disparado para cada questão respondida.
 
 **Parâmetros**:
 - `event_category`: "engagement"
-- `question_number`: Número da questão (1-70)
+- `question_number`: Número da questão (1-87)
 - `answer_value`: Multiplicador da resposta (-1.0 a 1.0)
 - `non_interaction`: true (não afeta taxa de rejeição)
 
