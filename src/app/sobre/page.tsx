@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { CheckCircle2, BookOpen, Scale, CircleDollarSign, Globe, Landmark, Users, Lightbulb, ShieldCheck } from "lucide-react";
 import { questions } from "@/lib/data";
+import { JsonLd } from "@/components/JsonLd";
 
 export const metadata: Metadata = {
   title: "Sobre o método | Teste Político",
@@ -10,8 +11,27 @@ export const metadata: Metadata = {
 };
 
 export default function SobrePage() {
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "Sobre o Teste Político 8 Valores",
+    "description": "Entenda como funciona o Teste Político 8 Valores, nossa metodologia e como garantimos neutralidade.",
+    "url": "https://www.testepolitico.com.br/sobre",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Teste Político",
+      "url": "https://www.testepolitico.com.br",
+      "founder": {
+        "@type": "Person",
+        "name": "Rilson Joás",
+        "url": "https://github.com/rilsonjoas",
+      },
+    },
+  };
+
   return (
     <main className="min-h-screen container mx-auto px-4 py-12 max-w-5xl">
+      <JsonLd data={schemaData} />
       <div className="space-y-12">
         {/* Hero Section */}
         <section className="text-center space-y-4 md:space-y-6">

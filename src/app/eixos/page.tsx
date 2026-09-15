@@ -5,6 +5,7 @@ import { eixosData } from '@/lib/eixosData';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, BookOpen, Scale, CircleDollarSign, Globe, Landmark } from 'lucide-react';
+import { JsonLd } from '@/components/JsonLd';
 
 export const metadata: Metadata = {
   title: 'Guia dos 4 Eixos Políticos | Teste Político 8 Valores',
@@ -24,8 +25,27 @@ const axisIcons: Record<string, React.ReactNode> = {
 };
 
 export default function EixosIndexPage() {
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Enciclopédia dos 4 Eixos Políticos",
+    "description": "Compreenda a estrutura quadridimensional do pensamento político: Econômico, Diplomático, Civil e Social.",
+    "url": "https://www.testepolitico.com.br/eixos",
+    "mainEntity": {
+      "@type": "ItemList",
+      "itemListElement": eixosData.map((axis, index) => ({
+        "@type": "ListItem",
+        "position": index + 1,
+        "name": axis.name,
+        "description": axis.shortDescription,
+        "url": `https://www.testepolitico.com.br/eixos/${axis.slug}`,
+      })),
+    },
+  };
+
   return (
     <div className="container mx-auto px-4 py-12 max-w-5xl">
+      <JsonLd data={schemaData} />
       <header className="flex flex-col items-center text-center mb-16">
         <Link href="/" className="group flex flex-col items-center gap-4 transition-all duration-300">
           <Logo size={80} showText={false} className="bg-white dark:bg-gray-800 p-2 rounded-full shadow-lg group-hover:scale-110 transition-transform" />
@@ -133,12 +153,12 @@ export default function EixosIndexPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
             <Link href="/quiz">
-              <Button size="lg" variant="secondary" className="w-full sm:w-auto font-black text-blue-900 px-8 py-6 text-lg rounded-2xl shadow-xl hover:scale-105 transition-transform">
+              <Button size="lg" className="w-full sm:w-auto font-black bg-white text-blue-950 hover:bg-blue-50 px-8 py-6 text-lg rounded-2xl shadow-xl hover:scale-105 transition-all border-none">
                 FAZER O TESTE AGORA
               </Button>
             </Link>
             <Link href="/metodologia">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto font-bold border-white text-white hover:bg-white/10 px-8 py-6 text-lg rounded-2xl">
+              <Button size="lg" className="w-full sm:w-auto font-bold bg-white/10 hover:bg-white/20 border-2 border-white text-white px-8 py-6 text-lg rounded-2xl transition-all shadow-none">
                 Ver Metodologia Matemática
               </Button>
             </Link>

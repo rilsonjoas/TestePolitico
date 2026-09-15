@@ -26,6 +26,34 @@ Seguindo o padrão de engenharia do projeto:
 
 ---
 
+## 🚦 Mapa de pendências — eleição 2026 (atualizado 14/09)
+
+> Checklist executável do que falta até o 1º turno (04/10). Legenda:
+> 🔴 bloqueador · 🔵 manual (Rilson) · 🟠 decisão · ⚙️ agente · 🟢 automático.
+
+### 🔴 Técnicas — FEITAS (14/09)
+- [x] ROADMAP 2026-09-08 + plano eleitoral commitado (`7b175c7`)
+- [x] ANALYTICS.md 70→87 perguntas; sitemap 66→57; canonical www (`95cff84`)
+
+### 🔵 Manuais (Rilson) — prazo antes do pico 28/09
+- [ ] **Leitura cruzada de neutralidade** via Reddit (r/brasil +
+      r/brasilivre) com copy pronta pedindo feedback de viés
+- [ ] **TikTok/Reels/Shorts**: 5 roteiros 35–40s (MARKETING_COPY.md);
+      CTA legível na imagem de resultado
+- [ ] **WhatsApp**: 3–5 grupos de espectros diferentes, UTM `whatsapp`
+- [ ] **X**: post com print do resultado + link p/ 2–3 contas de meme
+- [ ] **Criadores/podcasts**: 1 de direita + 1 de esquerda, pitch de embed
+- [ ] Conferir GA4: `quiz_complete/quiz_start`>60% ·
+      **`result_share/result_view`>20%** decide dobrar/abandonar
+
+### 🟠 Decisões menores
+- [ ] `ads.txt` "Não encontrado" no painel — criar arquivo (baixo esforço)
+
+### 📋 Próximos roteiros pra Rilson (agente prepara, Rilson posta)
+- [x] Roteiro canal-a-canal entregue nesta sessão
+
+---
+
 ## Qualidade de Conteúdo & AdSense
 
 Com a criação das páginas de **Metodologia**, **Eixos**, **Ideologias** e **Dicionário de Ciência Política**, o problema de "thin content" que causou a objeção inicial do AdSense foi plenamente superado:

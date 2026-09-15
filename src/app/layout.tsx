@@ -7,7 +7,7 @@ import { AdSense } from "@/components/AdSense";
 import { RouteTracker } from "@/components/RouteTracker";
 import { Header } from "@/components/Header";
 
-const siteUrl = "https://testepolitico.com.br";
+const siteUrl = "https://www.testepolitico.com.br";
 const siteName = "Teste Político 8 Valores";
 const siteDescription = "Descubra sua ideologia política em 5 minutos! Você é de esquerda ou direita? Liberal ou conservador? Faça o teste mais completo do Brasil!";
 const shareTitle = "Descobri minha ideologia política! E a sua?";
@@ -88,7 +88,7 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Teste Político 8 Valores",
-    "url": "https://testepolitico.com.br",
+    "url": "https://www.testepolitico.com.br",
   };
 
   return (
@@ -121,7 +121,6 @@ export default function RootLayout({
         >
           {JSON.stringify(jsonLd)}
         </script>
-        <RouteTracker />
         <RouteTracker />
         <Header />
         {children}

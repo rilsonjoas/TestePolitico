@@ -12,10 +12,10 @@ export async function GET(req: NextRequest) {
 
   // Cores dos eixos
   const colors = {
-    econ: { l: '#f44336', r: '#4caf50' }, // Igualdade vs Mercado
-    dipl: { l: '#03a9f4', r: '#ff9800' }, // Global vs Nação
-    govt: { l: '#ffeb3b', r: '#3f51b5' }, // Liberdade vs Autoridade
-    scty: { l: '#3b82f6', r: '#9c27b0' }, // Progresso vs Tradição
+    econ: { l: '#ef4444', r: '#22c55e' }, // Igualdade vs Mercado
+    dipl: { l: '#06b6d4', r: '#f97316' }, // Global vs Nação
+    govt: { l: '#eab308', r: '#3b82f6' }, // Liberdade vs Autoridade
+    scty: { l: '#ec4899', r: '#a855f7' }, // Progresso vs Tradição
   };
 
   return new ImageResponse(
@@ -27,76 +27,98 @@ export async function GET(req: NextRequest) {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#111827', // Gray 900
+          justifyContent: 'space-between',
+          backgroundColor: '#0f172a', // Slate 900
           fontFamily: 'sans-serif',
           color: 'white',
-          padding: '40px',
+          padding: '40px 60px',
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '20px' }}>
-          <h1 style={{ fontSize: '60px', fontWeight: '900', margin: 0, textTransform: 'uppercase', letterSpacing: '4px' }}>
-            Teste Político
-          </h1>
-          <h2 style={{ fontSize: '30px', fontWeight: 'bold', color: '#3b82f6', margin: 0 }}>
-            MEUS RESULTADOS
-          </h2>
+        {/* Header */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <h1 style={{ fontSize: '48px', fontWeight: '900', margin: 0, letterSpacing: '2px', color: '#ffffff' }}>
+              TESTE POLÍTICO
+            </h1>
+            <span style={{ fontSize: '20px', fontWeight: 'bold', backgroundColor: 'rgba(59,130,246,0.2)', color: '#60a5fa', padding: '4px 12px', borderRadius: '20px', border: '1px solid rgba(59,130,246,0.4)' }}>
+              8 VALORES
+            </span>
+          </div>
+          <p style={{ fontSize: '18px', color: '#94a3b8', margin: '6px 0 0 0', textTransform: 'uppercase', letterSpacing: '3px' }}>
+            Resultado do Espectro Político
+          </p>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '20px', padding: '0 60px' }}>
+        {/* 4 Eixos */}
+        <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '14px' }}>
           
           {/* Econômico */}
           <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '24px', fontWeight: 'bold', marginBottom: '5px' }}>
-              <span style={{ color: colors.econ.l }}>Igualdade</span>
-              <span style={{ color: colors.econ.r }}>Mercado</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '18px', fontWeight: 'bold', marginBottom: '4px' }}>
+              <span style={{ color: colors.econ.l }}>Igualdade ({e.toFixed(1)}%)</span>
+              <span style={{ color: colors.econ.r }}>Mercado ({(100-e).toFixed(1)}%)</span>
             </div>
-            <div style={{ display: 'flex', height: '30px', width: '100%', borderRadius: '15px', overflow: 'hidden' }}>
-              <div style={{ width: `${e}%`, height: '100%', backgroundColor: colors.econ.l, display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '10px' }}>{e > 15 && `${e.toFixed(1)}%`}</div>
-              <div style={{ width: `${100-e}%`, height: '100%', backgroundColor: colors.econ.r, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '10px' }}>{100-e > 15 && `${(100-e).toFixed(1)}%`}</div>
+            <div style={{ display: 'flex', height: '24px', width: '100%', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#334155' }}>
+              <div style={{ width: `${e}%`, height: '100%', backgroundColor: colors.econ.l }} />
+              <div style={{ width: `${100-e}%`, height: '100%', backgroundColor: colors.econ.r }} />
             </div>
           </div>
 
           {/* Diplomático */}
           <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '24px', fontWeight: 'bold', marginBottom: '5px' }}>
-              <span style={{ color: colors.dipl.l }}>Global</span>
-              <span style={{ color: colors.dipl.r }}>Nação</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '18px', fontWeight: 'bold', marginBottom: '4px' }}>
+              <span style={{ color: colors.dipl.l }}>Global ({d.toFixed(1)}%)</span>
+              <span style={{ color: colors.dipl.r }}>Nação ({(100-d).toFixed(1)}%)</span>
             </div>
-            <div style={{ display: 'flex', height: '30px', width: '100%', borderRadius: '15px', overflow: 'hidden' }}>
-              <div style={{ width: `${d}%`, height: '100%', backgroundColor: colors.dipl.l, display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '10px' }}>{d > 15 && `${d.toFixed(1)}%`}</div>
-              <div style={{ width: `${100-d}%`, height: '100%', backgroundColor: colors.dipl.r, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '10px' }}>{100-d > 15 && `${(100-d).toFixed(1)}%`}</div>
+            <div style={{ display: 'flex', height: '24px', width: '100%', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#334155' }}>
+              <div style={{ width: `${d}%`, height: '100%', backgroundColor: colors.dipl.l }} />
+              <div style={{ width: `${100-d}%`, height: '100%', backgroundColor: colors.dipl.r }} />
             </div>
           </div>
 
           {/* Civil */}
           <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '24px', fontWeight: 'bold', marginBottom: '5px' }}>
-              <span style={{ color: colors.govt.l }}>Liberdade</span>
-              <span style={{ color: colors.govt.r }}>Autoridade</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '18px', fontWeight: 'bold', marginBottom: '4px' }}>
+              <span style={{ color: colors.govt.l }}>Liberdade ({g.toFixed(1)}%)</span>
+              <span style={{ color: colors.govt.r }}>Autoridade ({(100-g).toFixed(1)}%)</span>
             </div>
-            <div style={{ display: 'flex', height: '30px', width: '100%', borderRadius: '15px', overflow: 'hidden' }}>
-              <div style={{ width: `${g}%`, height: '100%', backgroundColor: colors.govt.l, display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '10px' }}>{g > 15 && `${g.toFixed(1)}%`}</div>
-              <div style={{ width: `${100-g}%`, height: '100%', backgroundColor: colors.govt.r, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '10px' }}>{100-g > 15 && `${(100-g).toFixed(1)}%`}</div>
+            <div style={{ display: 'flex', height: '24px', width: '100%', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#334155' }}>
+              <div style={{ width: `${g}%`, height: '100%', backgroundColor: colors.govt.l }} />
+              <div style={{ width: `${100-g}%`, height: '100%', backgroundColor: colors.govt.r }} />
             </div>
           </div>
 
           {/* Social */}
           <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '24px', fontWeight: 'bold', marginBottom: '5px' }}>
-              <span style={{ color: colors.scty.l }}>Progresso</span>
-              <span style={{ color: colors.scty.r }}>Tradição</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '18px', fontWeight: 'bold', marginBottom: '4px' }}>
+              <span style={{ color: colors.scty.l }}>Progresso ({s.toFixed(1)}%)</span>
+              <span style={{ color: colors.scty.r }}>Tradição ({(100-s).toFixed(1)}%)</span>
             </div>
-            <div style={{ display: 'flex', height: '30px', width: '100%', borderRadius: '15px', overflow: 'hidden' }}>
-              <div style={{ width: `${s}%`, height: '100%', backgroundColor: colors.scty.l, display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '10px' }}>{s > 15 && `${s.toFixed(1)}%`}</div>
-              <div style={{ width: `${100-s}%`, height: '100%', backgroundColor: colors.scty.r, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '10px' }}>{100-s > 15 && `${(100-s).toFixed(1)}%`}</div>
+            <div style={{ display: 'flex', height: '24px', width: '100%', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#334155' }}>
+              <div style={{ width: `${s}%`, height: '100%', backgroundColor: colors.scty.l }} />
+              <div style={{ width: `${100-s}%`, height: '100%', backgroundColor: colors.scty.r }} />
             </div>
           </div>
 
         </div>
 
-        <div style={{ marginTop: '30px', fontSize: '20px', color: '#9ca3af' }}>
-          testepolitico.com.br
+        {/* CTA Footer Pill */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '10px 28px',
+            borderRadius: '30px',
+            backgroundColor: 'rgba(30, 41, 59, 0.95)',
+            border: '2px solid #3b82f6',
+            fontSize: '18px',
+            fontWeight: 'bold',
+            color: '#e2e8f0',
+          }}
+        >
+          <span>Descubra sua ideologia em&nbsp;</span>
+          <span style={{ color: '#60a5fa' }}>testepolitico.com.br</span>
         </div>
       </div>
     ),

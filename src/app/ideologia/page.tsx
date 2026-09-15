@@ -2,7 +2,8 @@ import { Logo } from '@/components/Logo';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import IdeologyListClient from './IdeologyListClient';
-import { ideologies } from '@/lib/data';
+import { ideologies, slugify } from '@/lib/data';
+import { JsonLd } from '@/components/JsonLd';
 
 export const metadata: Metadata = {
   title: 'Enciclopédia de Ideologias | Teste Político 8 Valores',
@@ -15,8 +16,28 @@ export const metadata: Metadata = {
 };
 
 export default function IdeologyListPage() {
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Enciclopédia de Ideologias Políticas",
+    "description": `Guia com ${ideologies.length} ideologias políticas detalhadas com valores econômicos, diplomáticos, civis e sociais.`,
+    "url": "https://www.testepolitico.com.br/ideologia",
+    "mainEntity": {
+      "@type": "ItemList",
+      "numberOfItems": ideologies.length,
+      "itemListElement": ideologies.map((ideology, index) => ({
+        "@type": "ListItem",
+        "position": index + 1,
+        "name": ideology.name,
+        "description": ideology.desc,
+        "url": `https://www.testepolitico.com.br/ideologia/${slugify(ideology.name)}`,
+      })),
+    },
+  };
+
   return (
     <div className="container mx-auto p-4 flex flex-col items-center min-h-screen">
+      <JsonLd data={schemaData} />
       <header className="flex flex-col items-center w-full max-w-2xl text-center">
         <Link href="/" className="group flex flex-col items-center gap-4 transition-all duration-300">
           <Logo size={80} showText={false} className="bg-white dark:bg-gray-800 p-2 rounded-full shadow-lg group-hover:scale-110 transition-transform" />

@@ -503,23 +503,72 @@ export function ShareResults({ scores, matchedIdeology, enableComparison = false
     }
 
     // ─────────────────────────────────────────────────────────────────
-    // FOOTER
+    // FOOTER (CALL TO ACTION BADGE)
     // ─────────────────────────────────────────────────────────────────
-    const footerY = L.footerY;
     const isTwitter = format === 'twitter';
+    const isSquare = format === 'square';
 
-    // Linha divisória sutil
-    ctx.strokeStyle = '#334155';
-    ctx.lineWidth = 1;
+    let badgeW = 680;
+    let badgeH = 64;
+    let badgeY = 1775;
+    let badgeFontSize = 24;
+
+    if (isTwitter) {
+      badgeW = 460;
+      badgeH = 34;
+      badgeY = 632;
+      badgeFontSize = 13;
+    } else if (isSquare) {
+      badgeW = 620;
+      badgeH = 48;
+      badgeY = 1005;
+      badgeFontSize = 19;
+    }
+
+    const badgeX = (canvas.width - badgeW) / 2;
+
+    // Glowing CTA Pill Background
+    ctx.save();
+    ctx.shadowColor = 'rgba(59, 130, 246, 0.35)';
+    ctx.shadowBlur = isTwitter ? 8 : 16;
     ctx.beginPath();
-    ctx.moveTo(canvas.width / 2 - 100, footerY - 50);
-    ctx.lineTo(canvas.width / 2 + 100, footerY - 50);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    ctx.roundRect(badgeX, badgeY - badgeH / 2, badgeW, badgeH, badgeH / 2);
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+    ctx.fill();
+    ctx.strokeStyle = '#3b82f6';
+    ctx.lineWidth = isTwitter ? 1.5 : 2;
     ctx.stroke();
+    ctx.restore();
 
-    ctx.fillStyle = textSecondary;
-    ctx.font = `bold ${isTwitter ? 18 : 24}px Arial`;
+    // CTA Text inside Pill
     ctx.textAlign = 'center';
-    ctx.fillText('testepolitico.com.br', canvas.width / 2, footerY);
+    ctx.textBaseline = 'middle';
+    ctx.font = `bold ${badgeFontSize}px Arial`;
+    
+    // Draw CTA text with highlighted domain
+    const prefix = 'Descubra sua ideologia em ';
+    const domain = 'testepolitico.com.br';
+    
+    ctx.font = `600 ${badgeFontSize}px Arial`;
+    const prefixW = ctx.measureText(prefix).width;
+    ctx.font = `800 ${badgeFontSize}px Arial`;
+    const domainW = ctx.measureText(domain).width;
+    const totalTextW = prefixW + domainW;
+    const startTextX = canvas.width / 2 - totalTextW / 2;
+
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#e2e8f0';
+    ctx.font = `600 ${badgeFontSize}px Arial`;
+    ctx.fillText(prefix, startTextX, badgeY);
+
+    ctx.fillStyle = '#60a5fa';
+    ctx.font = `800 ${badgeFontSize}px Arial`;
+    ctx.fillText(domain, startTextX + prefixW, badgeY);
+
+    // Reset baseline
+    ctx.textBaseline = 'alphabetic';
 
     return canvas;
   };

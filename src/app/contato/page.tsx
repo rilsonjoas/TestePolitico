@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Metadata } from "next";
 import { Mail, Github, MessageSquare, Handshake, Bug, Lightbulb, FileText } from "lucide-react";
+import { JsonLd } from "@/components/JsonLd";
 
 export const metadata: Metadata = {
   title: "Contato | Teste Político 8 Valores",
@@ -8,8 +9,23 @@ export const metadata: Metadata = {
 };
 
 export default function ContatoPage() {
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contato - Teste Político 8 Valores",
+    "description": "Canais de atendimento, feedback e contribuição open source do Teste Político.",
+    "url": "https://www.testepolitico.com.br/contato",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Teste Político",
+      "email": "rilsonjoas10@gmail.com",
+      "url": "https://www.testepolitico.com.br",
+    },
+  };
+
   return (
     <main className="min-h-screen container mx-auto px-4 py-12 max-w-4xl">
+      <JsonLd data={schemaData} />
       <div className="space-y-12">
         {/* Hero */}
         <section className="text-center space-y-4">

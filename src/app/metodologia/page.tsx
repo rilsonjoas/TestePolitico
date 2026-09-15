@@ -271,12 +271,12 @@ export default function MetodologiaPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
             <Link href="/quiz">
-              <Button size="lg" className="w-full sm:w-auto font-black bg-white text-blue-900 hover:bg-gray-100 px-8 py-6 text-lg rounded-2xl shadow-xl hover:scale-105 transition-all">
+              <Button size="lg" className="w-full sm:w-auto font-black bg-white text-blue-950 hover:bg-blue-50 px-8 py-6 text-lg rounded-2xl shadow-xl hover:scale-105 transition-all border-none">
                 INICIAR O TESTE
               </Button>
             </Link>
             <Link href="/eixos">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto font-bold border-white text-white hover:bg-white/10 px-8 py-6 text-lg rounded-2xl">
+              <Button size="lg" className="w-full sm:w-auto font-bold bg-white/10 hover:bg-white/20 border-2 border-white text-white px-8 py-6 text-lg rounded-2xl transition-all shadow-none">
                 Explorar os 4 Eixos Políticos
               </Button>
             </Link>
