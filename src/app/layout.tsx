@@ -94,6 +94,12 @@ export default function RootLayout({
   return (
     <html lang="pt-br" suppressHydrationWarning>
       <head>
+        {/* Umami Analytics — cookieless, self-hosted */}
+        <script
+          defer
+          src="https://umami.narniano.com/script.js"
+          data-website-id="0d906f57-a006-4cc3-adff-4152ae7ed2d8"
+        />
         {/* Google Analytics 4 */}
         {process.env.NEXT_PUBLIC_GA_ID && (
           <>
