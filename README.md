@@ -7,6 +7,10 @@
 
 **🌐 Live Demo:** [testepolitico.com.br](https://testepolitico.com.br/)
 
+<p align="center">
+  <img src="docs/screenshots/preview.png" alt="Teste Político Preview" width="800" />
+</p>
+
 > [!NOTE]
 > Roadmap (engenharia + backlog de produto, inclui o status real do
 > AdSense) em [`ROADMAP.md`](ROADMAP.md).
