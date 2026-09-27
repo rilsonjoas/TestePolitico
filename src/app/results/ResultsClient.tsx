@@ -320,6 +320,24 @@ export default function ResultsClient() {
                 </div>
               </div>
 
+              {/* Achado do Rilson (ROADMAP, 2026-09-26): a seção de
+                  compartilhar ficava só no fim da página inteira,
+                  depois de descrição/roast/políticos/livros — quem não
+                  rolava até lá nunca via o convite, o que pesa direto na
+                  própria métrica que o projeto rastreia (result_share /
+                  result_view). Movida (não duplicada) pra logo depois do
+                  nome+match da ideologia, o "pico" emocional de quem
+                  acabou de descobrir o resultado — antes de qualquer
+                  detalhamento. */}
+              <div className="mb-6">
+                <ShareResults
+                  scores={scores}
+                  matchedIdeology={matchedIdeology}
+                  enableComparison={true}
+                  isRoastActive={showRoast}
+                />
+              </div>
+
               {/* 3-col on desktop: desc (2fr) + sidebar (1fr) */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 min-w-0">
                 {/* Description */}
@@ -419,15 +437,23 @@ export default function ResultsClient() {
           </motion.section>
         )}
 
-        {/* ===== SHARE SECTION ===== */}
-        <motion.div variants={itemVariants} className="mt-5">
-          <ShareResults
-            scores={scores}
-            matchedIdeology={matchedIdeology}
-            enableComparison={true}
-            isRoastActive={showRoast}
-          />
-        </motion.div>
+        {/* Rede de segurança: se por algum motivo não houver ideologia
+            correspondente (matchedIdeology vazio), a seção acima toda
+            some — sem isso, o compartilhamento sumiria junto. Antes de
+            mover pra cima, ShareResults ficava fora desse condicional
+            (sempre renderizava, com texto genérico de fallback); aqui
+            replica só esse caso extremo, pra não perder a rede de
+            segurança que já existia. */}
+        {!matchedIdeology && (
+          <motion.div variants={itemVariants} className="mt-5">
+            <ShareResults
+              scores={scores}
+              matchedIdeology={matchedIdeology}
+              enableComparison={true}
+              isRoastActive={showRoast}
+            />
+          </motion.div>
+        )}
 
         <motion.div variants={itemVariants} className="text-center mt-4 pb-8">
           <Link href="/" aria-label="Voltar para a página inicial" className="focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none rounded-lg inline-block">

@@ -160,3 +160,93 @@ do portfólio.
 - [ ] **Executar Plano de Marketing (Época Eleitoral)** — realizar o Marketing Day na Sprint 2 de Setembro (WhatsApp, Reddit r/brasil e r/brasilivre, Facebook grupos políticos, Twitter/X thread, LinkedIn artigo técnico).
 - [ ] **Acompanhar GA4 pós-divulgação** — monitorar taxas de abandono (`quiz_abandon`), compartilhamento (`result_share`) e conclusões (`quiz_complete`).
 
+---
+
+## 📌 Compartilhamento manual (usuário → Instagram) — Achados 1 e 2 resolvidos (2026-09-27)
+
+Pedido do Rilson: nem o Teste Político, nem A Bancada Evangélica, nem o
+Bíblia na Arte estão aproveitando o compartilhamento pro Instagram como
+poderiam — mesmo achado registrado nos três repos. Este projeto já era
+o mais avançado dos três nesse ponto (única métrica de decisão
+explícita: `result_share / result_view > 20%` — ver seção "Métricas de
+decisão" acima). Levantamento original de 2026-09-26; Achados 1 e 2
+corrigidos no dia seguinte, a pedido do Rilson. Achado 3 fica pra
+depois, deliberadamente (refactor maior, risco maior, sem urgência
+frente aos dois primeiros).
+
+### O que já existe (`ShareResults.tsx`)
+
+O melhor posicionado dos três produtos hoje: seção dedicada
+"Compartilhe seu resultado", 4 botões coloridos e diferenciados
+(Instagram com gradiente da marca, Twitter preto, WhatsApp verde, Copiar
+Link neutro) num grid 2×2, mais um "Desafiar um amigo" com link de
+comparação lado a lado. Geração de imagem via `<canvas>` puro (não
+`html2canvas`) em 3 formatos — Instagram Story (1080×1920), Twitter post
+(1200×675) e quadrado (1080×1080) — com bússola política, barras dos 4
+eixos e nome da ideologia.
+
+### Achado 1 — a seção de compartilhar ficava no fim da página — RESOLVIDO (2026-09-27)
+
+`ShareResults` era renderizado na linha 424 de 443 de
+`ResultsClient.tsx` — a última seção antes do fechamento, depois de
+toda a análise de resultado (bússola, eixos, ideologia, comparações).
+Quem não rolava até o fim nunca via o convite pra compartilhar,
+pesando direto na própria métrica que o projeto rastreia
+(`result_share / result_view`).
+
+**Solução aplicada**: movido (não duplicado) pra logo depois do
+nome+match da ideologia — o "pico" emocional de quem acabou de
+descobrir o resultado, antes de qualquer descrição/roast/políticos/
+livros. Mantida uma rede de segurança: se por algum motivo não houver
+ideologia correspondente (`matchedIdeology` vazio), o bloco de
+compartilhar volta a aparecer no fim, no lugar onde sempre esteve —
+comportamento que já existia antes (renderizava incondicionalmente,
+com texto genérico de fallback) e que seria perdido sem esse cuidado.
+
+### Achado 2 — Instagram não era visualmente destacado — RESOLVIDO (2026-09-27)
+
+Mesmo o Instagram sendo citado como o canal mais poderoso, o grid 2×2
+dava peso visual igual a Instagram/Twitter/WhatsApp/Copiar Link —
+nenhum comunicava "comece por aqui" (mesma regra do skill
+`qualidade-de-interface`, §4, violada nos 3 projetos).
+
+**Solução aplicada**: "Compartilhar como Story" virou uma linha própria,
+em largura total, sozinha acima dos outros 3 — ação primária de
+verdade, maior (ícone e texto aumentados), não mais "o botão colorido
+no meio dos outros". Twitter/WhatsApp/Copiar Link viraram uma fileira
+secundária, menor, mantendo peso igual entre si (só o Instagram
+precisava se destacar, os outros 3 continuam equivalentes entre eles).
+
+### Achado 3 — layout do canvas é matemática de pixel manual, frágil
+
+`createManualCanvas` calcula posição de cada elemento (logo, título,
+barras, bússola, rodapé) com constantes numéricas fixas por formato,
+recalculadas à mão a cada ajuste (comentários tipo `// ≈ 397` no meio do
+código confirmam isso). Funciona, mas qualquer mudança de conteúdo
+(nome de ideologia mais longo, novo eixo) exige reajustar números um a
+um em 3 layouts diferentes — risco de regressão silenciosa alto.
+
+### Perguntas em aberto (compartilhadas com os outros 2 repos, não decidido aqui)
+
+- ~~Mover (ou duplicar) a seção de compartilhar pra mais perto do topo
+  do resultado — logo depois de revelar a ideologia, antes do
+  detalhamento por eixo?~~ — RESOLVIDO (2026-09-27): movido pra logo
+  após o header de ideologia, com fallback pro fim da página se não
+  houver `matchedIdeology`. Ver Achado 1.
+- ~~Destacar o botão do Instagram como ação primária (maior, no topo do
+  grid, ou sozinho numa linha acima dos outros 3)?~~ — RESOLVIDO
+  (2026-09-27): "Compartilhar como Story" em linha própria, largura
+  total, acima dos outros 3. Ver Achado 2.
+- Vale migrar a geração de imagem de canvas manual pra algo baseado em
+  DOM+`html2canvas` (como os outros 2 projetos), trocando a fragilidade
+  do pixel-math por CSS de verdade? — Achado 3, deliberadamente adiado
+  (refactor maior, risco maior, sem urgência frente aos dois primeiros).
+- Estratégia de viralização mais ampla — "Desafiar um amigo" já existe
+  aqui e é uma ideia forte que os outros 2 projetos não têm; vale levar
+  esse conceito pros outros (ex.: comparar avaliação de político com um
+  amigo na Bancada)? — em aberto, discutir com o Rilson.
+
+**Achados 1 e 2 implementados e verificados (typecheck + suíte de
+testes + screenshots desktop/mobile) em 2026-09-27. Achado 3 e a
+pergunta de viralização cross-projeto seguem em aberto.**
+
