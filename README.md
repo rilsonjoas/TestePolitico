@@ -81,6 +81,9 @@ Utilizado primordialmente pelo seu suporte nativo ao SSR (Server-Side Rendering)
 ### **Bússola Cartesiana Nativa (Sem bibliotecas)**
 Um dos destaques do painel de resultados é o `<PoliticalCompass />`. Para evitar o peso gigantesco de bibliotecas engessadas como `Chart.js` ou `Recharts`, a bússola foi construída usando puramente `CSS Absolute Elements` iterados em cima do DOM do React pelo vetor `[left: X%, top: Y%]`. Isso entrega um gráfico de dispersão com custo de renderização praticamente nulo.
 
+### **Cartão de Resultado e Fotos `(src/components/ShareResults.tsx)`**
+O cartão de compartilhamento é desenhado em `<canvas>` (Story, Twitter e quadrado). No Story entram a figura pública mais próxima e mais três (`getClosestPoliticians()`), com foto quando existe uma com licença livre. As fotos vêm da Wikimedia Commons, via `scripts/fetch-politician-photos.py`, e ficam em `public/politicos/`; autoria e licença estão em `src/lib/politician-photos.json` e na página `/creditos`. Sem foto livre, o cartão mostra as iniciais.
+
 ### **Data Structure `(src/lib/data.ts)`**
 Atuando como um "NoSQL Database" pseudo-local, o TypeScript organiza toda base enciclopédica do projeto (43 ideologias catalogadas, 87 perguntas com pesos elásticos que variam entre `5`, `10` e `20`, atreladas a autores históricos). Ao expor tipos fixos e pré-compilados, o auto-complete da IDE blinda o código contra typos em tempo de desenvolvimento.
 

@@ -250,3 +250,57 @@ um em 3 layouts diferentes — risco de regressão silenciosa alto.
 testes + screenshots desktop/mobile) em 2026-09-27. Achado 3 e a
 pergunta de viralização cross-projeto seguem em aberto.**
 
+---
+
+## Cartão de Story: figura pública mais próxima, com foto (2026-11-01)
+
+Motivação: um concorrente lançou um cartão de resultado com a figura pública
+mais compatível (rosto, % grande) e mais três nomes. O cartão de Story era o
+formato que circula sem link, e não mostrava político nenhum.
+
+**Feito (commit `563e586`, no ar em 01/11/2026):**
+- `getClosestPoliticians(e, d, g, s, n)` em `src/lib/data.ts`: top N por
+  afinidade, sem repetir político que aparece em mais de uma ideologia.
+  `getClosestPolitician` passou a delegar para ela (mesmo resultado).
+- Cartão Story (1080×1920) mostra o mais próximo (foto, % e nome) e mais 3.
+  Barras e bússola ficaram menores para abrir espaço. Sem político na lista,
+  o layout antigo é mantido.
+- Os nomes em `data.ts` trazem bandeira em emoji e sufixos como "(Filósofo)";
+  a limpeza acontece só na hora de desenhar o cartão.
+- Fotos: `scripts/fetch-politician-photos.py` usa o verbete pt.wikipedia do
+  `link` de cada político, pega a imagem principal e só guarda se estiver na
+  Wikimedia Commons com licença livre (domínio público, CC0, CC BY, CC BY-SA).
+  Saída: `public/politicos/` (130 fotos, ~8 MB, 300 px), manifesto
+  `src/lib/politician-photos.json` (autor, licença, fonte) e
+  `scripts/politician-photos-rejected.json` (13 sem foto e o motivo).
+- Sem foto livre: círculo com as iniciais.
+- `/creditos` lista autor, licença e fonte de cada foto (`noindex`, fora do
+  sitemap, link no rodapé). O cartão leva a linha "Fotos: Wikimedia Commons ·
+  créditos em testepolitico.com.br/creditos".
+
+**Decisões do autor (01/11/2026):**
+- CC BY-SA aceita (~20 fotos). Se o cartão com foto embutida conta como
+  adaptação é questão jurídica em aberto; se for preciso, restringir o script
+  a domínio público, CC0 e CC BY.
+- Pol Pot, Stalin, Mao, Khomeini e Saddam ficam com foto.
+- Ficam sem foto por filtro automático (aviso `nazi` ou `terrorism` na
+  Commons): Hitler, Goebbels, bin Laden e al-Baghdadi.
+
+**Rejeitadas sem foto utilizável:** Thomas Sankara (só uso justo, fora da
+Commons), Margaret Thatcher, Herman Dooyeweerd e Viktor Orbán (licenças
+ambíguas), Groen van Prinsterer, André Biéler, João Pereira Coutinho,
+Luís Felipe d'Avila e Raya Dunayevskaya (verbete sem imagem). Para refazer a
+busca: gerar `names.json` a partir de `data.ts` e rodar
+`python3 scripts/fetch-politician-photos.py names.json`.
+
+**Em aberto:**
+- Formatos Twitter (1200×675) e quadrado (1080×1080) continuam sem os
+  políticos.
+- Afinidades muito próximas (ex.: 93%, 93%, 91%) podem parecer estranhas num
+  cartão; opção: percentual só no primeiro.
+- Conferir os rostos de todas as fotos em `/creditos` (foram vistos só os que
+  apareceram nos testes).
+- O ESLint não roda neste clone (falta `@next/eslint-plugin-next`).
+- Achado 3 (canvas com pixel-math manual) segue em aberto; este cartão
+  adicionou mais coordenadas fixas ao layout Story.
+

@@ -245,7 +245,7 @@ export default function MetodologiaPage() {
           </p>
           <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-sm font-mono text-gray-600 dark:text-gray-300">
-              <code>src/lib/data.ts — function getClosestPolitician() & getMatchPercentage()</code>
+              <code>src/lib/data.ts — functions getClosestPoliticians() & getMatchPercentage()</code>
             </div>
             <a
               href="https://github.com/rilsonjoas/TestePolitico"
