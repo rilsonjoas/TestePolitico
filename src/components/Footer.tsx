@@ -64,6 +64,12 @@ export function Footer() {
               Sobre
             </Link>
             <Link 
+              href="/creditos" 
+              className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >
+              Créditos
+            </Link>
+            <Link 
               href="/contato" 
               className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >

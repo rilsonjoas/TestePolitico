@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/Toast';
-import { Ideology, getTopMatchedIdeologies, slugify, getClosestPolitician, Politician } from '@/lib/data';
+import { Ideology, getTopMatchedIdeologies, slugify, getClosestPoliticians, Politician } from '@/lib/data';
 import { ShareResults } from '@/components/ShareResults';
 import { BookCard } from '@/components/BookCard';
 import { PoliticalCompass } from '@/components/PoliticalCompass';
@@ -33,6 +33,7 @@ export default function ResultsClient() {
   const [compareScores, setCompareScores] = useState<{ e: number, d: number, g: number, s: number } | null>(null);
   const [topIdeologies, setTopIdeologies] = useState<Ideology[]>([]);
   const [matchedPolitician, setMatchedPolitician] = useState<Politician | null>(null);
+  const [closestPoliticians, setClosestPoliticians] = useState<Politician[]>([]);
   const [showRoast, setShowRoast] = useState(false);
   const { showToast, ToastComponent } = useToast();
   const router = useRouter();
@@ -76,8 +77,9 @@ export default function ResultsClient() {
     const topMatches = getTopMatchedIdeologies(e, d, g, s, 3);
     setTopIdeologies(topMatches);
 
-    const closest = getClosestPolitician(e, d, g, s);
-    setMatchedPolitician(closest);
+    const closestList = getClosestPoliticians(e, d, g, s, 4);
+    setMatchedPolitician(closestList[0] ?? null);
+    setClosestPoliticians(closestList);
 
     if (topMatches[0]) {
       quizEvents.completed();
@@ -333,6 +335,7 @@ export default function ResultsClient() {
                 <ShareResults
                   scores={scores}
                   matchedIdeology={matchedIdeology}
+                  closestPoliticians={closestPoliticians}
                   enableComparison={true}
                   isRoastActive={showRoast}
                 />
@@ -449,6 +452,7 @@ export default function ResultsClient() {
             <ShareResults
               scores={scores}
               matchedIdeology={matchedIdeology}
+              closestPoliticians={closestPoliticians}
               enableComparison={true}
               isRoastActive={showRoast}
             />

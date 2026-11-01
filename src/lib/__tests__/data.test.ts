@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { slugify, getMatchPercentage, getClosestPolitician } from '../data';
+import { slugify, getMatchPercentage, getClosestPolitician, getClosestPoliticians } from '../data';
 
 describe('slugify', () => {
   it('should convert text to lowercase', () => {
@@ -76,5 +76,26 @@ describe('getClosestPolitician', () => {
     const result = getClosestPolitician(50, 50, 50, 50); // centrista puro
     expect(result?.affinity).toBeGreaterThanOrEqual(0);
     expect(result?.affinity).toBeLessThanOrEqual(100);
+  });
+});
+
+describe('getClosestPoliticians', () => {
+  it('retorna a quantidade pedida, ordenada por afinidade decrescente', () => {
+    const list = getClosestPoliticians(70, 40, 60, 30, 4);
+    expect(list).toHaveLength(4);
+    for (let i = 1; i < list.length; i++) {
+      expect(list[i - 1].affinity!).toBeGreaterThanOrEqual(list[i].affinity!);
+    }
+  });
+
+  it('não repete o mesmo político', () => {
+    const names = getClosestPoliticians(50, 50, 50, 50, 10).map((p) => p.name);
+    expect(new Set(names).size).toBe(names.length);
+  });
+
+  it('o primeiro coincide com getClosestPolitician', () => {
+    expect(getClosestPoliticians(20, 80, 30, 70, 1)[0].name).toBe(
+      getClosestPolitician(20, 80, 30, 70)?.name,
+    );
   });
 });

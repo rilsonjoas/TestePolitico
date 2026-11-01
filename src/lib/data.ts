@@ -68,47 +68,47 @@ export function slugify(text: string) {
     .replace(/-+$/, ""); // Remove hifens do fim
 }
 
+export function getClosestPoliticians(
+  e: number,
+  d: number,
+  g: number,
+  s: number,
+  count: number = 4,
+): Politician[] {
+  // Um político pode aparecer em mais de uma ideologia: deduplica pelo nome.
+  const byName = new Map<string, Politician>();
+  ideologies.forEach((ideology) => {
+    ideology.politicians.forEach((p) => {
+      if (p.stats && !byName.has(p.name)) byName.set(p.name, p);
+    });
+  });
+
+  const ranked = Array.from(byName.values()).map((politician) => {
+    const st = politician.stats!;
+    const distance = Math.sqrt(
+      Math.pow(st.econ - e, 2) +
+      Math.pow(st.dipl - d, 2) +
+      Math.pow(st.govt - g, 2) +
+      Math.pow(st.scty - s, 2),
+    );
+    return { politician, distance };
+  });
+
+  ranked.sort((a, b) => a.distance - b.distance);
+
+  return ranked.slice(0, count).map(({ politician, distance }) => ({
+    ...politician,
+    affinity: getMatchPercentage(distance),
+  }));
+}
+
 export function getClosestPolitician(
   e: number,
   d: number,
   g: number,
   s: number,
 ) {
-  let closestPolitician: Politician | null = null;
-  let minDistance = Infinity;
-
-  // Flatten all politicians from all ideologies
-  const allPoliticians: Politician[] = [];
-  ideologies.forEach((ideology) => {
-    ideology.politicians.forEach((p) => {
-      // Only include politicians with stats
-      if (p.stats) {
-        allPoliticians.push(p);
-      }
-    });
-  });
-
-  for (const politician of allPoliticians) {
-    if (!politician.stats) continue;
-
-    // Euclidean distance
-    const distance = Math.sqrt(
-      Math.pow(politician.stats.econ - e, 2) +
-      Math.pow(politician.stats.dipl - d, 2) +
-      Math.pow(politician.stats.govt - g, 2) +
-      Math.pow(politician.stats.scty - s, 2),
-    );
-
-    if (distance < minDistance) {
-      minDistance = distance;
-      closestPolitician = {
-        ...politician,
-        affinity: getMatchPercentage(distance)
-      };
-    }
-  }
-
-  return closestPolitician;
+  return getClosestPoliticians(e, d, g, s, 1)[0] ?? null;
 }
 
 export interface DictionaryTerm {

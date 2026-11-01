@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "./Toast";
 import { Swords, Instagram, Twitter, Link as LinkIcon, Download, Copy, Share2, Check } from "lucide-react";
 import { shareEvents } from "@/lib/analytics";
+import { getPoliticianPhoto } from "@/lib/politicianPhotos";
 
 type SocialFormat = 'instagram' | 'twitter' | 'square';
 
@@ -16,11 +17,13 @@ interface ShareResultsProps {
     books: { title: string }[];
 
   } | null;
+  /** Políticos mais próximos, do mais para o menos parecido (usado no cartão Story). */
+  closestPoliticians?: { name: string; link?: string; affinity?: number }[];
   enableComparison?: boolean;
   isRoastActive?: boolean;
 }
 
-export function ShareResults({ scores, matchedIdeology, enableComparison = false, isRoastActive = false }: ShareResultsProps) {
+export function ShareResults({ scores, matchedIdeology, closestPoliticians = [], enableComparison = false, isRoastActive = false }: ShareResultsProps) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -273,15 +276,15 @@ export function ShareResults({ scores, matchedIdeology, enableComparison = false
     } else {
       // ── INSTAGRAM 1080 × 1920 ──────────────────────────────────────
       // Stacked: header (2-line) → ideology → bars → large compass → footer.
-      const bH = 52, bSp = 112, bsW = 920;
+      const hasPol = closestPoliticians.length > 0;
+      const bH = hasPol ? 40 : 52, bSp = hasPol ? 84 : 112, bsW = 920;
       const bsX = (1080 - bsW) / 2;
       const bsY = 478;
-      const barBot = bsY + 3 * bSp + bH / 2; // = 478+336+26 = 840
-      const cs = 720;
+      const barBot = bsY + 3 * bSp + bH / 2;   // hasPol: 478+252+20 = 750
+      // Com políticos: bloco de afinidade+fotos em ~790-1250, bússola menor abaixo.
+      const cs = hasPol ? 360 : 720;
       const cx = (1080 - cs) / 2;
-      const cy = barBot + 95;                  // = 935
-      // Compass bottom: 935+720=1655, "Libertário" label ≈1672
-      // Footer divider at 1825, gap = 153px ✓
+      const cy = hasPol ? 1318 : barBot + 95;  // hasPol: bottom 1678, label ≈1699
       L = {
         logoSize: 80, logoY: 60,
         titleFontSize: 46, titleY: 184,
@@ -289,8 +292,8 @@ export function ShareResults({ scores, matchedIdeology, enableComparison = false
         ideologyLabelFontSize: 25, ideologyLabelY: 306,
         ideologyNameFontSize: 76, ideologyNameY: 392,
         barStartX: bsX, maxBarWidth: bsW,
-        barStartY: bsY, barSpacing: bSp, barHeight: bH, barFontSize: 23,
-        compassX: cx, compassY: cy, compassSize: cs, compassLblSize: 17,
+        barStartY: bsY, barSpacing: bSp, barHeight: bH, barFontSize: hasPol ? 21 : 23,
+        compassX: cx, compassY: cy, compassSize: cs, compassLblSize: hasPol ? 15 : 17,
         footerY: 1875,
       };
     }
@@ -422,6 +425,113 @@ export function ShareResults({ scores, matchedIdeology, enableComparison = false
         ctx.fillText(`${axis.value2.toFixed(1)}%`, barStartX + maxBarWidth - 12, centreY + barFontSize / 3);
       }
     });
+
+    // ─────────────────────────────────────────────────────────────────
+    // DRAW POLITICIANS (Story only): mais parecido + outros 3, com foto
+    // ─────────────────────────────────────────────────────────────────
+    if (format === 'instagram' && closestPoliticians.length > 0) {
+      // Os nomes em data.ts trazem bandeira em emoji e sufixos tipo "(Filósofo)": fora do cartão.
+      const cleanName = (n: string) =>
+        n.replace(/[\u{1F1E6}-\u{1F1FF}]/gu, '').replace(/\s*\([^)]*\)/g, '').replace(/\s+/g, ' ').trim();
+      const people = closestPoliticians.map((p) => ({ ...p, name: cleanName(p.name) }));
+      const [top, ...others] = people;
+      const midX = canvas.width / 2;
+
+      const fitText = (text: string, maxW: number, size: number, weight: number) => {
+        let fs = size;
+        ctx.font = `${weight} ${fs}px Arial`;
+        while (ctx.measureText(text).width > maxW && fs > 18) {
+          fs -= 2;
+          ctx.font = `${weight} ${fs}px Arial`;
+        }
+        return fs;
+      };
+
+      const loadPhoto = (src: string): Promise<HTMLImageElement | null> =>
+        new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => resolve(img);
+          img.onerror = () => resolve(null);
+          img.src = src;
+        });
+
+      // Foto circular (recorte quadrado a partir do topo, onde costuma estar o rosto)
+      // ou, sem foto livre, um círculo com as iniciais.
+      const drawAvatar = async (p: { name: string; link?: string }, cx: number, cy: number, r: number) => {
+        const meta = getPoliticianPhoto(p.link);
+        const img = meta ? await loadPhoto(meta.file) : null;
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.clip();
+        if (img) {
+          const side = Math.min(img.width, img.height);
+          const sx = (img.width - side) / 2;
+          ctx.drawImage(img, sx, 0, side, side, cx - r, cy - r, r * 2, r * 2);
+        } else {
+          ctx.fillStyle = '#1e293b';
+          ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+          const initials = p.name.split(' ').filter(Boolean).filter((w) => /^\p{Lu}/u.test(w))
+            .map((w) => w[0]).slice(0, 2).join('');
+          ctx.fillStyle = '#64748b';
+          ctx.font = `800 ${Math.round(r * 0.8)}px Arial`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(initials, cx, cy + 2);
+          ctx.textBaseline = 'alphabetic';
+        }
+        ctx.restore();
+        ctx.strokeStyle = '#3b82f6';
+        ctx.lineWidth = r > 60 ? 5 : 3;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.stroke();
+      };
+
+      ctx.textAlign = 'center';
+      ctx.fillStyle = textSecondary;
+      ctx.font = '600 22px Arial';
+      ctx.fillText('FIGURA PÚBLICA MAIS PRÓXIMA', midX, 812);
+
+      // Principal: foto à esquerda, % e nome à direita
+      const topR = 96, topCx = 80 + topR + 40, topCy = 932;
+      await drawAvatar(top, topCx, topCy, topR);
+      const textX = topCx + topR + 44;
+      const textMaxW = 1000 - textX;
+      ctx.textAlign = 'left';
+      if (top.affinity !== undefined) {
+        ctx.fillStyle = '#60a5fa';
+        ctx.font = '900 96px Arial';
+        ctx.fillText(`${Math.round(top.affinity)}%`, textX, 940);
+      }
+      ctx.fillStyle = textPrimary;
+      fitText(top.name, textMaxW, 50, 800);
+      ctx.fillText(top.name, textX, 1006);
+
+      if (others.length > 0) {
+        ctx.textAlign = 'center';
+        ctx.fillStyle = textSecondary;
+        ctx.font = '600 20px Arial';
+        ctx.fillText('TAMBÉM PRÓXIMO DE', midX, 1070);
+
+        const colW = 920 / others.length;
+        for (let i = 0; i < others.length; i++) {
+          const p = others[i];
+          const colX = (1080 - 920) / 2 + colW * i + colW / 2;
+          await drawAvatar(p, colX, 1134, 42);
+          ctx.textAlign = 'center';
+          ctx.fillStyle = textPrimary;
+          fitText(p.name, colW - 24, 26, 700);
+          ctx.fillText(p.name, colX, 1214);
+          if (p.affinity !== undefined) {
+            ctx.fillStyle = '#60a5fa';
+            ctx.font = '800 24px Arial';
+            ctx.fillText(`${Math.round(p.affinity)}%`, colX, 1246);
+          }
+        }
+      }
+    }
 
     // ─────────────────────────────────────────────────────────────────
     // DRAW POLITICAL COMPASS
@@ -569,6 +679,13 @@ export function ShareResults({ scores, matchedIdeology, enableComparison = false
 
     // Reset baseline
     ctx.textBaseline = 'alphabetic';
+
+    if (format === 'instagram' && closestPoliticians.length > 0) {
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#64748b';
+      ctx.font = '500 17px Arial';
+      ctx.fillText('Fotos: Wikimedia Commons · créditos em testepolitico.com.br/creditos', canvas.width / 2, badgeY + badgeH / 2 + 34);
+    }
 
     return canvas;
   };
